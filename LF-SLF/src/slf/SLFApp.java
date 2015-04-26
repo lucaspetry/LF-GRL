@@ -1,13 +1,13 @@
-package grl;
+package slf;
 
-public class GRLApp {
+public class SLFApp {
 
 	/**
-	 * Método principal.
+	 * MÃ©todo principal.
 	 * @param args argumentos.
 	 */
 	public static void main(String[] args) {
-
+		System.out.println("Test");
 	}
 
 }
