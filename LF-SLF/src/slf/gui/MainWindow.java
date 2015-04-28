@@ -14,6 +14,7 @@ public class MainWindow extends JFrame {
 	
     public MainWindow() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     private void initComponents() {
