@@ -15,6 +15,8 @@ public class MainWindow extends JFrame {
     public MainWindow() {
         initComponents();
         setLocationRelativeTo(null);
+        this.setUnaryOperation(false);
+        this.setBinaryOperation(false);
     }
 
     private void initComponents() {
@@ -196,8 +198,34 @@ public class MainWindow extends JFrame {
                 .addComponent(panelResults, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
-
+        
         pack();
+    }
+    
+    private void setUnaryOperation(boolean unaryOperation) {
+    	if(unaryOperation) {
+    		this.btnEnumerateSentences.setEnabled(true);
+    		this.btnPatternOccurrencesText.setEnabled(true);
+    		this.btnFiniteAutomaton.setEnabled(true);
+    		this.btnMinimalFiniteAutomaton.setEnabled(true);
+    	} else {
+    		this.btnEnumerateSentences.setEnabled(false);
+    		this.btnPatternOccurrencesText.setEnabled(false);
+    		this.btnFiniteAutomaton.setEnabled(false);
+    		this.btnMinimalFiniteAutomaton.setEnabled(false);  		
+    	}
+    }
+
+    private void setBinaryOperation(boolean binaryOperation) {
+    	if(binaryOperation) {
+    		this.btnEquivalent.setEnabled(true);
+    		this.btnIntercectionMinimalFiniteAutomaton.setEnabled(true);
+    		this.btnDifferenceMinimalFiniteAutomaton.setEnabled(true);  
+    	} else {
+    		this.btnEquivalent.setEnabled(false);
+    		this.btnIntercectionMinimalFiniteAutomaton.setEnabled(false);
+    		this.btnDifferenceMinimalFiniteAutomaton.setEnabled(false);    		  		
+    	}
     }
 
 	private static final long serialVersionUID = 4113893869813535193L;
