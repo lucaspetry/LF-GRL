@@ -2,11 +2,14 @@ package slf.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
@@ -364,7 +367,7 @@ public class MainWindow extends JFrame {
 
 		pack();
 	}
-	
+
 	private void setActionCommands() {
 		this.btnAddRE.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -382,9 +385,9 @@ public class MainWindow extends JFrame {
 							JOptionPane.QUESTION_MESSAGE);
 				}
 
-				if(re != null && !re.isEmpty())
+				if (re != null && !re.isEmpty())
 					MainWindow.this.regularExpressions.addElement(re);
-				
+
 				MainWindow.this.listRegularExpressions
 						.setModel(MainWindow.this.regularExpressions);
 			}
@@ -392,35 +395,83 @@ public class MainWindow extends JFrame {
 
 		this.btnRemoveRE.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				List<String> selected = MainWindow.this.listRegularExpressions.getSelectedValuesList();
-				
-				for(String item : selected)
+				List<String> selected = MainWindow.this.listRegularExpressions
+						.getSelectedValuesList();
+
+				for (String item : selected)
 					MainWindow.this.regularExpressions.removeElement(item);
-				
-				MainWindow.this.listRegularExpressions.setModel(MainWindow.this.regularExpressions);
+
+				MainWindow.this.listRegularExpressions
+						.setModel(MainWindow.this.regularExpressions);
 			}
 		});
-		
-		this.listRegularExpressions.addListSelectionListener(new ListSelectionListener() {
-			public void valueChanged(ListSelectionEvent arg0) {
-				int items = MainWindow.this.listRegularExpressions.getSelectedValuesList().size();
-				
-				switch(items) {
-					case 1:
-						MainWindow.this.setUnaryOperation(true);
-						MainWindow.this.setBinaryOperation(false);
-						break;
-					case 2:
-						MainWindow.this.setUnaryOperation(false);
-						MainWindow.this.setBinaryOperation(true);
-						break;
-					default:
-						MainWindow.this.setUnaryOperation(false);
-						MainWindow.this.setBinaryOperation(false);
-						break;
+
+		this.listRegularExpressions.addMouseListener(new MouseListener() {
+			public void mouseReleased(MouseEvent arg0) {
+			}
+
+			public void mousePressed(MouseEvent arg0) {
+			}
+
+			public void mouseExited(MouseEvent arg0) {
+			}
+
+			public void mouseEntered(MouseEvent arg0) {
+			}
+
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() == 2 && !e.isConsumed()) {
+					e.consume();
+					String re = MainWindow.this.listRegularExpressions
+							.getSelectedValue();
+					int indexRe = MainWindow.this.regularExpressions
+							.indexOf(re);
+
+					if (re != null) {
+						String novaRe = (String) JOptionPane.showInputDialog(
+								null, "", "Editar Expressão Regular",
+								JOptionPane.QUESTION_MESSAGE, null, null, re);
+
+						if (novaRe != null && !novaRe.isEmpty()) {
+							if (!re.equals(novaRe) && MainWindow.this.regularExpressions
+									.contains(novaRe)) {
+								JOptionPane.showMessageDialog(null,
+										"Expressão regular já existente!",
+										"Atenção", JOptionPane.WARNING_MESSAGE);
+							} else {
+								MainWindow.this.regularExpressions.set(indexRe,
+										novaRe);
+								MainWindow.this.listRegularExpressions
+										.setModel(MainWindow.this.regularExpressions);
+							}
+						}
+					}
 				}
 			}
 		});
+
+		this.listRegularExpressions
+				.addListSelectionListener(new ListSelectionListener() {
+					public void valueChanged(ListSelectionEvent arg0) {
+						int items = MainWindow.this.listRegularExpressions
+								.getSelectedValuesList().size();
+
+						switch (items) {
+						case 1:
+							MainWindow.this.setUnaryOperation(true);
+							MainWindow.this.setBinaryOperation(false);
+							break;
+						case 2:
+							MainWindow.this.setUnaryOperation(false);
+							MainWindow.this.setBinaryOperation(true);
+							break;
+						default:
+							MainWindow.this.setUnaryOperation(false);
+							MainWindow.this.setBinaryOperation(false);
+							break;
+						}
+					}
+				});
 	}
 
 	private void setUnaryOperation(boolean unaryOperation) {
