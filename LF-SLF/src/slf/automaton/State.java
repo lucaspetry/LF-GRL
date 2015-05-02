@@ -50,6 +50,16 @@ public class State {
 		
 		return this.transitions.get(symbol);
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof State) {
+			State state = (State) obj;
+			return state.getName().equals(this.name);
+		}
+		
+		return false;
+	}
 
 	private String name;
 	private boolean isFinal;
