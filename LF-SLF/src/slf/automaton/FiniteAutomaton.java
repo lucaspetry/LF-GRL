@@ -5,7 +5,7 @@ import java.util.List;
 
 /**
  * Autômato finito.
- * @author lucas.
+ * @author lucas
  */
 public class FiniteAutomaton {
 
@@ -30,7 +30,23 @@ public class FiniteAutomaton {
 		if(states.size() > 0)
 			this.initialState = states.get(0);
 	}
+	
+	/**
+	 * Obter o alfabeto de entrada do autômato.
+	 * @return alfabeto de entrada.
+	 */
+	public String getAlphabet() {
+		return this.alphabet;
+	}
 
+	/**
+	 * Obter o estado inicial do autômato.
+	 * @return estado inicial.
+	 */
+	public State getInitialState() {
+		return this.initialState;
+	}
+	
 	private String alphabet;
 	private List<State> states;
 	private State initialState;
