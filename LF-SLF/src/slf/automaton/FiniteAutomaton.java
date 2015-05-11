@@ -3,8 +3,6 @@ package slf.automaton;
 import java.util.ArrayList;
 import java.util.List;
 
-import slf.exception.InvalidTransitionException;
-
 /**
  * Autômato finito.
  * @author lucas
@@ -58,8 +56,65 @@ public class FiniteAutomaton {
 		return true; // TODO
 	}
 	
+	/**
+	 * Determinizar o autômato.
+	 */
+	public void determinize() {
+		
+	}
+	
+	/**
+	 * Calcular o autômato da interseção com o autômato especificado.
+	 * @param automaton autômato finito.
+	 * @return o autômato resultante da interseção.
+	 */
+	public FiniteAutomaton intercection(final FiniteAutomaton automaton) {
+		return null;
+	}
+
+	/**
+	 * Calcular o autômato da diferença com o autômato especificado.
+	 * @param automaton autômato finito.
+	 * @return o autômato resultante da diferença.
+	 */
+	public FiniteAutomaton difference(final FiniteAutomaton automaton) {
+		return null;
+	}
+
+	/**
+	 * Minimizar o autômato.
+	 */
+	public void minimize() {
+		
+	}
+
+	/**
+	 * Verificar se o autômato é determinístico.
+	 * @return true se o autômato é determinístico.
+	 */
+	public boolean isDeterministic() {
+		return true;
+	}
+
+	/**
+	 * Verificar se o autômato é equivalente ao autômato especificado.
+	 * @param automaton autômato finito.
+	 * @return true se os autômatos são equivalentes.
+	 */
+	public boolean isEquivalent(final FiniteAutomaton automaton) {
+		return true;
+	}
+
+	/**
+	 * Verificar se o autômato é mínimo.
+	 * @return true se o autômato é mínimo.
+	 */
+	public boolean isMinimal() {
+		return true;
+	}
+
 	private String alphabet;
 	private List<State> states;
 	private State initialState;
-	
+
 }
