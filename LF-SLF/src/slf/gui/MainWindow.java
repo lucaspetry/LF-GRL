@@ -28,7 +28,7 @@ public class MainWindow extends JFrame {
 		this.setActionCommands();
 		this.setLocationRelativeTo(null);
 		this.setUnaryOperation(false);
-		this.setBinaryOperation(false);
+		this.setNaryOperation(false);
 	}
 
 	private void initComponents() {
@@ -213,7 +213,7 @@ public class MainWindow extends JFrame {
 
 		panelBinaryOperations
 				.setBorder(BorderFactory
-						.createTitledBorder("Operações Sobre Duas Expressões Regulares"));
+						.createTitledBorder("Operações Sobre Várias Expressões Regulares"));
 
 		btnDifferenceMinimalFiniteAutomaton
 				.setText("Autômato Finito Mínimo da Diferença");
@@ -456,18 +456,18 @@ public class MainWindow extends JFrame {
 								.getSelectedValuesList().size();
 
 						switch (items) {
-						case 1:
-							MainWindow.this.setUnaryOperation(true);
-							MainWindow.this.setBinaryOperation(false);
-							break;
-						case 2:
-							MainWindow.this.setUnaryOperation(false);
-							MainWindow.this.setBinaryOperation(true);
-							break;
-						default:
-							MainWindow.this.setUnaryOperation(false);
-							MainWindow.this.setBinaryOperation(false);
-							break;
+							case 0:
+								MainWindow.this.setUnaryOperation(false);
+								MainWindow.this.setNaryOperation(false);
+								break;
+							case 1:
+								MainWindow.this.setUnaryOperation(true);
+								MainWindow.this.setNaryOperation(false);
+								break;
+							default:
+								MainWindow.this.setUnaryOperation(false);
+								MainWindow.this.setNaryOperation(true);
+								break;
 						}
 					}
 				});
@@ -487,8 +487,8 @@ public class MainWindow extends JFrame {
 		}
 	}
 
-	private void setBinaryOperation(boolean binaryOperation) {
-		if (binaryOperation) {
+	private void setNaryOperation(boolean naryOperation) {
+		if (naryOperation) {
 			this.btnEquivalent.setEnabled(true);
 			this.btnIntercectionMinimalFiniteAutomaton.setEnabled(true);
 			this.btnDifferenceMinimalFiniteAutomaton.setEnabled(true);

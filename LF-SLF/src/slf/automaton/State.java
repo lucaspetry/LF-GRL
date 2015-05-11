@@ -1,6 +1,6 @@
 package slf.automaton;
 
-import java.util.Map;
+import java.util.List;
 
 import slf.exception.InvalidTransitionException;
 
@@ -16,7 +16,7 @@ public class State {
 	 * @param isFinal true caso o estado seja final.
 	 * @param transitions transições do estado.
 	 */
-	public State(String name, boolean isFinal, Map<Character, State> transitions) {
+	public State(String name, boolean isFinal, TransitionMap transitions) {
 		this.name = name;
 		this.isFinal = isFinal;
 		this.transitions = transitions;
@@ -44,10 +44,7 @@ public class State {
 	 * @return estado de destino da transição.
 	 * @throws InvalidTransitionException se não há uma transição pelo símbolo de entrada especificado.
 	 */
-	public State transit(char symbol) throws InvalidTransitionException {
-		if(!this.transitions.containsKey(symbol))
-			throw new InvalidTransitionException();
-		
+	public List<State> transit(char symbol) throws InvalidTransitionException {
 		return this.transitions.get(symbol);
 	}
 	
@@ -63,6 +60,6 @@ public class State {
 
 	private String name;
 	private boolean isFinal;
-	private Map<Character, State> transitions;
+	private TransitionMap transitions;
 
 }

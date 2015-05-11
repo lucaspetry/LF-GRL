@@ -3,6 +3,8 @@ package slf.automaton;
 import java.util.ArrayList;
 import java.util.List;
 
+import slf.exception.InvalidTransitionException;
+
 /**
  * Autômato finito.
  * @author lucas
@@ -45,6 +47,15 @@ public class FiniteAutomaton {
 	 */
 	public State getInitialState() {
 		return this.initialState;
+	}
+	
+	/**
+	 * Reconhecer uma entrada qualquer.
+	 * @param entry entrada qualquer.
+	 * @return true caso a entrada seja uma sentença da linguagem.
+	 */
+	public boolean recognize(final String entry) {
+		return true; // TODO
 	}
 	
 	private String alphabet;

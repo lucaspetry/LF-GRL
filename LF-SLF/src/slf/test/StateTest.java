@@ -2,31 +2,31 @@ package slf.test;
 
 import static org.junit.Assert.*;
 
-import java.util.HashMap;
-
 import org.junit.Before;
 import org.junit.Test;
 
 import slf.automaton.State;
+import slf.automaton.TransitionMap;
 import slf.exception.InvalidTransitionException;
 
 public class StateTest {
 
 	@Before
 	public void setUp() throws Exception {		
-		HashMap<Character, State> aTransitions = new HashMap<Character, State>();
-		HashMap<Character, State> bTransitions = new HashMap<Character, State>();
-		HashMap<Character, State> cTransitions = new HashMap<Character, State>();
+		TransitionMap aTransitions = new TransitionMap();
+		TransitionMap bTransitions = new TransitionMap();
+		TransitionMap cTransitions = new TransitionMap();
 
 		this.a = new State("aState", false, aTransitions);
 		this.b = new State("bState", true, bTransitions);
 		this.c = new State("cState", false, cTransitions);
 		
-		aTransitions.put('a', this.a);
-		aTransitions.put('b', this.b);
-		bTransitions.put('a', this.b);
-		bTransitions.put('b', this.c);
-		cTransitions.put('b', this.b);
+		aTransitions.add('a', this.a);
+		aTransitions.add('b', this.b);
+		bTransitions.add('a', this.b);
+		bTransitions.add('b', this.c);
+		cTransitions.add('b', this.c);
+		cTransitions.add('b', this.b);
 	}
 
 	@Test
@@ -41,9 +41,21 @@ public class StateTest {
 	}
 
 	@Test
-	public void testTransit() {
+	public void testTransitSingle() {
 		try {
-			assertEquals(this.b, this.a.transit('b'));
+			assertEquals(1, this.a.transit('b').size());
+			assertEquals(this.b, this.a.transit('b').get(0));
+		} catch (InvalidTransitionException e) {
+			fail();
+		}
+	}
+
+	@Test
+	public void testTransitMultiple() {
+		try {
+			assertEquals(2, this.c.transit('b').size());
+			assertEquals(this.c, this.c.transit('b').get(0));
+			assertEquals(this.b, this.c.transit('b').get(1));
 		} catch (InvalidTransitionException e) {
 			fail();
 		}
