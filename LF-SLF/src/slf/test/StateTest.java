@@ -2,6 +2,9 @@ package slf.test;
 
 import static org.junit.Assert.*;
 
+import java.util.Set;
+import java.util.TreeSet;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,10 +19,12 @@ public class StateTest {
 		TransitionMap aTransitions = new TransitionMap();
 		TransitionMap bTransitions = new TransitionMap();
 		TransitionMap cTransitions = new TransitionMap();
+		TransitionMap dTransitions = new TransitionMap();
 
 		this.a = new State("aState", false, aTransitions);
 		this.b = new State("bState", true, bTransitions);
 		this.c = new State("cState", false, cTransitions);
+		this.d = new State("dState", false, dTransitions);
 		
 		aTransitions.add('a', this.a);
 		aTransitions.add('b', this.b);
@@ -27,6 +32,9 @@ public class StateTest {
 		bTransitions.add('b', this.c);
 		cTransitions.add('b', this.c);
 		cTransitions.add('b', this.b);
+		dTransitions.add('a', this.b);
+		dTransitions.add('a', this.d);
+		dTransitions.add('b', this.c);
 	}
 
 	@Test
@@ -44,7 +52,7 @@ public class StateTest {
 	public void testTransitSingle() {
 		try {
 			assertEquals(1, this.a.transit('b').size());
-			assertEquals(this.b, this.a.transit('b').get(0));
+			assertEquals(this.b, this.a.transit('b').toArray()[0]);
 		} catch (InvalidTransitionException e) {
 			fail();
 		}
@@ -54,8 +62,8 @@ public class StateTest {
 	public void testTransitMultiple() {
 		try {
 			assertEquals(2, this.c.transit('b').size());
-			assertEquals(this.c, this.c.transit('b').get(0));
-			assertEquals(this.b, this.c.transit('b').get(1));
+			assertTrue(this.c.transit('b').contains(this.b));
+			assertTrue(this.c.transit('b').contains(this.c));
 		} catch (InvalidTransitionException e) {
 			fail();
 		}
@@ -72,6 +80,16 @@ public class StateTest {
 	}
 
 	@Test
+	public void testGetReachableStates() {
+		Set<State> reachableD = new TreeSet<State>();
+		reachableD.add(this.b);
+		reachableD.add(this.d);
+		reachableD.add(this.c);
+		assertEquals(reachableD, this.d.getReachableStates());
+		assertEquals(3, this.d.getReachableStates().size());
+	}
+	
+	@Test
 	public void testEqualsObject() {
 		assertEquals(false, this.a.equals(this.b));
 		assertEquals(true, this.a.equals(this.a));
@@ -80,5 +98,6 @@ public class StateTest {
 	private State a;
 	private State b;
 	private State c;
+	private State d;
 
 }

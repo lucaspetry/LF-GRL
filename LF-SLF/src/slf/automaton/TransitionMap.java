@@ -1,9 +1,9 @@
 package slf.automaton;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import slf.exception.InvalidTransitionException;
 
@@ -18,7 +18,7 @@ public class TransitionMap {
 	 * Construtor.
 	 */
 	public TransitionMap() {
-		this.transitions = new HashMap<Character, List<State>>();
+		this.transitions = new HashMap<Character, Set<State>>();
 	}
 	
 	/**
@@ -28,12 +28,12 @@ public class TransitionMap {
 	 */
 	public void add(char symbol, State targetState) {
 		if(this.transitions.containsKey(symbol)) {
-			List<State> states = this.transitions.get(symbol);
+			Set<State> states = this.transitions.get(symbol);
 			
 			if(!states.contains(targetState))
 				states.add(targetState);
 		} else {
-			List<State> states = new ArrayList<State>();
+			Set<State> states = new TreeSet<State>();
 			states.add(targetState);
 			this.transitions.put(symbol, states);
 		}
@@ -52,7 +52,7 @@ public class TransitionMap {
 		if(!this.transitions.get(symbol).contains(targetState))
 			throw new InvalidTransitionException();
 		
-		List<State> states = this.transitions.get(symbol);
+		Set<State> states = this.transitions.get(symbol);
 		
 		if(states.size() == 1)
 			this.transitions.remove(symbol);
@@ -61,15 +61,30 @@ public class TransitionMap {
 	/**
 	 * Obter as transições possíveis por um símbolo.
 	 * @param symbol símbolo de transição.
-	 * @return lista de estados de destino.
+	 * @return conjunto de estados de destino.
 	 * @throws InvalidTransitionException caso não exista transição pelo símbolo.
 	 */
-	public List<State> get(char symbol) throws InvalidTransitionException {
+	public Set<State> get(char symbol) throws InvalidTransitionException {
 		if(!this.transitions.containsKey(symbol))
 			throw new InvalidTransitionException();
 		
 		return this.transitions.get(symbol);
 	}
 	
-	Map<Character, List<State>> transitions;
+	/**
+	 * Obter todos os estados para os quais existe uma transição.
+	 * @return conjunto de estados.
+	 */
+	public Set<State> getTargetStates() {
+		Set<State> states = new TreeSet<State>();
+		
+		for(Set<State> transition : this.transitions.values()) {
+			for(State s : transition)
+				states.add(s);
+		}
+	
+		return states;
+	}
+	
+	Map<Character, Set<State>> transitions;
 }

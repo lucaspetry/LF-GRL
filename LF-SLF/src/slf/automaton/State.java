@@ -1,6 +1,6 @@
 package slf.automaton;
 
-import java.util.List;
+import java.util.Set;
 
 import slf.exception.InvalidTransitionException;
 
@@ -8,7 +8,7 @@ import slf.exception.InvalidTransitionException;
  * Estado.
  * @author lucas
  */
-public class State {
+public class State implements Comparable<State> {
 	
 	/**
 	 * Construtor.
@@ -41,11 +41,19 @@ public class State {
 	/**
 	 * Transitar do estado para outro.
 	 * @param symbol símbolo de entrada de transição.
-	 * @return estado de destino da transição.
+	 * @return conjunto de estados de destino da transição.
 	 * @throws InvalidTransitionException se não há uma transição pelo símbolo de entrada especificado.
 	 */
-	public List<State> transit(char symbol) throws InvalidTransitionException {
+	public Set<State> transit(char symbol) throws InvalidTransitionException {
 		return this.transitions.get(symbol);
+	}
+	
+	/**
+	 * Obter os estados alcançáveis a partir deste.
+	 * @return conjunto de estados.
+	 */
+	public Set<State> getReachableStates() {
+		return this.transitions.getTargetStates();
 	}
 	
 	@Override
@@ -56,6 +64,11 @@ public class State {
 		}
 		
 		return false;
+	}
+
+	@Override
+	public int compareTo(State o) {
+		return this.getName().compareTo(o.getName());
 	}
 
 	private String name;

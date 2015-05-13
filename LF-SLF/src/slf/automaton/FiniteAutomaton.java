@@ -1,7 +1,9 @@
 package slf.automaton;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+
+import slf.exception.InvalidTransitionException;
 
 /**
  * Autômato finito.
@@ -14,21 +16,20 @@ public class FiniteAutomaton {
 	 */
 	public FiniteAutomaton() {
 		this.alphabet = "";
-		this.states = new ArrayList<State>();
+		this.states = new TreeSet<State>();
 		this.initialState = null;
 	}
 
 	/**
 	 * Construtor.
-	 * @param states lista de estados, sendo o primeiro o estado inicial.
+	 * @param states conjunto de estados.
 	 * @param alphabet alfabeto do autômato.
+	 * @param initialState estado inicial do conjunto de estados.
 	 */
-	public FiniteAutomaton(List<State> states, String alphabet) {
+	public FiniteAutomaton(final Set<State> states, final String alphabet, final State initialState) {
 		this.alphabet = alphabet;
 		this.states = states;
-		
-		if(states.size() > 0)
-			this.initialState = states.get(0);
+		this.initialState = initialState;
 	}
 	
 	/**
@@ -85,7 +86,12 @@ public class FiniteAutomaton {
 	 * Minimizar o autômato.
 	 */
 	public void minimize() {
+		if(!this.isDeterministic())
+			this.determinize();
 		
+		this.removeUnreachableStates();
+		this.removeDeadStates();
+		// TODO Continuar a minimização.
 	}
 
 	/**
@@ -93,6 +99,24 @@ public class FiniteAutomaton {
 	 * @return true se o autômato é determinístico.
 	 */
 	public boolean isDeterministic() {
+		for(State state : this.states) {
+			for(char symbol : this.alphabet.toCharArray()) {
+				try {
+					Set<State> reachable = state.transit(symbol);
+					
+					if(reachable.size() > 1)
+						return false;
+				} catch (InvalidTransitionException e) {}
+			}
+			
+			try {
+				Set<State> reachable = state.transit('&'); // TODO Padronizar símbolo epsilon
+				
+				if(reachable.size() > 0)
+					return false;
+			} catch (InvalidTransitionException e) {}
+		}
+		
 		return true;
 	}
 
@@ -112,9 +136,67 @@ public class FiniteAutomaton {
 	public boolean isMinimal() {
 		return true;
 	}
+	
+	/**
+	 * Remover estados inalcançáveis.
+	 */
+	private void removeUnreachableStates() {
+		Set<State> reachableStates = new TreeSet<State>();
+		reachableStates.add(this.initialState);
+		
+		boolean reachableSetChanged = true;
+
+		while(reachableSetChanged) {
+			int setSize = reachableStates.size();
+			
+			for(State state : reachableStates) {
+				for(State reachable : state.getReachableStates())
+					reachableStates.add(reachable);
+			}
+			
+			if(setSize == reachableStates.size())
+				reachableSetChanged = false;
+		}
+		
+		this.states = reachableStates;
+	}
+	
+	/**
+	 * Remover estados mortos.
+	 */
+	private void removeDeadStates() {
+		Set<State> livingStates = new TreeSet<State>();
+
+		for(State state : this.states) {
+			if(state.isFinal())
+				livingStates.add(state);
+		}
+		
+		boolean livingSetChanged = true;
+
+		while(livingSetChanged) {
+			int setSize = livingStates.size();
+			
+			for(State state : this.states) {
+				if(!livingStates.contains(state)) {
+					for(State reachable : state.getReachableStates()) {
+						if(livingStates.contains(reachable)) {
+							livingStates.add(state);
+							break;
+						}
+					}
+				}
+			}
+			
+			if(setSize == livingStates.size())
+				livingSetChanged = false;
+		}
+		
+		this.states = livingStates;
+	}
 
 	private String alphabet;
-	private List<State> states;
+	private Set<State> states;
 	private State initialState;
 
 }
