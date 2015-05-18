@@ -1,4 +1,4 @@
-package slf.test;
+package slr.test;
 
 import static org.junit.Assert.*;
 

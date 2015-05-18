@@ -1,9 +1,9 @@
-package slf;
+package slr;
 
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import slf.control.MainController;
+import slr.control.MainController;
 
 public class SLFApp {
 

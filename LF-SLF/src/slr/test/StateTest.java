@@ -1,4 +1,4 @@
-package slf.test;
+package slr.test;
 
 import static org.junit.Assert.*;
 
@@ -8,9 +8,9 @@ import java.util.TreeSet;
 import org.junit.Before;
 import org.junit.Test;
 
-import slf.automaton.State;
-import slf.automaton.TransitionMap;
-import slf.exception.InvalidTransitionException;
+import slr.automaton.State;
+import slr.automaton.TransitionMap;
+import slr.exception.InvalidTransitionException;
 
 public class StateTest {
 

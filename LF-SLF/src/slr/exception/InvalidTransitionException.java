@@ -1,4 +1,4 @@
-package slf.exception;
+package slr.exception;
 
 public class InvalidTransitionException extends Exception {
 	

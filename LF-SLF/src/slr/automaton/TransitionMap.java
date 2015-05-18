@@ -1,11 +1,11 @@
-package slf.automaton;
+package slr.automaton;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import slf.exception.InvalidTransitionException;
+import slr.exception.InvalidTransitionException;
 
 /**
  * Mapa de transições.

@@ -1,4 +1,4 @@
-package slf.expression;
+package slr.expression;
 
 /**
  * Expressão regular.

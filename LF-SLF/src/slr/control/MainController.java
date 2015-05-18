@@ -1,6 +1,6 @@
-package slf.control;
+package slr.control;
 
-import slf.gui.MainWindow;
+import slr.gui.MainWindow;
 
 /**
  * Controlador principal.

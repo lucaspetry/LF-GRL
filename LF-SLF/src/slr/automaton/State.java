@@ -1,8 +1,8 @@
-package slf.automaton;
+package slr.automaton;
 
 import java.util.Set;
 
-import slf.exception.InvalidTransitionException;
+import slr.exception.InvalidTransitionException;
 
 /**
  * Estado.

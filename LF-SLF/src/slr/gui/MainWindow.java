@@ -1,4 +1,4 @@
-package slf.gui;
+package slr.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
