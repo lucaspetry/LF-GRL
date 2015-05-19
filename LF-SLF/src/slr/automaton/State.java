@@ -21,6 +21,34 @@ public class State implements Comparable<State> {
 		this.isFinal = isFinal;
 		this.transitions = transitions;
 	}
+
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return new State(this.name, this.isFinal(), (TransitionMap) this.transitions.clone());
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof State) {
+			State state = (State) obj;
+			return state.getName().equals(this.name);
+		}
+		
+		return false;
+	}
+
+	@Override
+	public int compareTo(State o) {
+		return this.getName().compareTo(o.getName());
+	}
+	
+	/**
+	 * Definir se o estado é final.
+	 * @param isFinal true se o estado é final.
+	 */
+	public void setIsFinal(boolean isFinal) {
+		this.isFinal = isFinal;
+	}
 	
 	/**
 	 * Obter o nome do estado.
@@ -54,21 +82,6 @@ public class State implements Comparable<State> {
 	 */
 	public Set<State> getReachableStates() {
 		return this.transitions.getTargetStates();
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if(obj instanceof State) {
-			State state = (State) obj;
-			return state.getName().equals(this.name);
-		}
-		
-		return false;
-	}
-
-	@Override
-	public int compareTo(State o) {
-		return this.getName().compareTo(o.getName());
 	}
 
 	private String name;

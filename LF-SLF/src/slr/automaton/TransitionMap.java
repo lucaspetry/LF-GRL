@@ -21,6 +21,22 @@ public class TransitionMap {
 		this.transitions = new HashMap<Character, Set<State>>();
 	}
 	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+	    TransitionMap transitionMap = new TransitionMap();
+	    
+	    for(char k : this.transitions.keySet()) {
+	    	try {
+				for(State s : this.get(k))
+					transitionMap.add(k, s);
+			} catch (InvalidTransitionException e) {
+				throw new CloneNotSupportedException();
+			}
+	    }
+	    
+	    return transitionMap;
+	}
+	
 	/**
 	 * Adicionar transição.
 	 * @param symbol símbolo de transição.

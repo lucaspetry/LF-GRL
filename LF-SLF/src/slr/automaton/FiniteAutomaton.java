@@ -32,6 +32,23 @@ public class FiniteAutomaton {
 		this.initialState = initialState;
 	}
 	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		Set<State> states = new TreeSet<State>();
+		State initial = null;
+		
+		for(State s : this.states) {
+			State newState = (State) s.clone();
+			states.add(newState);
+			
+			if(s.equals(this.initialState)) {
+				initial = newState;
+			}
+		}
+		
+	    return new FiniteAutomaton(states, this.alphabet, initial);
+	}
+
 	/**
 	 * Obter o alfabeto de entrada do autômato.
 	 * @return alfabeto de entrada.
@@ -49,6 +66,36 @@ public class FiniteAutomaton {
 	}
 	
 	/**
+	 * Obter os estados finais.
+	 * @return conjunto de estados finais.
+	 */
+	public Set<State> getFinalStates() {
+		Set<State> states = new TreeSet<State>();
+		
+		for(State s : this.states) {
+			if(s.isFinal())
+				states.add(s);
+		}
+		
+		return states;
+	}
+	
+	/**
+	 * Obter os estados não finais.
+	 * @return conjunto de estados não finais.
+	 */
+	public Set<State> getNotFinalStates() {
+		Set<State> states = new TreeSet<State>();
+		
+		for(State s : this.states) {
+			if(!s.isFinal())
+				states.add(s);
+		}
+		
+		return states;
+	}
+	
+	/**
 	 * Reconhecer uma entrada qualquer.
 	 * @param entry entrada qualquer.
 	 * @return true caso a entrada seja uma sentença da linguagem.
@@ -62,6 +109,30 @@ public class FiniteAutomaton {
 	 */
 	public void determinize() {
 		
+	}
+	
+	/**
+	 * Calcular o autômato complemento.
+	 * @return o autômato resultante do complemento.
+	 */
+	public FiniteAutomaton complement() {
+		try {
+			FiniteAutomaton automaton = (FiniteAutomaton) this.clone();
+			Set<State> finalStates = automaton.getFinalStates();
+			Set<State> notFinalStates = automaton.getNotFinalStates();
+			
+			for(State s : finalStates) {
+				s.setIsFinal(false);
+			}
+
+			for(State s : notFinalStates) {
+				s.setIsFinal(true);
+			}
+			
+			return automaton;
+		} catch (CloneNotSupportedException e) {
+			return null;
+		}
 	}
 	
 	/**
