@@ -94,16 +94,24 @@ public class ProductionMap {
 	}
 
 	/**
-	 * Obter as transições possíveis por um símbolo.
-	 * @param leftSide símbolo de transição.
-	 * @return conjunto de estados de destino.
-	 * @throws InvalidProductionException caso não exista transição pelo símbolo.
+	 * Obter as derivações possíveis a partir de um símbolo.
+	 * @param leftSide símbolo não terminal.
+	 * @return conjunto de derivações possíveis.
+	 * @throws InvalidProductionException caso não existam produções a partir do símbolo.
 	 */
 	public Set<String> get(char leftSide) throws InvalidProductionException {
 		if(!this.productions.containsKey(leftSide))
 			throw new InvalidProductionException();
 		
 		return this.productions.get(leftSide);
+	}
+
+	/**
+	 * Obter o conjunto de símbolos não terminais da gramática.
+	 * @return conjunto de símbolos deriváveis.
+	 */
+	public Set<Character> getLeftSides() {
+		return this.productions.keySet();
 	}
 	
 }

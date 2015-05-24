@@ -17,7 +17,6 @@ public class FiniteAutomatonTest {
 	private FiniteAutomaton automatonA;
 	private Set<State> automatonAfinalStates;
 	private Set<State> automatonAnotFinalStates;
-	private FiniteAutomaton automatonB;
 	
 	@Before
 	public void setUp() throws Exception {		

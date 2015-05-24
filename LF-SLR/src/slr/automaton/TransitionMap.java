@@ -104,4 +104,8 @@ public class TransitionMap {
 		return states;
 	}
 	
+	public Map<Character, Set<State>> getMap() {
+		return this.transitions;
+	}
+	
 }

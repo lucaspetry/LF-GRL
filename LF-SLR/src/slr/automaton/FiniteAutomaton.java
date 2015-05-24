@@ -1,5 +1,6 @@
 package slr.automaton;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -53,6 +54,27 @@ public class FiniteAutomaton {
 	    return new FiniteAutomaton(states, this.alphabet, initial);
 	}
 
+	@Override
+	public String toString() {
+		String automaton = "";
+		for(State s : this.states) {
+			Map<Character, Set<State>> t = s.getTransitions();
+			for(char symbol : t.keySet()) {
+				for(State target : t.get(symbol))
+					automaton += "δ(" + s.getName() + ", " + symbol + ") = "
+									+ target.getName() + "\n";
+			}
+		}
+		
+		StringBuilder builder = new StringBuilder(automaton);
+		int initialIndex = builder.indexOf("δ(" + this.initialState.getName());
+		String rest = builder.substring(0, initialIndex);
+		builder.delete(0, initialIndex);
+		builder.append(rest);
+		
+		return builder.toString();
+	}
+	
 	/**
 	 * Obter o alfabeto de entrada do autômato.
 	 * @return alfabeto de entrada.

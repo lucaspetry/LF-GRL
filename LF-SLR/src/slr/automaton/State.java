@@ -1,5 +1,6 @@
 package slr.automaton;
 
+import java.util.Map;
 import java.util.Set;
 
 import slr.exception.InvalidTransitionException;
@@ -86,6 +87,14 @@ public class State implements Comparable<State> {
 	 */
 	public Set<State> getReachableStates() {
 		return this.transitions.getTargetStates();
+	}
+
+	/**
+	 * Obter as transições do estado.
+	 * @return mapa de transições.
+	 */
+	public Map<Character, Set<State>> getTransitions() {
+		return this.transitions.getMap();
 	}
 
 }
