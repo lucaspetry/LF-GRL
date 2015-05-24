@@ -27,7 +27,20 @@ public class FiniteAutomaton {
 	public FiniteAutomaton(final Set<State> states, final State initialState) {
 		this.states = states;
 		this.initialState = initialState;
-		this.alphabet = ""; // TODO Inicializar alfabeto
+		this.buildAlphabet();
+	}
+	
+	/**
+	 * Construir o alfabeto do autômato a partir de suas transições.
+	 */
+	private void buildAlphabet() {
+		Set<Character> alphabet = new TreeSet<Character>();
+		
+		for(State s : this.states)
+			alphabet.addAll(s.getTransitions().keySet());
+		
+		for(char c : alphabet.toArray(new Character[1]))
+			this.alphabet += "" + c;
 	}
 	
 	@Override
@@ -151,48 +164,6 @@ public class FiniteAutomaton {
 	public void determinize() {
 		// TODO
 	}
-	
-	/**
-	 * Calcular o autômato complemento.
-	 * @return o autômato resultante do complemento.
-	 */
-	public FiniteAutomaton complement() {
-		try {
-			FiniteAutomaton automaton = (FiniteAutomaton) this.clone();
-			Set<State> finalStates = automaton.getFinalStates();
-			Set<State> notFinalStates = automaton.getNotFinalStates();
-			
-			for(State s : finalStates) {
-				s.setIsFinal(false);
-			}
-
-			for(State s : notFinalStates) {
-				s.setIsFinal(true);
-			}
-			
-			return automaton;
-		} catch (CloneNotSupportedException e) {
-			return null;
-		}
-	}
-	
-	/**
-	 * Calcular o autômato da interseção com o autômato especificado.
-	 * @param automaton autômato finito.
-	 * @return o autômato resultante da interseção.
-	 */
-	public FiniteAutomaton intercection(final FiniteAutomaton automaton) {
-		return null;
-	}
-
-	/**
-	 * Calcular o autômato da diferença com o autômato especificado.
-	 * @param automaton autômato finito.
-	 * @return o autômato resultante da diferença.
-	 */
-	public FiniteAutomaton difference(final FiniteAutomaton automaton) {
-		return null; // TODO
-	}
 
 	/**
 	 * Minimizar o autômato.
@@ -233,20 +204,38 @@ public class FiniteAutomaton {
 	}
 
 	/**
-	 * Verificar se o autômato é equivalente ao autômato especificado.
-	 * @param automaton autômato finito.
-	 * @return true se os autômatos são equivalentes.
-	 */
-	public boolean isEquivalent(final FiniteAutomaton automaton) {
-		return true; // TODO
-	}
-
-	/**
 	 * Verificar se o autômato é mínimo.
 	 * @return true se o autômato é mínimo.
 	 */
 	public boolean isMinimal() {
 		return true; // TODO
+	}
+	
+	/**
+	 * Calcular o autômato complemento.
+	 * @return o autômato resultante do complemento.
+	 */
+	public FiniteAutomaton complement() {
+		try {
+			FiniteAutomaton automaton = (FiniteAutomaton) this.clone();
+			
+			for(State s : automaton.states) {
+				s.setIsFinal(!s.isFinal());
+			}
+			
+			return automaton;
+		} catch (CloneNotSupportedException e) {
+			return null;
+		}
+	}
+	
+	/**
+	 * Calcular o autômato da interseção com o autômato especificado.
+	 * @param automaton autômato finito.
+	 * @return o autômato resultante da interseção.
+	 */
+	public FiniteAutomaton intercection(final FiniteAutomaton automaton) {
+		return null; // TODO
 	}
 	
 	/**

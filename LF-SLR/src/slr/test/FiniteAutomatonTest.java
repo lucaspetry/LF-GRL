@@ -11,6 +11,7 @@ import org.junit.Test;
 import slr.automaton.FiniteAutomaton;
 import slr.automaton.State;
 import slr.automaton.TransitionMap;
+import slr.expression.RegularExpression;
 
 public class FiniteAutomatonTest {
 
@@ -91,7 +92,40 @@ public class FiniteAutomatonTest {
 		assertEquals(true, this.automatonB.recognize("abbbbbbbaa"));
 		assertEquals(true, this.automatonB.recognize("aaaaaabb"));
 		assertEquals(true, this.automatonB.recognize("bbbbbaaaaab"));
-	}	
+	}
+	
+	@Test
+	public void testDeterminize() {
+		// TODO
+	}
+
+	@Test
+	public void testMinimize() {
+		// TODO
+	}
+
+	@Test
+	public void testIntersection() {
+		// TODO
+	}
+	
+	@Test
+	public void testIsDeterministic() {
+		assertEquals(true, this.automatonA.isDeterministic());
+		assertEquals(false, this.automatonB.isDeterministic());
+
+		TransitionMap transitions = new TransitionMap();
+		State a = new State("test", false, transitions);
+		Set<State> states = new TreeSet<State>();
+		states.add(a);
+		this.automatonA.getInitialState().getTransitions().put(RegularExpression.EPSILON, states);
+		assertEquals(false, this.automatonA.isDeterministic());		
+	}
+
+	@Test
+	public void testIsMinimal() {
+		// TODO
+	}
 
 	@Test
 	public void testComplement() {
