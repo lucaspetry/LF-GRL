@@ -3,3 +3,6 @@ Sistema desenvolvido na disciplina de Linguagens Formais e Compiladores (INE5421
 
 <b>Frameworks necessários:</b>
 - JUnit (compilação/execução dos testes).
+
+<b>Diagrama de Classes:</b>
+![Alt Text](https://github.com/lucaspetry/LF-SLR/blob/master/LF-SLR/doc/DiagramaDeClasses.png)
