@@ -40,7 +40,7 @@ public class FiniteAutomatonTest {
 		cTransitions.add('a', a);
 		cTransitions.add('b', c);
 		
-		this.automatonA = new FiniteAutomaton(states, "ab", a);
+		this.automatonA = new FiniteAutomaton(states, a);
 		this.automatonAfinalStates = new TreeSet<State>();
 		this.automatonAfinalStates.add(a);
 		this.automatonAnotFinalStates = new TreeSet<State>();

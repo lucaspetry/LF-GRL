@@ -2,7 +2,7 @@ package slr.expression;
 
 
 /**
- * Árvore Binária.
+ * Árvore binária.
  * @author lucas
  *
  * @param <T>
@@ -26,10 +26,18 @@ public class BinaryTree<T> {
 		this.root = root;
 	}
 	
+	/**
+	 * Obter a raiz da árvore.
+	 * @return nodo raiz da árvore.
+	 */
 	public BinaryTreeNode<T> getRoot() {
 		return root;
 	}
 
+	/**
+	 * Definir a raiz da árvore.
+	 * @param root nodo raiz da árvore.
+	 */
 	public void setRoot(BinaryTreeNode<T> root) {
 		this.root = root;
 	}

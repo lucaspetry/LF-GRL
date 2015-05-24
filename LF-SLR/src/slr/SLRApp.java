@@ -7,6 +7,11 @@ import slr.control.MainController;
 import slr.exception.InvalidProductionException;
 import slr.grammar.RegularGrammar;
 
+/**
+ * Sistema de linguagens regulares.
+ * @author lucas
+ *
+ */
 public class SLRApp {
 
 	/**

@@ -10,6 +10,7 @@ import slr.automaton.FiniteAutomaton;
 import slr.automaton.State;
 import slr.automaton.TransitionMap;
 import slr.exception.InvalidProductionException;
+import slr.expression.RegularExpression;
 
 /**
  * Gramática regular.
@@ -19,9 +20,7 @@ import slr.exception.InvalidProductionException;
 public class RegularGrammar {
 
 	public static final String DERIVATION = "->";
-	public static final char EPSILON = '&';
-	public static final char OR = '|';
-	public static final String TERMINALS = "abcdefghijklmnopqrstuvwxyz0123456789&";
+	public static final String TERMINALS = "abcdefghijklmnopqrstuvwxyz0123456789" + RegularExpression.EPSILON;
 	public static final String NONTERMINALS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	private char initialSymbol;
 	private ProductionMap productions;
@@ -93,7 +92,7 @@ public class RegularGrammar {
 			line = line.replaceAll("(\\s)+", "");
 			
 			String[] sides = line.split("->");
-			String[] rightSide = sides[1].split("\\|");
+			String[] rightSide = sides[1].split("\\" + RegularExpression.OR);
 			char leftSide = sides[0].charAt(0);
 			
 			if(firstProduction) {
@@ -123,7 +122,7 @@ public class RegularGrammar {
 			while(scanner.hasNextLine()) {
 				String line = scanner.nextLine();
 				line = line.replaceAll("(\\s)+", "");
-				String[] parts = line.split("\\||->");
+				String[] parts = line.split("\\" + RegularExpression.OR + "|->");
 
 				if(parts.length < 2 || parts[0].equals("") || !NONTERMINALS.contains(parts[0]))
 					throw new InvalidProductionException();
@@ -172,7 +171,7 @@ public class RegularGrammar {
 		
 		// Definir o estado inicial como final se Epsilon pertence à linguagem
 		try {
-			if(this.productions.get(this.initialSymbol).contains(EPSILON + ""))
+			if(this.productions.get(this.initialSymbol).contains(RegularExpression.EPSILON + ""))
 				states.get(this.initialSymbol + "").setIsFinal(true);
 		} catch (InvalidProductionException e) {}
 
@@ -192,6 +191,6 @@ public class RegularGrammar {
 		}
 		
 		return new FiniteAutomaton(
-				new TreeSet<State>(states.values()), "", states.get(this.initialSymbol + ""));
+				new TreeSet<State>(states.values()), states.get(this.initialSymbol + ""));
 	}
 }

@@ -20,6 +20,11 @@ import javax.swing.WindowConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+/**
+ * Janela principal.
+ * @author lucas
+ *
+ */
 public class MainWindow extends JFrame {
 
 	private static final long serialVersionUID = 4113893869813535193L;

@@ -1,7 +1,7 @@
 package slr.exception;
 
 /**
- * Exceção de Expressão Regular Inválida.
+ * Exceção de expressão regular inválida.
  * @author lucas
  *
  */

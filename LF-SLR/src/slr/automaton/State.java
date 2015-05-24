@@ -8,6 +8,7 @@ import slr.exception.InvalidTransitionException;
 /**
  * Estado.
  * @author lucas
+ * 
  */
 public class State implements Comparable<State> {
 
@@ -21,7 +22,7 @@ public class State implements Comparable<State> {
 	 * @param isFinal true caso o estado seja final.
 	 * @param transitions transições do estado.
 	 */
-	public State(String name, boolean isFinal, TransitionMap transitions) {
+	public State(final String name, final boolean isFinal, final TransitionMap transitions) {
 		this.name = name;
 		this.isFinal = isFinal;
 		this.transitions = transitions;
@@ -51,7 +52,7 @@ public class State implements Comparable<State> {
 	 * Definir se o estado é final.
 	 * @param isFinal true se o estado é final.
 	 */
-	public void setIsFinal(boolean isFinal) {
+	public void setIsFinal(final boolean isFinal) {
 		this.isFinal = isFinal;
 	}
 	
@@ -77,7 +78,7 @@ public class State implements Comparable<State> {
 	 * @return conjunto de estados de destino da transição.
 	 * @throws InvalidTransitionException se não há uma transição pelo símbolo de entrada especificado.
 	 */
-	public Set<State> transit(char symbol) throws InvalidTransitionException {
+	public Set<State> transit(final char symbol) throws InvalidTransitionException {
 		return this.transitions.get(symbol);
 	}
 	

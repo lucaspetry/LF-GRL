@@ -5,10 +5,12 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import slr.exception.InvalidTransitionException;
+import slr.expression.RegularExpression;
 
 /**
  * Autômato finito.
  * @author lucas
+ * 
  */
 public class FiniteAutomaton {
 
@@ -18,23 +20,14 @@ public class FiniteAutomaton {
 	
 	/**
 	 * Construtor.
-	 */
-	public FiniteAutomaton() {
-		this.alphabet = "";
-		this.states = new TreeSet<State>();
-		this.initialState = null;
-	}
-
-	/**
-	 * Construtor.
 	 * @param states conjunto de estados.
-	 * @param alphabet alfabeto do autômato.
+	 * @param  alfabeto do autômato.
 	 * @param initialState estado inicial do conjunto de estados.
 	 */
-	public FiniteAutomaton(final Set<State> states, final String alphabet, final State initialState) {
-		this.alphabet = alphabet;
+	public FiniteAutomaton(final Set<State> states, final State initialState) {
 		this.states = states;
 		this.initialState = initialState;
+		this.alphabet = ""; // TODO Inicializar alfabeto
 	}
 	
 	@Override
@@ -51,7 +44,7 @@ public class FiniteAutomaton {
 			}
 		}
 		
-	    return new FiniteAutomaton(states, this.alphabet, initial);
+	    return new FiniteAutomaton(states, initial);
 	}
 
 	@Override
@@ -134,7 +127,7 @@ public class FiniteAutomaton {
 	 * Determinizar o autômato.
 	 */
 	public void determinize() {
-		
+		// TODO
 	}
 	
 	/**
@@ -176,7 +169,7 @@ public class FiniteAutomaton {
 	 * @return o autômato resultante da diferença.
 	 */
 	public FiniteAutomaton difference(final FiniteAutomaton automaton) {
-		return null;
+		return null; // TODO
 	}
 
 	/**
@@ -207,7 +200,7 @@ public class FiniteAutomaton {
 			}
 			
 			try {
-				Set<State> reachable = state.transit('&'); // TODO Padronizar símbolo epsilon
+				Set<State> reachable = state.transit(RegularExpression.EPSILON);
 				
 				if(reachable.size() > 0)
 					return false;
@@ -223,7 +216,7 @@ public class FiniteAutomaton {
 	 * @return true se os autômatos são equivalentes.
 	 */
 	public boolean isEquivalent(final FiniteAutomaton automaton) {
-		return true;
+		return true; // TODO
 	}
 
 	/**
@@ -231,7 +224,7 @@ public class FiniteAutomaton {
 	 * @return true se o autômato é mínimo.
 	 */
 	public boolean isMinimal() {
-		return true;
+		return true; // TODO
 	}
 	
 	/**

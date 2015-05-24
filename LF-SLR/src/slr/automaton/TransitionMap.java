@@ -44,7 +44,7 @@ public class TransitionMap {
 	 * @param symbol símbolo de transição.
 	 * @param targetState estado de destino da transição.
 	 */
-	public void add(char symbol, State targetState) {
+	public void add(final char symbol, final State targetState) {
 		if(this.transitions.containsKey(symbol)) {
 			Set<State> states = this.transitions.get(symbol);
 			
@@ -63,7 +63,7 @@ public class TransitionMap {
 	 * @param targetState estado de destino da transição.
 	 * @throws InvalidTransitionException se a transição não existe.
 	 */
-	public void remove(char symbol, State targetState) throws InvalidTransitionException {
+	public void remove(final char symbol, final State targetState) throws InvalidTransitionException {
 		if(!this.transitions.containsKey(symbol))
 			throw new InvalidTransitionException();
 		
@@ -82,7 +82,7 @@ public class TransitionMap {
 	 * @return conjunto de estados de destino.
 	 * @throws InvalidTransitionException caso não exista transição pelo símbolo.
 	 */
-	public Set<State> get(char symbol) throws InvalidTransitionException {
+	public Set<State> get(final char symbol) throws InvalidTransitionException {
 		if(!this.transitions.containsKey(symbol))
 			throw new InvalidTransitionException();
 		
@@ -104,6 +104,10 @@ public class TransitionMap {
 		return states;
 	}
 	
+	/**
+	 * Obter as transições.
+	 * @return mapa de transições.
+	 */
 	public Map<Character, Set<State>> getMap() {
 		return this.transitions;
 	}

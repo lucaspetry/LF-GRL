@@ -1,7 +1,7 @@
 package slr.exception;
 
 /**
- * Exceção de Produção Inválida.
+ * Exceção de produção inválida.
  * @author lucas
  *
  */

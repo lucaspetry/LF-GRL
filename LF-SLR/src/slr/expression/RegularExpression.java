@@ -7,10 +7,10 @@ import slr.exception.InvalidRegularExpressionException;
 /**
  * Expressão regular.
  * @author lucas
+ * 
  */
 public class RegularExpression {
 
-	public static final String ALPHABET = "abcdefghijklmnopqrstuvwxyz0123456789";
 	public static final char CONCATENATION = '.';
 	public static final char EPSILON = '&';
 	public static final char KLEENE_STAR_CLOSURE = '*';
@@ -19,6 +19,7 @@ public class RegularExpression {
 	public static final char OPTIONAL = '?';
 	public static final char PARENTHESIS_OPENING = '(';
 	public static final char PARENTHESIS_CLOSING = ')';
+	public static final String ALPHABET = "abcdefghijklmnopqrstuvwxyz0123456789" + EPSILON;
 	private String regularExpression;
 	
 	/**
@@ -26,7 +27,7 @@ public class RegularExpression {
 	 * @param regularExpression expressão regular na forma textual.
 	 * @throws InvalidRegularExpressionException caso a expressão seja inválida.
 	 */
-	public RegularExpression(String regularExpression) throws InvalidRegularExpressionException {
+	public RegularExpression(final String regularExpression) throws InvalidRegularExpressionException {
 		this.regularExpression = regularExpression;
 		
 		if(!this.isValid())
