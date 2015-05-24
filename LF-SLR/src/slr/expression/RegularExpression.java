@@ -2,6 +2,8 @@ package slr.expression;
 
 import java.util.Stack;
 
+import slr.exception.InvalidRegularExpressionException;
+
 /**
  * Expressão regular.
  * @author lucas

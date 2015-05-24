@@ -4,14 +4,17 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import slr.control.MainController;
+import slr.exception.InvalidProductionException;
+import slr.grammar.RegularGrammar;
 
 public class SLRApp {
 
 	/**
 	 * Método principal.
 	 * @param args argumentos.
+	 * @throws InvalidProductionException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InvalidProductionException {
 		// Definir o tema nativo do sistema operacional
 		String osName = System.getProperty("os.name").toLowerCase();
 		try {
@@ -23,6 +26,13 @@ public class SLRApp {
 				| IllegalAccessException | UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}
+		
+		String productions = "S -> aA|bB\n" +
+							 "A -> aA|bB|a\n" +
+							 "B-> bB|b";
+		
+		RegularGrammar g = new RegularGrammar(productions);
+		System.out.println(g);
 
 		// Executar o controlador principal
 		new MainController().execute();

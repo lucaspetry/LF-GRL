@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import slr.expression.InvalidRegularExpressionException;
+import slr.exception.InvalidRegularExpressionException;
 import slr.expression.RegularExpression;
 
 public class RegularExpressionTest {

@@ -1,4 +1,4 @@
-package slr.expression;
+package slr.exception;
 
 /**
  * Exceção de Expressão Regular Inválida.
