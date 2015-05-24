@@ -15,38 +15,83 @@ import slr.automaton.TransitionMap;
 public class FiniteAutomatonTest {
 
 	private FiniteAutomaton automatonA;
+	private FiniteAutomaton automatonB;
 	private Set<State> automatonAfinalStates;
 	private Set<State> automatonAnotFinalStates;
 	
 	@Before
 	public void setUp() throws Exception {		
-		TransitionMap aTransitions = new TransitionMap();
-		TransitionMap bTransitions = new TransitionMap();
-		TransitionMap cTransitions = new TransitionMap();
+		TransitionMap aTransitionsA = new TransitionMap();
+		TransitionMap bTransitionsA = new TransitionMap();
+		TransitionMap cTransitionsA = new TransitionMap();
 
-		State a = new State("aState", true, aTransitions);
-		State b = new State("bState", false, bTransitions);
-		State c = new State("cState", false, cTransitions);
+		State aA = new State("aState", true, aTransitionsA);
+		State bA = new State("bState", false, bTransitionsA);
+		State cA = new State("cState", false, cTransitionsA);
 		
-		Set<State> states = new TreeSet<State>();
-		states.add(a);
-		states.add(b);
-		states.add(c);
+		Set<State> statesA = new TreeSet<State>();
+		statesA.add(aA);
+		statesA.add(bA);
+		statesA.add(cA);
 		
-		aTransitions.add('a', b);
-		aTransitions.add('b', a);
-		bTransitions.add('a', c);
-		bTransitions.add('b', b);
-		cTransitions.add('a', a);
-		cTransitions.add('b', c);
+		aTransitionsA.add('a', bA);
+		aTransitionsA.add('b', aA);
+		bTransitionsA.add('a', cA);
+		bTransitionsA.add('b', bA);
+		cTransitionsA.add('a', aA);
+		cTransitionsA.add('b', cA);
 		
-		this.automatonA = new FiniteAutomaton(states, a);
+		this.automatonA = new FiniteAutomaton(statesA, aA);
 		this.automatonAfinalStates = new TreeSet<State>();
-		this.automatonAfinalStates.add(a);
+		this.automatonAfinalStates.add(aA);
 		this.automatonAnotFinalStates = new TreeSet<State>();
-		this.automatonAnotFinalStates.add(b);
-		this.automatonAnotFinalStates.add(c);
+		this.automatonAnotFinalStates.add(bA);
+		this.automatonAnotFinalStates.add(cA);
+
+		TransitionMap aTransitionsB = new TransitionMap();
+		TransitionMap bTransitionsB = new TransitionMap();
+		TransitionMap cTransitionsB = new TransitionMap();
+
+		State aB = new State("q0", false, aTransitionsB);
+		State bB = new State("q1", false, bTransitionsB);
+		State cB = new State("q2", true, cTransitionsB);
+		
+		Set<State> statesB = new TreeSet<State>();
+		statesB.add(aB);
+		statesB.add(bB);
+		statesB.add(cB);
+		
+		aTransitionsB.add('a', aB);
+		aTransitionsB.add('a', bB);
+		aTransitionsB.add('b', aB);
+		bTransitionsB.add('b', cB);
+		cTransitionsB.add('a', cB);
+		cTransitionsB.add('b', cB);
+		this.automatonB = new FiniteAutomaton(statesB, aB);
+		
 	}
+
+	@Test
+	public void testRecognizeDeterministic() {
+		assertEquals(false, this.automatonA.recognize("asdbae"));
+		assertEquals(false, this.automatonA.recognize("aababbba"));
+		assertEquals(true, this.automatonA.recognize(""));
+		assertEquals(true, this.automatonA.recognize("aaabb"));
+		assertEquals(true, this.automatonA.recognize("abbababbbbbb"));
+		assertEquals(true, this.automatonA.recognize("bbbb"));
+	}
+
+	@Test
+	public void testRecognizeNondeterministic() {
+		assertEquals(false, this.automatonB.recognize(""));
+		assertEquals(false, this.automatonB.recognize("bbbbaaa"));
+		assertEquals(false, this.automatonB.recognize("aaaa"));
+		assertEquals(false, this.automatonB.recognize("bb"));
+		assertEquals(true, this.automatonB.recognize("ab"));
+		assertEquals(true, this.automatonB.recognize("abbbbbbbaa"));
+		assertEquals(true, this.automatonB.recognize("aaaaaabb"));
+		assertEquals(true, this.automatonB.recognize("bbbbbaaaaab"));
+	}	
 
 	@Test
 	public void testComplement() {

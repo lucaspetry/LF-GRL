@@ -120,7 +120,29 @@ public class FiniteAutomaton {
 	 * @return true caso a entrada seja uma sentença da linguagem.
 	 */
 	public boolean recognize(final String entry) {
-		return true; // TODO
+		return this.recognizeEntry(entry, this.initialState);
+	}
+	
+	/**
+	 * Método auxiliar de reconhecimento de uma entrada.
+	 * @param entry entrada qualquer.
+	 * @param begin estado de início do reconhecimento.
+	 * @return true caso a entrada seja reconhecida a partir do estado especificado.
+	 */
+	private boolean recognizeEntry(final String entry, final State begin) {
+		switch(entry.length()) {
+			case 0:
+				return begin.isFinal();
+			default:
+				try {
+					for(State s : begin.transit(entry.charAt(0))) {
+						if(this.recognizeEntry(entry.substring(1, entry.length()), s))
+							return true;
+					}
+				} catch (InvalidTransitionException e) {}
+				
+				return false;
+		}
 	}
 	
 	/**

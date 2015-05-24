@@ -5,7 +5,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import slr.control.MainController;
 import slr.exception.InvalidProductionException;
-import slr.grammar.RegularGrammar;
 
 /**
  * Sistema de linguagens regulares.
@@ -31,13 +30,6 @@ public class SLRApp {
 				| IllegalAccessException | UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}
-		
-		String productions = "S -> aA|bB\n" +
-							 "A -> aA|bB|a\n" +
-							 "B-> bB|b";
-		
-		RegularGrammar g = new RegularGrammar(productions);
-		System.out.println(g);
 
 		// Executar o controlador principal
 		new MainController().execute();

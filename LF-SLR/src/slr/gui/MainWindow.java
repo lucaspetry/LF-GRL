@@ -29,6 +29,7 @@ public class MainWindow extends JFrame {
 
 	private static final long serialVersionUID = 4113893869813535193L;
 	private JButton btnAddRE;
+	private JButton btnAddRG;
 	private JButton btnDifferenceMinimalFiniteAutomaton;
 	private JButton btnEnumerateSentences;
 	private JButton btnEquivalent;
@@ -40,7 +41,7 @@ public class MainWindow extends JFrame {
 	private JScrollPane jScrollPane1;
 	private JList<String> listRegularExpressions;
 	private JPanel panelBinaryOperations;
-	private JPanel panelRegularExpressions;
+	private JPanel panelERsAndGRs;
 	private JPanel panelResults;
 	private JPanel panelUnaryOperations;
 	DefaultListModel<String> regularExpressions;
@@ -55,10 +56,11 @@ public class MainWindow extends JFrame {
 	}
 
 	private void initComponents() {
-		panelRegularExpressions = new JPanel();
+		panelERsAndGRs = new JPanel();
 		jScrollPane1 = new JScrollPane();
 		listRegularExpressions = new JList<String>();
 		btnAddRE = new JButton();
+		btnAddRG = new JButton();
 		btnRemoveRE = new JButton();
 		panelUnaryOperations = new JPanel();
 		btnFiniteAutomaton = new JButton();
@@ -75,79 +77,50 @@ public class MainWindow extends JFrame {
 		setTitle("Sistema de Linguagens Formais");
 		setResizable(false);
 
-		panelRegularExpressions.setBorder(BorderFactory
-				.createTitledBorder("Expressões Regulares"));
+		panelERsAndGRs.setBorder(BorderFactory
+				.createTitledBorder("Expressões e Gramáticas Regulares"));
 
 		listRegularExpressions
 				.setToolTipText("Clique duplo para editar uma expressão");
 		jScrollPane1.setViewportView(listRegularExpressions);
 
-		btnAddRE.setText("Adicionar");
+		btnAddRE.setText("Inserir ER");
 		btnAddRE.setToolTipText("Adicionar uma nova expressão regular");
+        btnAddRG.setText("Inserir GR");
+        btnAddRG.setToolTipText("Adicionar uma nova gramática regular");
 
 		btnRemoveRE.setText("Remover");
 		btnRemoveRE.setToolTipText("Remover a expressão regular selecionada");
 
-		GroupLayout panelRegularExpressionsLayout = new GroupLayout(
-				panelRegularExpressions);
-		panelRegularExpressions.setLayout(panelRegularExpressionsLayout);
-		panelRegularExpressionsLayout
-				.setHorizontalGroup(panelRegularExpressionsLayout
-						.createParallelGroup(GroupLayout.Alignment.TRAILING)
-						.addGroup(
-								panelRegularExpressionsLayout
-										.createSequentialGroup()
-										.addContainerGap(
-												GroupLayout.DEFAULT_SIZE,
-												Short.MAX_VALUE)
-										.addGroup(
-												panelRegularExpressionsLayout
-														.createParallelGroup(
-																GroupLayout.Alignment.LEADING,
-																false)
-														.addComponent(
-																jScrollPane1,
-																GroupLayout.Alignment.TRAILING,
-																GroupLayout.PREFERRED_SIZE,
-																253,
-																GroupLayout.PREFERRED_SIZE)
-														.addGroup(
-																panelRegularExpressionsLayout
-																		.createSequentialGroup()
-																		.addComponent(
-																				btnAddRE,
-																				GroupLayout.PREFERRED_SIZE,
-																				122,
-																				GroupLayout.PREFERRED_SIZE)
-																		.addPreferredGap(
-																				LayoutStyle.ComponentPlacement.RELATED)
-																		.addComponent(
-																				btnRemoveRE,
-																				GroupLayout.DEFAULT_SIZE,
-																				GroupLayout.DEFAULT_SIZE,
-																				Short.MAX_VALUE)))
-										.addContainerGap()));
-		panelRegularExpressionsLayout
-				.setVerticalGroup(panelRegularExpressionsLayout
-						.createParallelGroup(GroupLayout.Alignment.LEADING)
-						.addGroup(
-								GroupLayout.Alignment.TRAILING,
-								panelRegularExpressionsLayout
-										.createSequentialGroup()
-										.addContainerGap()
-										.addComponent(jScrollPane1,
-												GroupLayout.PREFERRED_SIZE, 0,
-												Short.MAX_VALUE)
-										.addPreferredGap(
-												LayoutStyle.ComponentPlacement.RELATED)
-										.addGroup(
-												panelRegularExpressionsLayout
-														.createParallelGroup(
-																GroupLayout.Alignment.BASELINE)
-														.addComponent(btnAddRE)
-														.addComponent(
-																btnRemoveRE))
-										.addContainerGap()));
+		javax.swing.GroupLayout panelRegularExpressionsLayout = new javax.swing.GroupLayout(panelERsAndGRs);
+		panelERsAndGRs.setLayout(panelRegularExpressionsLayout);
+        panelRegularExpressionsLayout.setHorizontalGroup(
+            panelRegularExpressionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(panelRegularExpressionsLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(panelRegularExpressionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelRegularExpressionsLayout.createSequentialGroup()
+                        .addComponent(btnAddRE, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnAddRG, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnRemoveRE, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        panelRegularExpressionsLayout.setVerticalGroup(
+            panelRegularExpressionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelRegularExpressionsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelRegularExpressionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelRegularExpressionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnAddRE)
+                        .addComponent(btnRemoveRE))
+                    .addComponent(btnAddRG, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addContainerGap())
+        );
 
 		panelUnaryOperations.setBorder(BorderFactory
 				.createTitledBorder("Operações Básicas da Expressão Regular"));
@@ -331,7 +304,7 @@ public class MainWindow extends JFrame {
 												.addGroup(
 														layout.createSequentialGroup()
 																.addComponent(
-																		panelRegularExpressions,
+																		panelERsAndGRs,
 																		GroupLayout.PREFERRED_SIZE,
 																		GroupLayout.DEFAULT_SIZE,
 																		GroupLayout.PREFERRED_SIZE)
@@ -362,7 +335,7 @@ public class MainWindow extends JFrame {
 												GroupLayout.Alignment.TRAILING,
 												false)
 												.addComponent(
-														panelRegularExpressions,
+														panelERsAndGRs,
 														GroupLayout.DEFAULT_SIZE,
 														GroupLayout.DEFAULT_SIZE,
 														Short.MAX_VALUE)
