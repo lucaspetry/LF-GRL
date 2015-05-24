@@ -14,6 +14,11 @@ import slr.exception.InvalidTransitionException;
 
 public class StateTest {
 
+	private State a;
+	private State b;
+	private State c;
+	private State d;
+	
 	@Before
 	public void setUp() throws Exception {		
 		TransitionMap aTransitions = new TransitionMap();
@@ -75,7 +80,6 @@ public class StateTest {
 			this.c.transit('a');
 			fail();
 		} catch (InvalidTransitionException e) {
-			assertTrue(true);
 		}
 	}
 
@@ -94,10 +98,5 @@ public class StateTest {
 		assertEquals(false, this.a.equals(this.b));
 		assertEquals(true, this.a.equals(this.a));
 	}
-	
-	private State a;
-	private State b;
-	private State c;
-	private State d;
 
 }

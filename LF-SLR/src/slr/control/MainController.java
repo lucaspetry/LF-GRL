@@ -9,6 +9,8 @@ import slr.gui.MainWindow;
  */
 public class MainController {
 
+	private MainWindow mainWindow;
+	
 	/**
 	 * Construtor.
 	 */
@@ -22,7 +24,5 @@ public class MainController {
 	public void execute() {
 		this.mainWindow.setVisible(true);
 	}
-	
-	private MainWindow mainWindow;
 	
 }

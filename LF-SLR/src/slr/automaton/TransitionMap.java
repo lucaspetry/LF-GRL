@@ -14,6 +14,8 @@ import slr.exception.InvalidTransitionException;
  */
 public class TransitionMap {
 
+	Map<Character, Set<State>> transitions;
+	
 	/**
 	 * Construtor.
 	 */
@@ -102,5 +104,4 @@ public class TransitionMap {
 		return states;
 	}
 	
-	Map<Character, Set<State>> transitions;
 }

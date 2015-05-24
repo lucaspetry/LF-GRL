@@ -9,6 +9,10 @@ import slr.exception.InvalidTransitionException;
  * @author lucas
  */
 public class State implements Comparable<State> {
+
+	private String name;
+	private boolean isFinal;
+	private TransitionMap transitions;
 	
 	/**
 	 * Construtor.
@@ -83,9 +87,5 @@ public class State implements Comparable<State> {
 	public Set<State> getReachableStates() {
 		return this.transitions.getTargetStates();
 	}
-
-	private String name;
-	private boolean isFinal;
-	private TransitionMap transitions;
 
 }

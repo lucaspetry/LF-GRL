@@ -11,6 +11,10 @@ import slr.exception.InvalidTransitionException;
  */
 public class FiniteAutomaton {
 
+	private String alphabet;
+	private Set<State> states;
+	private State initialState;
+	
 	/**
 	 * Construtor.
 	 */
@@ -265,9 +269,5 @@ public class FiniteAutomaton {
 		
 		this.states = livingStates;
 	}
-
-	private String alphabet;
-	private Set<State> states;
-	private State initialState;
 
 }

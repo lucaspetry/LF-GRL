@@ -22,6 +22,24 @@ import javax.swing.event.ListSelectionListener;
 
 public class MainWindow extends JFrame {
 
+	private static final long serialVersionUID = 4113893869813535193L;
+	private JButton btnAddRE;
+	private JButton btnDifferenceMinimalFiniteAutomaton;
+	private JButton btnEnumerateSentences;
+	private JButton btnEquivalent;
+	private JButton btnFiniteAutomaton;
+	private JButton btnIntercectionMinimalFiniteAutomaton;
+	private JButton btnMinimalFiniteAutomaton;
+	private JButton btnPatternOccurrencesText;
+	private JButton btnRemoveRE;
+	private JScrollPane jScrollPane1;
+	private JList<String> listRegularExpressions;
+	private JPanel panelBinaryOperations;
+	private JPanel panelRegularExpressions;
+	private JPanel panelResults;
+	private JPanel panelUnaryOperations;
+	DefaultListModel<String> regularExpressions;
+	
 	public MainWindow() {
 		this.regularExpressions = new DefaultListModel<String>();
 		this.initComponents();
@@ -498,23 +516,5 @@ public class MainWindow extends JFrame {
 			this.btnDifferenceMinimalFiniteAutomaton.setEnabled(false);
 		}
 	}
-
-	private static final long serialVersionUID = 4113893869813535193L;
-	private JButton btnAddRE;
-	private JButton btnDifferenceMinimalFiniteAutomaton;
-	private JButton btnEnumerateSentences;
-	private JButton btnEquivalent;
-	private JButton btnFiniteAutomaton;
-	private JButton btnIntercectionMinimalFiniteAutomaton;
-	private JButton btnMinimalFiniteAutomaton;
-	private JButton btnPatternOccurrencesText;
-	private JButton btnRemoveRE;
-	private JScrollPane jScrollPane1;
-	private JList<String> listRegularExpressions;
-	private JPanel panelBinaryOperations;
-	private JPanel panelRegularExpressions;
-	private JPanel panelResults;
-	private JPanel panelUnaryOperations;
-	DefaultListModel<String> regularExpressions;
 
 }

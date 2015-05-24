@@ -5,7 +5,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import slr.control.MainController;
 
-public class SLFApp {
+public class SLRApp {
 
 	/**
 	 * Método principal.
