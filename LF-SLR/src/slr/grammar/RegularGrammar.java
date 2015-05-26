@@ -3,7 +3,6 @@ package slr.grammar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.Set;
 import java.util.TreeSet;
 
 import slr.automaton.FiniteAutomaton;
@@ -46,7 +45,6 @@ public class RegularGrammar {
 		this.initialSymbol = initialSymbol;
 		
 		this.productions.get(initialSymbol);
-		this.checkProductions(this.toString());
 	}
 
 	@Override
@@ -115,37 +113,31 @@ public class RegularGrammar {
 	 */
 	private void checkProductions(final String productions) throws InvalidProductionException {
 		Scanner scanner = new Scanner(productions);
-		Set<Character> nonTerminalsLeft = new TreeSet<Character>();
-		Set<Character> nonTerminalsRight = new TreeSet<Character>();
 
 		try {
 			while(scanner.hasNextLine()) {
 				String line = scanner.nextLine();
 				line = line.replaceAll("(\\s)+", "");
-				String[] parts = line.split("\\" + RegularExpression.OR + "|->");
-
-				if(parts.length < 2 || parts[0].equals("") || !NONTERMINALS.contains(parts[0]))
+				
+				String[] sides = line.split("->");
+				
+				if(sides.length != 2 || sides[0].equals("") || !NONTERMINALS.contains(sides[0]))
 					throw new InvalidProductionException();
 
-				nonTerminalsLeft.add(parts[0].charAt(0));
+				String[] rightSide = sides[1].split("\\" + RegularExpression.OR);
 
-				for(int i = 1; i < parts.length; i++) {
-					if(!TERMINALS.contains(parts[i].subSequence(0, 1)))
+				for(int i = 0; i < rightSide.length; i++) {
+					if(!TERMINALS.contains(rightSide[i].subSequence(0, 1)))
 						throw new InvalidProductionException();
 
-					if(parts[i].length() == 2) {
-						if(!NONTERMINALS.contains(parts[i].subSequence(1, 2)))
+					if(rightSide[i].length() == 2) {
+						if(!NONTERMINALS.contains(rightSide[i].subSequence(1, 2)))
 							throw new InvalidProductionException();
-
-						nonTerminalsRight.add(parts[i].charAt(1));
-					} else if(parts[i].length() > 2) {
+					} else if(rightSide[i].length() > 2) {
 						throw new InvalidProductionException();					
 					}
 				}
 			}
-			
-			if(!nonTerminalsLeft.containsAll(nonTerminalsRight))
-				throw new InvalidProductionException();
 		} finally {
 			scanner.close();
 		}
@@ -160,7 +152,7 @@ public class RegularGrammar {
 		Map<String, TransitionMap> transitionMaps = new HashMap<String, TransitionMap>();
 		
 		// Criar os estados e mapas de transição
-		for(char leftSide : this.productions.getLeftSides()) {
+		for(char leftSide : this.productions.getNonTerminals()) {
 			transitionMaps.put(leftSide + "", new TransitionMap());
 			states.put(leftSide + "", new State(leftSide + "", false, transitionMaps.get(leftSide + "")));
 		}
@@ -176,7 +168,7 @@ public class RegularGrammar {
 		} catch (InvalidProductionException e) {}
 
 		// Adicionar as transições do autômato
-		for(char leftSide : this.productions.getLeftSides()) {
+		for(char leftSide : this.productions.getNonTerminals()) {
 			TransitionMap t = transitionMaps.get(leftSide + "");
 						
 			try {

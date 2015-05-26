@@ -108,10 +108,24 @@ public class ProductionMap {
 
 	/**
 	 * Obter o conjunto de símbolos não terminais da gramática.
-	 * @return conjunto de símbolos deriváveis.
+	 * @return conjunto de símbolos não terminais.
 	 */
-	public Set<Character> getLeftSides() {
-		return this.productions.keySet();
+	public Set<Character> getNonTerminals() {
+		Set<Character> symbols = new TreeSet<Character>();
+		
+		for(char leftSide : this.productions.keySet()) {
+			symbols.add(leftSide);
+			try {
+				for(String rightSide : this.get(leftSide)) {
+					for(char c : rightSide.toCharArray()) {
+						if(RegularGrammar.NONTERMINALS.contains(c + ""))
+							symbols.add(c);
+					}
+				}
+			} catch (InvalidProductionException e) {}
+		}
+		
+		return symbols;
 	}
 	
 }

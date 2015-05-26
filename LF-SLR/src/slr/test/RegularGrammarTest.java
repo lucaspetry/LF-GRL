@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import slr.automaton.FiniteAutomaton;
 import slr.exception.InvalidProductionException;
 import slr.grammar.ProductionMap;
 import slr.grammar.RegularGrammar;
@@ -28,7 +29,7 @@ public class RegularGrammarTest {
 		new RegularGrammar(productions);
 	}
 
-	@Test(expected=InvalidProductionException.class)
+	@Test
 	public void testConstructor2() throws InvalidProductionException {
 		String productions = "A -> aA|b|bC\n" +
 							  "C -> a|bD";
@@ -43,13 +44,21 @@ public class RegularGrammarTest {
 
 	@Test(expected=InvalidProductionException.class)
 	public void testConstructor4() throws InvalidProductionException {
+		String productions = "A -> aA|b|bC\n" +
+	  			 			 "E -> bE|b" + // Sem a quebra de linha!
+				  			 "C -> a|bD";
+		new RegularGrammar(productions);
+	}
+	
+	@Test(expected=InvalidProductionException.class)
+	public void testConstructor5() throws InvalidProductionException {
 		ProductionMap p = new ProductionMap();
 		p.add('S', "aS");
 		new RegularGrammar(p, 'Z');
 	}
 
 	@Test
-	public void testConstructor5() throws InvalidProductionException {
+	public void testConstructor6() throws InvalidProductionException {
 		ProductionMap p = new ProductionMap();
 		p.add('S', "aS");
 		p.add('S', "bA");
@@ -64,8 +73,32 @@ public class RegularGrammarTest {
 	}
 
 	@Test
-	public void testToFiniteAutomaton() {
-		// TODO
+	public void testToFiniteAutomaton() throws InvalidProductionException {
+		String productions = "A -> aA|b|bC\n" +
+							 "C -> a|bD";
+		RegularGrammar g = new RegularGrammar(productions);
+		FiniteAutomaton fG = g.toFiniteAutomaton();
+		
+		assertEquals(true, fG.recognize("b"));
+		assertEquals(true, fG.recognize("aaaab"));
+		assertEquals(true, fG.recognize("aaba"));
+		assertEquals(false, fG.recognize("aaaabbb"));
+		assertEquals(false, fG.recognize("aaaaaa"));
+	}
+
+	@Test
+	public void testToFiniteAutomaton2() throws InvalidProductionException {
+		String productions = "A -> aA|b|bC\n" +
+							 "E -> bE|a\n" +
+							 "C -> a|bD";
+		RegularGrammar g = new RegularGrammar(productions);
+		FiniteAutomaton fG = g.toFiniteAutomaton();
+		
+		assertEquals(true, fG.recognize("b"));
+		assertEquals(true, fG.recognize("aaaab"));
+		assertEquals(true, fG.recognize("aaba"));
+		assertEquals(false, fG.recognize("aaaabbb"));
+		assertEquals(false, fG.recognize("aaaaaa"));
 	}
 
 }
