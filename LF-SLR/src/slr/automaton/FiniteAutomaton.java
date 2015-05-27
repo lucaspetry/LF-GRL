@@ -35,9 +35,12 @@ public class FiniteAutomaton {
 	 */
 	private void buildAlphabet() {
 		Set<Character> alphabet = new TreeSet<Character>();
+		this.alphabet = "";
 		
 		for(State s : this.states)
 			alphabet.addAll(s.getTransitions().keySet());
+		
+		alphabet.remove(RegularExpression.EPSILON);
 		
 		for(char c : alphabet.toArray(new Character[1]))
 			this.alphabet += "" + c;
@@ -145,8 +148,22 @@ public class FiniteAutomaton {
 	private boolean recognizeEntry(final String entry, final State begin) {
 		switch(entry.length()) {
 			case 0:
+				try {
+					for(State s : begin.transit(RegularExpression.EPSILON)) {
+						if(this.recognizeEntry(entry, s))
+							return true;
+					}
+				} catch (InvalidTransitionException e) {}
+				
 				return begin.isFinal();
 			default:
+				try {
+					for(State s : begin.transit(RegularExpression.EPSILON)) {
+						if(this.recognizeEntry(entry, s))
+							return true;
+					}
+				} catch (InvalidTransitionException e) {}
+				
 				try {
 					for(State s : begin.transit(entry.charAt(0))) {
 						if(this.recognizeEntry(entry.substring(1, entry.length()), s))
@@ -156,6 +173,31 @@ public class FiniteAutomaton {
 				
 				return false;
 		}
+	}
+	
+	/**
+	 * Completar o autômato.
+	 */
+	public void complete() {
+		TransitionMap transitionsDead = new TransitionMap();
+		State deadState = new State("Φ", false, transitionsDead);
+		boolean deadStateNeeded = false;
+		
+		for(char symbol : this.getAlphabet().toCharArray()) {
+			transitionsDead.add(symbol, deadState);
+			
+			for(State s : this.states) {
+				try {
+					s.transit(symbol);
+				} catch (InvalidTransitionException e) {
+					s.getTransitionMap().add(symbol, deadState);
+					deadStateNeeded = true;
+				}
+			}
+		}
+		
+		if(deadStateNeeded)
+			this.states.add(deadState);
 	}
 	
 	/**
@@ -177,6 +219,24 @@ public class FiniteAutomaton {
 		// TODO Continuar a minimização.
 	}
 
+	/**
+	 * Verificar se o autômato é completo.
+	 * @return true se o autômato possui todas as transições definidas.
+	 */
+	public boolean isComplete() {
+		for(char symbol : this.getAlphabet().toCharArray()) {
+			for(State s : this.states) {
+				try {
+					s.transit(symbol);
+				} catch (InvalidTransitionException e) {
+					return false;
+				}
+			}
+		}
+		
+		return true;
+	}
+	
 	/**
 	 * Verificar se o autômato é determinístico.
 	 * @return true se o autômato é determinístico.
@@ -218,12 +278,63 @@ public class FiniteAutomaton {
 	public FiniteAutomaton complement() {
 		try {
 			FiniteAutomaton automaton = (FiniteAutomaton) this.clone();
+			automaton.complete();
 			
 			for(State s : automaton.states) {
 				s.setIsFinal(!s.isFinal());
 			}
 			
 			return automaton;
+		} catch (CloneNotSupportedException e) {
+			return null;
+		}
+	}
+
+	/**
+	 * Calcular o autômato da união com o autômato especificado.
+	 * @param automaton autômato finito.
+	 * @return o autômato resultante da interseção.
+	 */
+	public FiniteAutomaton union(final FiniteAutomaton automaton) {
+		int stateNumber = 1;
+		try {
+			// Clonar o autômato atual
+			FiniteAutomaton unionAutomaton = (FiniteAutomaton) this.clone();
+			
+			// Renomear os estados do atual
+			for(State s : unionAutomaton.states) {
+				s.setName("q" + stateNumber);
+				stateNumber++;
+			}
+
+			// Renomear os estados do outro autômato e adicionar ao da união
+			for(State s : automaton.states) {
+				s.setName("q" + stateNumber);
+				stateNumber++;
+				unionAutomaton.states.add(s);
+			}
+			
+			// Criar o estado inicial a partir de um dos estados iniciais
+			State initialState = (State) unionAutomaton.initialState.clone();
+			initialState.setName("q0");
+			initialState.setIsFinal(automaton.initialState.isFinal() || initialState.isFinal());
+			TransitionMap transitions = initialState.getTransitionMap();
+			
+			// Copiar as transições do outro estado inicial
+			for(char symbol : automaton.getAlphabet().toCharArray()) {
+				try {
+					for(State target : automaton.initialState.transit(symbol)) {
+						transitions.add(symbol, target);
+					}
+				} catch (InvalidTransitionException e) {}
+			}
+			
+			// Definir o novo estado inicial e atualizar o alfabeto
+			unionAutomaton.states.add(initialState);
+			unionAutomaton.initialState = initialState;
+			unionAutomaton.buildAlphabet();		
+			
+			return unionAutomaton;
 		} catch (CloneNotSupportedException e) {
 			return null;
 		}
@@ -235,7 +346,15 @@ public class FiniteAutomaton {
 	 * @return o autômato resultante da interseção.
 	 */
 	public FiniteAutomaton intercection(final FiniteAutomaton automaton) {
-		return null; // TODO
+		try {
+			FiniteAutomaton a = (FiniteAutomaton) this.clone();
+			FiniteAutomaton b = (FiniteAutomaton) automaton.clone();
+			FiniteAutomaton union = a.complement().union(b.complement());
+			
+			return union.complement();
+		} catch (CloneNotSupportedException e) {}
+		
+		return null;
 	}
 	
 	/**

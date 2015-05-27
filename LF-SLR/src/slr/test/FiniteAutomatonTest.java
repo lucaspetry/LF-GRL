@@ -11,6 +11,7 @@ import org.junit.Test;
 import slr.automaton.FiniteAutomaton;
 import slr.automaton.State;
 import slr.automaton.TransitionMap;
+import slr.exception.InvalidTransitionException;
 import slr.expression.RegularExpression;
 
 public class FiniteAutomatonTest {
@@ -21,7 +22,11 @@ public class FiniteAutomatonTest {
 	private Set<State> automatonAnotFinalStates;
 	
 	@Before
-	public void setUp() throws Exception {		
+	public void setUp() throws Exception {
+		/**
+		 * Autômato A = (a,b)* | #a's é divisível por 3
+		 * Autômato B = (a,b)* | 'ab' pertence à sentença
+		 */
 		TransitionMap aTransitionsA = new TransitionMap();
 		TransitionMap bTransitionsA = new TransitionMap();
 		TransitionMap cTransitionsA = new TransitionMap();
@@ -73,6 +78,39 @@ public class FiniteAutomatonTest {
 	}
 
 	@Test
+	public void testGetAlphabet() {
+		TransitionMap aTransitions = new TransitionMap();
+		TransitionMap bTransitions = new TransitionMap();
+		TransitionMap cTransitions = new TransitionMap();
+		TransitionMap dTransitions = new TransitionMap();
+
+		State a = new State("q0", false, aTransitions);
+		State b = new State("q1", false, bTransitions);
+		State c = new State("q2", true, cTransitions);
+		State d = new State("q3", false, dTransitions);
+		
+		Set<State> states = new TreeSet<State>();
+		states.add(a);
+		states.add(b);
+		states.add(c);
+		states.add(d);
+		
+		aTransitions.add('a', a);
+		aTransitions.add('a', b);
+		bTransitions.add('d', c);
+		cTransitions.add('a', c);
+		cTransitions.add('c', c);
+		dTransitions.add('a', a);
+		dTransitions.add(RegularExpression.EPSILON, b);
+		FiniteAutomaton f = new FiniteAutomaton(states, a);
+
+		assertEquals(true, f.getAlphabet().contains("a"));
+		assertEquals(true, f.getAlphabet().contains("c"));
+		assertEquals(true, f.getAlphabet().contains("d"));
+		assertEquals(3, f.getAlphabet().length());
+	}
+	
+	@Test
 	public void testRecognizeDeterministic() {
 		assertEquals(false, this.automatonA.recognize("asdbae"));
 		assertEquals(false, this.automatonA.recognize("aababbba"));
@@ -93,6 +131,97 @@ public class FiniteAutomatonTest {
 		assertEquals(true, this.automatonB.recognize("aaaaaabb"));
 		assertEquals(true, this.automatonB.recognize("bbbbbaaaaab"));
 	}
+
+	@Test
+	public void testRecognizeNondeterministicEpsilon() {
+		TransitionMap aTransitions = new TransitionMap();
+		TransitionMap bTransitions = new TransitionMap();
+		TransitionMap cTransitions = new TransitionMap();
+
+		State a = new State("q0", false, aTransitions);
+		State b = new State("q1", true, bTransitions);
+		State c = new State("q2", true, cTransitions);
+		
+		Set<State> states = new TreeSet<State>();
+		states.add(a);
+		states.add(b);
+		states.add(c);
+		
+		aTransitions.add(RegularExpression.EPSILON, b);
+		aTransitions.add(RegularExpression.EPSILON, c);
+		bTransitions.add('a', b);
+		cTransitions.add('b', c);
+		FiniteAutomaton f = new FiniteAutomaton(states, a);
+
+		assertEquals(false, f.recognize("aaabb"));
+		assertEquals(false, f.recognize("ba"));
+		assertEquals(true, f.recognize(""));
+		assertEquals(true, f.recognize("a"));
+		assertEquals(true, f.recognize("aaaaa"));
+		assertEquals(true, f.recognize("bbb"));
+	}
+	
+	@Test
+	public void testRecognizeNondeterministicEpsilon2() {
+		TransitionMap aTransitions = new TransitionMap();
+		TransitionMap bTransitions = new TransitionMap();
+		TransitionMap cTransitions = new TransitionMap();
+
+		State a = new State("q0", false, aTransitions);
+		State b = new State("q1", false, bTransitions);
+		State c = new State("q2", true, cTransitions);
+		
+		Set<State> states = new TreeSet<State>();
+		states.add(a);
+		states.add(b);
+		states.add(c);
+		
+		aTransitions.add('a', a);
+		aTransitions.add(RegularExpression.EPSILON, b);
+		bTransitions.add('b', b);
+		bTransitions.add(RegularExpression.EPSILON, c);
+		cTransitions.add('c', c);
+		FiniteAutomaton f = new FiniteAutomaton(states, a);
+
+		assertEquals(false, f.recognize("bbaa"));
+		assertEquals(false, f.recognize("cca"));
+		assertEquals(false, f.recognize("ccb"));
+		assertEquals(true, f.recognize(""));
+		assertEquals(true, f.recognize("aa"));
+		assertEquals(true, f.recognize("aab"));
+		assertEquals(true, f.recognize("abc"));
+		assertEquals(true, f.recognize("bb"));
+		assertEquals(true, f.recognize("bbcccc"));
+		assertEquals(true, f.recognize("c"));
+	}
+
+	@Test
+	public void testComplete() throws InvalidTransitionException {
+		TransitionMap aTransitions = new TransitionMap();
+		TransitionMap bTransitions = new TransitionMap();
+		TransitionMap cTransitions = new TransitionMap();
+
+		State a = new State("q0", false, aTransitions);
+		State b = new State("q1", true, bTransitions);
+		State c = new State("q2", true, cTransitions);
+		
+		Set<State> states = new TreeSet<State>();
+		states.add(a);
+		states.add(b);
+		states.add(c);
+		
+		aTransitions.add(RegularExpression.EPSILON, b);
+		aTransitions.add(RegularExpression.EPSILON, c);
+		bTransitions.add('a', b);
+		cTransitions.add('b', c);
+		FiniteAutomaton f = new FiniteAutomaton(states, a);
+		f.complete();
+
+		assertEquals(1, a.transit('a').size());
+		assertEquals(1, a.transit('b').size());
+		assertEquals(1, b.transit('b').size());
+		assertEquals(1, c.transit('a').size());
+	}
 	
 	@Test
 	public void testDeterminize() {
@@ -105,10 +234,31 @@ public class FiniteAutomatonTest {
 	}
 
 	@Test
-	public void testIntersection() {
-		// TODO
+	public void testIsComplete() {
+		TransitionMap aTransitions = new TransitionMap();
+		TransitionMap bTransitions = new TransitionMap();
+		TransitionMap cTransitions = new TransitionMap();
+
+		State a = new State("q0", false, aTransitions);
+		State b = new State("q1", true, bTransitions);
+		State c = new State("q2", true, cTransitions);
+		
+		Set<State> states = new TreeSet<State>();
+		states.add(a);
+		states.add(b);
+		states.add(c);
+		
+		aTransitions.add(RegularExpression.EPSILON, b);
+		aTransitions.add(RegularExpression.EPSILON, c);
+		bTransitions.add('a', b);
+		cTransitions.add('b', c);
+		FiniteAutomaton f = new FiniteAutomaton(states, a);
+		
+		assertEquals(false, f.isComplete());
+		f.complete();
+		assertEquals(true, f.isComplete());		
 	}
-	
+
 	@Test
 	public void testIsDeterministic() {
 		assertEquals(true, this.automatonA.isDeterministic());
@@ -120,6 +270,33 @@ public class FiniteAutomatonTest {
 		states.add(a);
 		this.automatonA.getInitialState().getTransitions().put(RegularExpression.EPSILON, states);
 		assertEquals(false, this.automatonA.isDeterministic());		
+	}
+	
+	@Test
+	public void testUnion() {
+		FiniteAutomaton union = this.automatonA.union(this.automatonB);
+		
+		assertEquals(false, union.recognize("aa"));
+		assertEquals(false, union.recognize("bbba"));
+		assertEquals(true, union.recognize(""));
+		assertEquals(true, union.recognize("aaa"));
+		assertEquals(true, union.recognize("ab"));
+		assertEquals(true, union.recognize("bbaab"));
+		assertEquals(true, union.recognize("bbaaabb"));
+	}
+	
+	@Test
+	public void testIntersection() {
+		FiniteAutomaton intersection = this.automatonA.intercection(this.automatonB);
+		
+		assertEquals(false, intersection.recognize(""));
+		assertEquals(false, intersection.recognize("bbbb"));
+		assertEquals(false, intersection.recognize("aaa"));
+		assertEquals(false, intersection.recognize("bbaa"));
+		assertEquals(false, intersection.recognize("bbaab"));
+		assertEquals(true, intersection.recognize("abaa"));
+		assertEquals(true, intersection.recognize("aaabbbb"));
+		assertEquals(true, intersection.recognize("bababaabbaa"));
 	}
 
 	@Test

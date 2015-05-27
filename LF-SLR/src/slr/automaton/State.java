@@ -55,6 +55,14 @@ public class State implements Comparable<State> {
 	public void setIsFinal(final boolean isFinal) {
 		this.isFinal = isFinal;
 	}
+
+	/**
+	 * Definir o nome do estado.
+	 * @param name nome do estado.
+	 */
+	public void setName(final String name) {
+		this.name = name;
+	}
 	
 	/**
 	 * Obter o nome do estado.
@@ -96,6 +104,14 @@ public class State implements Comparable<State> {
 	 */
 	public Map<Character, Set<State>> getTransitions() {
 		return this.transitions.getMap();
+	}
+
+	/**
+	 * Obter o mapa de transições do estado.
+	 * @return mapa de transições.
+	 */
+	public TransitionMap getTransitionMap() {
+		return this.transitions;
 	}
 
 }
