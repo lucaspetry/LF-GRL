@@ -278,6 +278,7 @@ public class FiniteAutomaton {
 	public FiniteAutomaton complement() {
 		try {
 			FiniteAutomaton automaton = (FiniteAutomaton) this.clone();
+			automaton.determinize();
 			automaton.complete();
 			
 			for(State s : automaton.states) {
@@ -350,6 +351,8 @@ public class FiniteAutomaton {
 			FiniteAutomaton a = (FiniteAutomaton) this.clone();
 			FiniteAutomaton b = (FiniteAutomaton) automaton.clone();
 			FiniteAutomaton union = a.complement().union(b.complement());
+			union.determinize();
+			union.complete();
 			
 			return union.complement();
 		} catch (CloneNotSupportedException e) {}
