@@ -204,7 +204,26 @@ public class FiniteAutomaton {
 	 * Determinizar o autômato.
 	 */
 	public void determinize() {
-		// TODO
+/*	TODO	Set<State> states = new TreeSet<State>();
+		Set<Set<State>> newStates = new TreeSet<Set<State>>();
+		Set<State> initial = new TreeSet<State>();
+		initial.add(this.initialState);
+		newStates.add(initial);
+		
+		while(newStates.size() > 0) {
+			Set<State> s = (Set<State>) newStates.toArray()[0];
+			
+			for(char symbol : this.getAlphabet().toCharArray()) {
+				try {
+					Set<State> targets = s.transit(symbol);
+					
+					if(targets.size() > 1) {
+						
+					}
+				} catch (InvalidTransitionException e) {}
+			}
+			
+		}*/
 	}
 
 	/**
