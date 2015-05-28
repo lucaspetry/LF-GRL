@@ -2,8 +2,10 @@ package slr.automaton;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import slr.exception.InvalidTransitionException;
+import slr.expression.RegularExpression;
 
 /**
  * Estado.
@@ -96,6 +98,21 @@ public class State implements Comparable<State> {
 	 */
 	public Set<State> getReachableStates() {
 		return this.transitions.getTargetStates();
+	}
+	
+	/**
+	 * Obter o Epsilon fecho do estado.
+	 * @return conjunto de estados alcançáveis por Epsilon.
+	 */
+	public Set<State> getEpsilonClosure() {
+		Set<State> states = new TreeSet<State>();
+		states.add(this);
+		
+		try {
+			states.addAll(this.transit(RegularExpression.EPSILON));
+		} catch (InvalidTransitionException e) {}
+		
+		return states;
 	}
 
 	/**
