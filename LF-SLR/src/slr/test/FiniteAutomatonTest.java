@@ -271,6 +271,11 @@ public class FiniteAutomatonTest {
 		this.automatonA.getInitialState().getTransitions().put(RegularExpression.EPSILON, states);
 		assertEquals(false, this.automatonA.isDeterministic());		
 	}
+
+	@Test
+	public void testIsMinimal() {
+		// TODO
+	}
 	
 	@Test
 	public void testUnion() {
@@ -288,7 +293,7 @@ public class FiniteAutomatonTest {
 	@Test
 	public void testIntersection() {
 		FiniteAutomaton intersection = this.automatonA.intercection(this.automatonB);
-		
+
 		assertEquals(false, intersection.recognize(""));
 		assertEquals(false, intersection.recognize("bbbb"));
 		assertEquals(false, intersection.recognize("aaa"));
@@ -297,11 +302,6 @@ public class FiniteAutomatonTest {
 		assertEquals(true, intersection.recognize("abaa"));
 		assertEquals(true, intersection.recognize("aaabbbb"));
 		assertEquals(true, intersection.recognize("bababaabbaa"));
-	}
-
-	@Test
-	public void testIsMinimal() {
-		// TODO
 	}
 
 	@Test
