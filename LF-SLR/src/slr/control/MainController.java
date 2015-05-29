@@ -9,20 +9,20 @@ import slr.gui.MainWindow;
  */
 public class MainController {
 
-	private MainWindow mainWindow;
+	UIController uiController;
 	
 	/**
 	 * Construtor.
 	 */
 	public MainController() {
-		this.mainWindow = new MainWindow();
+		this.uiController = new UIController();
 	}
 	
 	/**
 	 * Executar a aplicação.
 	 */
 	public void execute() {
-		this.mainWindow.setVisible(true);
+		this.uiController.showMainWindow();
 	}
 	
 }

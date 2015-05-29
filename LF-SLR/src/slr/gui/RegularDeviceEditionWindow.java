@@ -1,5 +1,7 @@
 package slr.gui;
 
+import slr.control.UIController;
+
 /**
  *
  * @author lucas
@@ -7,11 +9,25 @@ package slr.gui;
 public class RegularDeviceEditionWindow extends javax.swing.JFrame {
 
 	private static final long serialVersionUID = 4660641017859238291L;
+    private javax.swing.JButton btnCancel;
+    private javax.swing.ButtonGroup btnGroupRegularDeviceType;
+    private javax.swing.JButton btnOk;
+    private javax.swing.JPanel panelDescription;
+    private javax.swing.JPanel panelDeviceType;
+    private javax.swing.JPanel panelTip;
+    private javax.swing.JRadioButton radBtnRegularExpression;
+    private javax.swing.JRadioButton radBtnRegularGrammar;
+    private javax.swing.JScrollPane scrollPaneDescription;
+    private javax.swing.JScrollPane scrollPaneTip;
+    private javax.swing.JTextArea textAreaDescription;
+    private javax.swing.JTextArea textAreaTip;
+	private UIController uiController;
 	
 	/**
      * Creates new form RegularDeviceEditionWindow
      */
-    public RegularDeviceEditionWindow() {
+    public RegularDeviceEditionWindow(final UIController uiController) {
+		this.uiController = uiController;
         initComponents();
     }
 
@@ -159,55 +175,6 @@ public class RegularDeviceEditionWindow extends javax.swing.JFrame {
         );
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(RegularDeviceEditionWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(RegularDeviceEditionWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(RegularDeviceEditionWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(RegularDeviceEditionWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new RegularDeviceEditionWindow().setVisible(true);
-            }
-        });
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnCancel;
-    private javax.swing.ButtonGroup btnGroupRegularDeviceType;
-    private javax.swing.JButton btnOk;
-    private javax.swing.JPanel panelDescription;
-    private javax.swing.JPanel panelDeviceType;
-    private javax.swing.JPanel panelTip;
-    private javax.swing.JRadioButton radBtnRegularExpression;
-    private javax.swing.JRadioButton radBtnRegularGrammar;
-    private javax.swing.JScrollPane scrollPaneDescription;
-    private javax.swing.JScrollPane scrollPaneTip;
-    private javax.swing.JTextArea textAreaDescription;
-    private javax.swing.JTextArea textAreaTip;
-    // End of variables declaration//GEN-END:variables
 }

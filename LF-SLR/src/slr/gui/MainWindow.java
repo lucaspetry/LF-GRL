@@ -20,6 +20,8 @@ import javax.swing.WindowConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import slr.control.UIController;
+
 /**
  * Janela principal.
  * @author lucas
@@ -45,8 +47,10 @@ public class MainWindow extends JFrame {
 	private JPanel panelResults;
 	private JPanel panelUnaryOperations;
 	DefaultListModel<String> regularExpressions;
+	private UIController uiController;
 	
-	public MainWindow() {
+	public MainWindow(final UIController uiController) {
+		this.uiController = uiController;
 		this.regularExpressions = new DefaultListModel<String>();
 		this.initComponents();
 		this.setActionCommands();
