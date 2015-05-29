@@ -1,7 +1,5 @@
 package slr.control;
 
-import slr.gui.MainWindow;
-
 /**
  * Controlador principal.
  * @author lucas
