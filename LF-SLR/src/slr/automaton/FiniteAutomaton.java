@@ -1,5 +1,7 @@
 package slr.automaton;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -59,6 +61,12 @@ public class FiniteAutomaton {
 				initial = newState;
 			}
 		}
+
+		for(State s1 : states) {
+			for(State s2 : states) {
+				s1.getTransitionMap().replaceTargets(s2, s2);
+			}
+		}
 		
 	    return new FiniteAutomaton(states, initial);
 	}
@@ -69,21 +77,25 @@ public class FiniteAutomaton {
 		for(State s : this.states) {
 			Map<Character, Set<State>> t = s.getTransitions();
 			for(char symbol : t.keySet()) {
-				for(State target : t.get(symbol))
-					automaton += "δ(" + s.getName() + ", " + symbol + ") = "
-									+ target.getName() + "\n";
+				for(State target : t.get(symbol)) {
+					String sF = s.isFinal() ? "*" : "";
+					String tF = target.isFinal() ? "*" : "";
+					automaton += "δ(" + sF + s.getName() + ", " + symbol + ") = "
+									+ tF + target.getName() + "\n";
+				}
 			}
 		}
 		
 		StringBuilder builder = new StringBuilder(automaton);
-		int initialIndex = builder.indexOf("δ(" + this.initialState.getName());
+		String sF = this.initialState.isFinal() ? "*" : "";
+		int initialIndex = builder.indexOf("δ(" + sF + this.initialState.getName());
 		String rest = builder.substring(0, initialIndex);
 		builder.delete(0, initialIndex);
 		builder.append(rest);
 		
 		return builder.toString();
 	}
-	
+		
 	/**
 	 * Obter o alfabeto de entrada do autômato.
 	 * @return alfabeto de entrada.
@@ -174,6 +186,23 @@ public class FiniteAutomaton {
 				return false;
 		}
 	}
+
+	/**
+	 * Verificar se as linguagens dos autômatos são iguais.
+	 * @return true caso as linguagens sejam iguais.
+	 */
+	public boolean isEquivalentTo(final FiniteAutomaton automaton) {
+		return this.contains(automaton) && automaton.contains(this);
+	}
+	
+	/**
+	 * Verificar se a linguagem do autômato especificado está contida na linguagem do autômato em questão.
+	 * @param automaton autômato a ser verificado.
+	 * @return true se T(automaton) está contida na linguagem do autômato.
+	 */
+	public boolean contains(final FiniteAutomaton automaton) {
+		return this.complement().intercection(automaton).isEmpty();
+	}
 	
 	/**
 	 * Completar o autômato.
@@ -204,35 +233,91 @@ public class FiniteAutomaton {
 	 * Determinizar o autômato.
 	 */
 	public void determinize() {
-/*	TODO	Set<State> states = new TreeSet<State>();
-		Set<Set<State>> newStates = new TreeSet<Set<State>>();
-		Set<State> initial = new TreeSet<State>();
+		if(this.isDeterministic())
+			return;
+		
+		Set<HashSet<State>> states = new HashSet<HashSet<State>>();
+		Set<HashSet<State>> newStates = new HashSet<HashSet<State>>();
+		HashSet<State> initial = new HashSet<State>();
 		initial.add(this.initialState);
+		initial.addAll(this.initialState.getEpsilonClosure());
 		newStates.add(initial);
 		
+		// Agrupar os estados para formar os novos determinísticos
 		while(newStates.size() > 0) {
-			Set<State> s = (Set<State>) newStates.toArray()[0];
+			@SuppressWarnings("unchecked")
+			HashSet<State> currentState = (HashSet<State>) newStates.toArray()[0];
 			
 			for(char symbol : this.getAlphabet().toCharArray()) {
-				try {
-					Set<State> targets = s.transit(symbol);
-					
-					if(targets.size() > 1) {
-						
-					}
-				} catch (InvalidTransitionException e) {}
+				HashSet<State> newState = new HashSet<State>();
+				
+				for(State current : currentState) {					
+					try {
+						for(State target : current.transit(symbol))
+							newState.addAll(target.getEpsilonClosure());
+					} catch (InvalidTransitionException e) {}
+				}
+
+				if(newState.size() > 0) {
+					if(!states.contains(newState))
+						newStates.add(newState);
+				}
 			}
+						
+			states.add(currentState);
+			newStates.remove(currentState);
+		}
+
+		// Criar os novos estados determinísticos
+		Map<HashSet<State>, State> deterministicStates = new HashMap<HashSet<State>, State>();
+		State newInitialState = new State("q0", this.initialState.isFinal(), new TransitionMap());
+
+		states.remove(initial);
+		deterministicStates.put(initial, newInitialState);
+		
+		int stateIndex = 1;
+		for(HashSet<State> state : states) {
+			boolean isFinal = false;
 			
-		}*/
+			for(State s : state) {
+				isFinal = isFinal || s.isFinal();
+			}
+			deterministicStates.put(state, new State("q" + stateIndex, isFinal, new TransitionMap()));
+			
+			stateIndex++;
+		}
+		states.add(initial);
+		
+		// Criar as transições dos novos estados
+		for(HashSet<State> state : states) {
+			State deterministicState = deterministicStates.get(state);
+			
+			for(char symbol : this.getAlphabet().toCharArray()) {
+				HashSet<State> targetState = new HashSet<State>();
+
+				for(State s : state) {
+					try {
+						for(State target : s.transit(symbol))
+							targetState.addAll(target.getEpsilonClosure());
+					} catch (InvalidTransitionException e) {}
+				}
+
+				if(targetState.size() > 0) {
+					State deterministicTargetState = deterministicStates.get(targetState);
+					deterministicState.getTransitionMap().add(symbol, deterministicTargetState);
+				}
+			}
+		}
+		
+		this.initialState = newInitialState;
+		this.states = new HashSet<State>(deterministicStates.values());
 	}
 
 	/**
 	 * Minimizar o autômato.
 	 */
 	public void minimize() {
-		if(!this.isDeterministic())
-			this.determinize();
-		
+		this.determinize();
 		this.removeUnreachableStates();
 		this.removeDeadStates();
 		// TODO Continuar a minimização.
@@ -265,16 +350,21 @@ public class FiniteAutomaton {
 			for(char symbol : this.alphabet.toCharArray()) {
 				try {
 					Set<State> reachable = state.transit(symbol);
+
+					if(reachable.size() > 1) // Existe mais do que um alcançável pelo símbolo
+						return false;
 					
-					if(reachable.size() > 1)
+					Set<State> reachableEpsilon = state.transit(RegularExpression.EPSILON);
+
+					if(reachableEpsilon.size() > 0) // Existe uma &-transição
 						return false;
 				} catch (InvalidTransitionException e) {}
 			}
 			
 			try {
-				Set<State> reachable = state.transit(RegularExpression.EPSILON);
+				Set<State> reachableEpsilon = state.transit(RegularExpression.EPSILON);
 				
-				if(reachable.size() > 0)
+				if(reachableEpsilon.size() > 1) // Existe uma &-transição para mais de um estado
 					return false;
 			} catch (InvalidTransitionException e) {}
 		}
@@ -287,7 +377,31 @@ public class FiniteAutomaton {
 	 * @return true se o autômato é mínimo.
 	 */
 	public boolean isMinimal() {
-		return true; // TODO
+		try {
+			FiniteAutomaton minimal = (FiniteAutomaton) this.clone();
+			minimal.minimize();
+			
+			if(minimal.states.size() == this.states.size())
+				return true;
+		} catch (CloneNotSupportedException e) {}
+		
+		return false;
+	}
+
+	/**
+	 * Verificar se a linguagem do autômato é vazia.
+	 * @return true se a linguagem do autômato é vazia.
+	 */
+	public boolean isEmpty() {
+		try {
+			FiniteAutomaton automaton = (FiniteAutomaton) this.clone();
+			automaton.removeDeadStates();
+			
+			if(!automaton.states.contains(automaton.initialState))
+				return true;
+		} catch (CloneNotSupportedException e) {}
+		
+		return false;
 	}
 	
 	/**
@@ -370,8 +484,6 @@ public class FiniteAutomaton {
 			FiniteAutomaton a = (FiniteAutomaton) this.clone();
 			FiniteAutomaton b = (FiniteAutomaton) automaton.clone();
 			FiniteAutomaton union = a.complement().union(b.complement());
-			union.determinize();
-			union.complete();
 			
 			return union.complement();
 		} catch (CloneNotSupportedException e) {}

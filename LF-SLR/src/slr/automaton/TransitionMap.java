@@ -75,6 +75,22 @@ public class TransitionMap {
 		if(states.size() == 1)
 			this.transitions.remove(symbol);
 	}
+	
+	/**
+	 * Substituir os estados de destino pelo estado especificado.
+	 * @param target estado a ser substituído.
+	 * @param newTarget novo estado.
+	 */
+	public void replaceTargets(final State target, final State newTarget) {
+		for(char symbol : this.transitions.keySet()) {
+			Set<State> targets = this.transitions.get(symbol);
+			
+			if(targets.contains(target)) {
+				targets.remove(target);
+				targets.add(newTarget);
+			}
+		}
+	}
 
 	/**
 	 * Obter as transições possíveis por um símbolo.

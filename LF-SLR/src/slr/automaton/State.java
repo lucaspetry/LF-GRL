@@ -32,7 +32,10 @@ public class State implements Comparable<State> {
 
 	@Override
 	public Object clone() throws CloneNotSupportedException {
-		return new State(this.name, this.isFinal(), (TransitionMap) this.transitions.clone());
+		TransitionMap t = (TransitionMap) this.transitions.clone();
+		State s = (State) new State(this.name, this.isFinal(), t);
+		t.replaceTargets(this, s);
+		return s;
 	}
 	
 	@Override
