@@ -31,7 +31,8 @@ public class RegularGrammarTest {
 
 	@Test
 	public void testConstructor2() throws InvalidProductionException {
-		String productions = "A -> aA|b|bC\n" +
+		String productions = "A -> aA|bC\n" +
+							 "A -> b\n" +
 							  "C -> a|bD";
 		new RegularGrammar(productions);
 	}
