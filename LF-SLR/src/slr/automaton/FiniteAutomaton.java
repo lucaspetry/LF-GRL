@@ -76,6 +76,7 @@ public class FiniteAutomaton {
 		String automaton = "";
 		for(State s : this.states) {
 			Map<Character, Set<State>> t = s.getTransitions();
+			
 			for(char symbol : t.keySet()) {
 				for(State target : t.get(symbol)) {
 					String sF = s.isFinal() ? "*" : "";
@@ -83,6 +84,13 @@ public class FiniteAutomaton {
 					automaton += "δ(" + sF + s.getName() + ", " + symbol + ") = "
 									+ tF + target.getName() + "\n";
 				}
+			}
+
+			for(State target : t.get(RegularExpression.EPSILON)) {
+				String sF = s.isFinal() ? "*" : "";
+				String tF = target.isFinal() ? "*" : "";
+				automaton += "δ(" + sF + s.getName() + ", " + RegularExpression.EPSILON + ") = "
+								+ tF + target.getName() + "\n";
 			}
 		}
 		
@@ -94,6 +102,60 @@ public class FiniteAutomaton {
 		builder.append(rest);
 		
 		return builder.toString();
+	}
+	
+	/**
+	 * Obter a tabela de transições do autômato.
+	 * @return matriz de strings correspondente à tabela de transições.
+	 */
+	public String[][] toTransitionsTable() { // TODO Refatorar todo o método.
+		int epsilonColumn = this.isEpsilonFree() ? 0 : 1;
+		String[][] matriz = new String[this.states.size() + 1][1 + this.alphabet.length() + epsilonColumn];
+		matriz[0][0] = "δ";
+
+		for(int i = 0; i < this.alphabet.length(); i++) {
+			char symbol = this.alphabet.charAt(i);
+			matriz[0][i + 1] =  symbol + "";
+			
+			State[] statesArray = this.states.toArray(new State[1]);
+
+			for(int j = 0; j < statesArray.length; j++) {
+				String finalSymbol = statesArray[j].isFinal() ? "*" : "";
+				matriz[j + 1][0] = finalSymbol + statesArray[j].getName();
+				matriz[j + 1][i + 1] = "";
+				
+				try {
+					Set<State> targets = statesArray[j].transit(symbol);
+					
+					for(State s : targets)
+						matriz[j + 1][i + 1] += s.getName() + ", ";
+					
+					matriz[j + 1][i + 1] = matriz[j + 1][i + 1].substring(0, matriz[j + 1][i + 1].length() - 2);
+				} catch (InvalidTransitionException e) {
+					matriz[j + 1][i + 1] = "-";
+				}
+			}
+		}
+		
+		if(epsilonColumn > 0) {
+			matriz[0][matriz[0].length] = "" + RegularExpression.EPSILON;
+			matriz[1][matriz[0].length] = "";
+			
+			try {
+				Set<State> targets = this.initialState.transit(RegularExpression.EPSILON);
+
+				for(State s : targets)
+					matriz[1][matriz[0].length] += s.getName() + ", ";
+				
+				matriz[1][matriz[0].length] = matriz[1][matriz[0].length]
+						.substring(0, matriz[1][matriz[0].length].length() - 2);
+			} catch (InvalidTransitionException e) {
+				matriz[1][matriz[0].length] = "-";
+			}
+		}
+		
+		
+		return matriz;
 	}
 		
 	/**
@@ -402,6 +464,21 @@ public class FiniteAutomaton {
 		} catch (CloneNotSupportedException e) {}
 		
 		return false;
+	}
+
+	/**
+	 * Verificar se o autômato não possui &-transições.
+	 * @return true se o autômato não possui &-transições.
+	 */
+	public boolean isEpsilonFree() {
+		for(State s : this.states) {
+			try {
+				if(s.transit(RegularExpression.EPSILON).size() > 0)
+					return false;
+			} catch (InvalidTransitionException e) {}
+		}
+		
+		return true;
 	}
 	
 	/**
