@@ -15,10 +15,10 @@ public class SyntaxTree extends BinaryTree<Character> {
 	 */
 	public SyntaxTree(RegularExpression regex) {
 		regex.standardize();
-		this.buildTreeFromExpression(regex.toString());
+		this.buildTree(regex.toString());
 	}
 	
-	public void buildTreeFromExpression(String regex) {
+	public void buildTree(String regex) {
 		this.builder = new StringBuilder(regex);
 		this.setRoot(expr());
 	}
