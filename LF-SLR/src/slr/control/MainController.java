@@ -2,8 +2,6 @@ package slr.control;
 
 /**
  * Controlador principal.
- * @author lucas
- *
  */
 public class MainController {
 

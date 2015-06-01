@@ -22,8 +22,7 @@ import slr.control.UIController;
 import slr.expression.RegularExpression;
 
 /**
- *
- * @author lucas
+ * Janela de edição de dispositivos regulares.
  */
 public class RegularDeviceEditionWindow extends JFrame {
 

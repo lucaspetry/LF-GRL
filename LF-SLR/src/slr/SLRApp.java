@@ -8,8 +8,6 @@ import slr.exception.InvalidProductionException;
 
 /**
  * Sistema de linguagens regulares.
- * @author lucas
- *
  */
 public class SLRApp {
 

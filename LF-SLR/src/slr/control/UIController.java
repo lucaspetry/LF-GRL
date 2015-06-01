@@ -3,6 +3,9 @@ package slr.control;
 import slr.gui.MainWindow;
 import slr.gui.RegularDeviceEditionWindow;
 
+/**
+ * Controlador da interface gráfica.
+ */
 public class UIController {
 
 	private MainWindow mainWindow;

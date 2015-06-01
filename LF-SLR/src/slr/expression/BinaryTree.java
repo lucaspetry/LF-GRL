@@ -3,8 +3,6 @@ package slr.expression;
 
 /**
  * Árvore binária.
- * @author lucas
- *
  * @param <T>
  */
 public class BinaryTree<T> {

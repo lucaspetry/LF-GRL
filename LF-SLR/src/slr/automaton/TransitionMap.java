@@ -9,8 +9,6 @@ import slr.exception.InvalidTransitionException;
 
 /**
  * Mapa de transições.
- * @author lucas
- *
  */
 public class TransitionMap {
 

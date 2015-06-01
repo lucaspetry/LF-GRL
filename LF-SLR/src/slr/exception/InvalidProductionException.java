@@ -2,8 +2,6 @@ package slr.exception;
 
 /**
  * Exceção de produção inválida.
- * @author lucas
- *
  */
 public class InvalidProductionException extends Exception {
 

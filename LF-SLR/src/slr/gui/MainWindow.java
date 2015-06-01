@@ -24,8 +24,6 @@ import slr.control.UIController;
 
 /**
  * Janela principal.
- * @author lucas
- *
  */
 public class MainWindow extends JFrame {
 

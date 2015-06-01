@@ -2,8 +2,6 @@ package slr.expression;
 
 /**
  * Árvore sintática.
- * @author lucas
- *
  */
 public class SyntaxTree extends BinaryTree<Character> {
 

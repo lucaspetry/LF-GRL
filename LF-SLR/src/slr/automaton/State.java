@@ -9,8 +9,6 @@ import slr.expression.RegularExpression;
 
 /**
  * Estado.
- * @author lucas
- * 
  */
 public class State implements Comparable<State> {
 

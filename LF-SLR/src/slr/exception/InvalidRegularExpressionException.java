@@ -2,8 +2,6 @@ package slr.exception;
 
 /**
  * Exceção de expressão regular inválida.
- * @author lucas
- *
  */
 public class InvalidRegularExpressionException extends Exception {
 

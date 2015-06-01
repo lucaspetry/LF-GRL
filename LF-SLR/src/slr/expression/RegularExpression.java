@@ -7,8 +7,6 @@ import slr.exception.InvalidRegularExpressionException;
 
 /**
  * Expressão regular.
- * @author lucas
- * 
  */
 public class RegularExpression {
 

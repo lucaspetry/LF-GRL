@@ -11,8 +11,6 @@ import slr.expression.RegularExpression;
 
 /**
  * Autômato finito.
- * @author lucas
- * 
  */
 public class FiniteAutomaton {
 
@@ -288,10 +286,12 @@ public class FiniteAutomaton {
 	 * Completar o autômato.
 	 */
 	public void complete() {
+		// Criar o estado morto
 		TransitionMap transitionsDead = new TransitionMap();
 		State deadState = new State("Φ", false, transitionsDead);
 		boolean deadStateNeeded = false;
 		
+		// Verificar as transições para cada símbolo do alfabeto
 		for(char symbol : this.getAlphabet().toCharArray()) {
 			transitionsDead.add(symbol, deadState);
 			
@@ -305,6 +305,7 @@ public class FiniteAutomaton {
 			}
 		}
 		
+		// Se o estado morto é necessário, adicona ele aos estados
 		if(deadStateNeeded)
 			this.states.add(deadState);
 	}
@@ -401,37 +402,7 @@ public class FiniteAutomaton {
 		this.removeUnreachableStates();
 		this.removeDeadStates();
 		this.complete();
-
-		// Eliminar estados equivalentes
-		Set<Set<State>> classes = new HashSet<Set<State>>();
-		classes.add(this.getFinalStates());
-		classes.add(this.getNotFinalStates());
-
-		for(Set<State> stateClass : classes) {
-			State[] states = stateClass.toArray(new State[1]);
-			State prev = states[0];
-
-			for(int i = 1; i < states.length; i++) {
-				State current = states[i];
-				for(char symbol : this.alphabet.toCharArray()) {
-					try {
-						Set<State> prevStates = prev.transit(symbol);
-						Set<State> currentStates = current.transit(symbol);
-						
-						for(Set<State> targetClass : classes) {
-							boolean cP = targetClass.containsAll(prevStates);
-							boolean cC = targetClass.containsAll(currentStates);
-							if((cP && !cC) || (!cP && cC)) {
-								// Minimização
-							}
-						}
-					} catch (InvalidTransitionException e) {}
-					
-				}
-			}
-		}
-
-		// TODO Continuar a minimização.
+		// TODO Eliminar estados equivalentes
 	}
 
 	/**

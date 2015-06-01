@@ -9,8 +9,6 @@ import slr.exception.InvalidProductionException;
 
 /**
  * Mapa de produções.
- * @author lucas
- *
  */
 public class ProductionMap {
 

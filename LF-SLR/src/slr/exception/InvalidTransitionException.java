@@ -2,8 +2,6 @@ package slr.exception;
 
 /**
  * Exceção de transição inválida.
- * @author lucas
- *
  */
 public class InvalidTransitionException extends Exception {
 

@@ -13,8 +13,6 @@ import slr.expression.RegularExpression;
 
 /**
  * Gramática regular.
- * @author lucas
- *
  */
 public class RegularGrammar {
 

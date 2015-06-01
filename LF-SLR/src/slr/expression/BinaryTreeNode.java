@@ -2,8 +2,6 @@ package slr.expression;
 
 /**
  * Nodo de árvore binária.
- * @author lucas
- *
  * @param <T>
  */
 public class BinaryTreeNode<T> {
