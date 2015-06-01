@@ -162,7 +162,7 @@ public class FiniteAutomatonTest {
 		bTransitions.add('a', b);
 		cTransitions.add('b', c);
 		FiniteAutomaton f = new FiniteAutomaton(states, a);
-
+				
 		assertEquals(false, f.recognize("aaabb"));
 		assertEquals(false, f.recognize("ba"));
 		assertEquals(true, f.recognize(""));

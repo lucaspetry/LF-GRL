@@ -108,52 +108,70 @@ public class FiniteAutomaton {
 	 * Obter a tabela de transições do autômato.
 	 * @return matriz de strings correspondente à tabela de transições.
 	 */
-	public String[][] toTransitionsTable() { // TODO Refatorar todo o método.
+	public String[][] toTransitionsTable() {
 		int epsilonColumn = this.isEpsilonFree() ? 0 : 1;
 		String[][] matriz = new String[this.states.size() + 1][1 + this.alphabet.length() + epsilonColumn];
+
+		State[] statesArray = this.states.toArray(new State[1]);
+		char[] alphabetArray = this.alphabet.toCharArray();
+		
+		// Definir o cabeçalho da tabela
 		matriz[0][0] = "δ";
-
-		for(int i = 0; i < this.alphabet.length(); i++) {
-			char symbol = this.alphabet.charAt(i);
-			matriz[0][i + 1] =  symbol + "";
+		for(int k = 0; k < alphabetArray.length; k++)
+			matriz[0][k + 1] = alphabetArray[k] + "";
+		
+		// Definir os nomes e transições dos estados
+		for(int i = 0; i < statesArray.length; i++) {
+			// Definir o nome do estado
+			String finalSymbol = statesArray[i].isFinal() ? "*" : "";
+			matriz[i + 1][0] = finalSymbol + statesArray[i].getName();
 			
-			State[] statesArray = this.states.toArray(new State[1]);
-
-			for(int j = 0; j < statesArray.length; j++) {
-				String finalSymbol = statesArray[j].isFinal() ? "*" : "";
-				matriz[j + 1][0] = finalSymbol + statesArray[j].getName();
-				matriz[j + 1][i + 1] = "";
-				
+			// Definir as transições do estado por cada símbolo
+			for(int k = 0; k < alphabetArray.length; k++) {
+				matriz[i + 1][k + 1] = "";
+						
 				try {
-					Set<State> targets = statesArray[j].transit(symbol);
+					Set<State> targets = statesArray[i].transit(alphabetArray[k]);
 					
 					for(State s : targets)
-						matriz[j + 1][i + 1] += s.getName() + ", ";
+						matriz[i + 1][k + 1] += s.getName() + ", ";
 					
-					matriz[j + 1][i + 1] = matriz[j + 1][i + 1].substring(0, matriz[j + 1][i + 1].length() - 2);
+					matriz[i + 1][k + 1] = matriz[i + 1][k + 1].substring(0, matriz[i + 1][k + 1].length() - 2);
 				} catch (InvalidTransitionException e) {
-					matriz[j + 1][i + 1] = "-";
+					matriz[i + 1][k + 1] = "-";
+				}
+			}
+			
+			// Definir a coluna de &-transição, se existir
+			if(epsilonColumn > 0) {
+				int columnPosition = matriz[i + 1].length - 1;
+				matriz[0][columnPosition] = RegularExpression.EPSILON + "";
+				matriz[i + 1][columnPosition] = "";
+						
+				try {
+					Set<State> targets = statesArray[i].transit(RegularExpression.EPSILON);
+
+					for(State s : targets)
+						matriz[i + 1][columnPosition] += s.getName() + ", ";
+					
+					matriz[i + 1][columnPosition] =
+							matriz[i + 1][columnPosition].substring(0, matriz[i + 1][columnPosition].length() - 2);
+				} catch (InvalidTransitionException e) {
+					matriz[i + 1][columnPosition] = "-";
 				}
 			}
 		}
-		
-		if(epsilonColumn > 0) {
-			matriz[0][matriz[0].length] = "" + RegularExpression.EPSILON;
-			matriz[1][matriz[0].length] = "";
-			
-			try {
-				Set<State> targets = this.initialState.transit(RegularExpression.EPSILON);
 
-				for(State s : targets)
-					matriz[1][matriz[0].length] += s.getName() + ", ";
-				
-				matriz[1][matriz[0].length] = matriz[1][matriz[0].length]
-						.substring(0, matriz[1][matriz[0].length].length() - 2);
-			} catch (InvalidTransitionException e) {
-				matriz[1][matriz[0].length] = "-";
+		// Colocar o estado inicial no início da tabela
+		for(int i = 0; i < statesArray.length; i++) {
+			if(statesArray[i].equals(this.initialState)) {
+				String[] buffer = new String[matriz[0].length];
+				buffer = matriz[i + 1];
+				matriz[i + 1] = matriz[1];
+				matriz[1] = buffer;
+				matriz[1][0] = "->" + matriz[1][0];
 			}
 		}
-		
 		
 		return matriz;
 	}
