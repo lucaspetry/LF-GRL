@@ -179,7 +179,7 @@ public class FiniteAutomaton {
 	 * @return conjunto de estados finais.
 	 */
 	public Set<State> getFinalStates() {
-		Set<State> states = new TreeSet<State>();
+		Set<State> states = new HashSet<State>();
 		
 		for(State s : this.states) {
 			if(s.isFinal())
@@ -194,7 +194,7 @@ public class FiniteAutomaton {
 	 * @return conjunto de estados não finais.
 	 */
 	public Set<State> getNotFinalStates() {
-		Set<State> states = new TreeSet<State>();
+		Set<State> states = new HashSet<State>();
 		
 		for(State s : this.states) {
 			if(!s.isFinal())
@@ -382,6 +382,37 @@ public class FiniteAutomaton {
 		this.determinize();
 		this.removeUnreachableStates();
 		this.removeDeadStates();
+		this.complete();
+		
+		// Eliminar estados equivalentes
+		Set<Set<State>> classes = new HashSet<Set<State>>();
+		classes.add(this.getFinalStates());
+		classes.add(this.getNotFinalStates());
+		
+		for(Set<State> stateClass : classes) {
+			State[] states = stateClass.toArray(new State[1]);
+			State prev = states[0];
+			
+			for(int i = 1; i < states.length; i++) {
+				State current = states[i];
+				for(char symbol : this.alphabet.toCharArray()) {
+					try {
+						Set<State> prevStates = prev.transit(symbol);
+						Set<State> currentStates = current.transit(symbol);
+						
+						for(Set<State> targetClass : classes) {
+							boolean cP = targetClass.containsAll(prevStates);
+							boolean cC = targetClass.containsAll(currentStates);
+							if((cP && !cC) || (!cP && cC)) {
+								// Minimização
+							}
+						}
+					} catch (InvalidTransitionException e) {}
+					
+				}
+			}
+		}
+				
 		// TODO Continuar a minimização.
 	}
 
