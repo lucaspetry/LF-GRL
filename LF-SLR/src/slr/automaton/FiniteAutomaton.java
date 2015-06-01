@@ -401,16 +401,16 @@ public class FiniteAutomaton {
 		this.removeUnreachableStates();
 		this.removeDeadStates();
 		this.complete();
-		
+
 		// Eliminar estados equivalentes
 		Set<Set<State>> classes = new HashSet<Set<State>>();
 		classes.add(this.getFinalStates());
 		classes.add(this.getNotFinalStates());
-		
+
 		for(Set<State> stateClass : classes) {
 			State[] states = stateClass.toArray(new State[1]);
 			State prev = states[0];
-			
+
 			for(int i = 1; i < states.length; i++) {
 				State current = states[i];
 				for(char symbol : this.alphabet.toCharArray()) {
@@ -430,7 +430,7 @@ public class FiniteAutomaton {
 				}
 			}
 		}
-				
+
 		// TODO Continuar a minimização.
 	}
 

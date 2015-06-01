@@ -2,6 +2,7 @@ package slr.expression;
 
 import java.util.Stack;
 
+import slr.automaton.FiniteAutomaton;
 import slr.exception.InvalidRegularExpressionException;
 
 /**
@@ -112,4 +113,12 @@ public class RegularExpression {
 		this.regularExpression = regexBuilder.toString();
 	}
 
+	/**
+	 * Converter a expressão regular em um autômato finito.
+	 * @return autômato finito equivalente.
+	 */
+	public FiniteAutomaton toFiniteAutomaton() {
+		return null; // TODO
+	}
+	
 }
