@@ -78,7 +78,7 @@ public class RegularDeviceEditionWindow extends JFrame {
         btnOk = new JButton();
         btnCancel = new JButton();
 
-        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Inserção/Edição de Dispositivos Regulares");
 
         panelDeviceType.setBorder(BorderFactory.createTitledBorder("Tipo do Dispositivo"));
