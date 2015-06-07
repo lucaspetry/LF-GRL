@@ -279,7 +279,7 @@ public class FiniteAutomaton {
 	 * @return true se T(automaton) está contida na linguagem do autômato.
 	 */
 	public boolean contains(final FiniteAutomaton automaton) {
-		return this.complement().intercection(automaton).isEmpty();
+		return this.complement().intersection(automaton).isEmpty();
 	}
 	
 	/**
@@ -576,7 +576,7 @@ public class FiniteAutomaton {
 	 * @param automaton autômato finito.
 	 * @return o autômato resultante da interseção.
 	 */
-	public FiniteAutomaton intercection(final FiniteAutomaton automaton) {
+	public FiniteAutomaton intersection(final FiniteAutomaton automaton) {
 		try {
 			FiniteAutomaton a = (FiniteAutomaton) this.clone();
 			FiniteAutomaton b = (FiniteAutomaton) automaton.clone();

@@ -224,7 +224,7 @@ public class FiniteAutomatonTest {
 
 	@Test
 	public void testContains2() {
-		FiniteAutomaton intersection = this.automatonA.intercection(this.automatonB);
+		FiniteAutomaton intersection = this.automatonA.intersection(this.automatonB);
 		assertEquals(false, intersection.contains(this.automatonA));
 		assertEquals(false, intersection.contains(this.automatonB));
 		assertEquals(true, this.automatonA.contains(intersection));
@@ -500,7 +500,7 @@ public class FiniteAutomatonTest {
 	
 	@Test
 	public void testIntersection() {
-		FiniteAutomaton intersection = this.automatonA.intercection(this.automatonB);
+		FiniteAutomaton intersection = this.automatonA.intersection(this.automatonB);
 
 		assertEquals(false, intersection.recognize(""));
 		assertEquals(false, intersection.recognize("bbbb"));
