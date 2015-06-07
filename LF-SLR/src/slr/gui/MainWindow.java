@@ -8,8 +8,12 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.LayoutStyle;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.WindowConstants;
+import javax.swing.table.DefaultTableModel;
 
 import slr.control.UIController;
 
@@ -39,6 +43,10 @@ public class MainWindow extends JFrame {
     private JPanel panelFiniteAutomata;
     private JPanel panelReRgView;
     private JPanel panelRegularExpressionsGrammars;
+    private JScrollPane scrollPaneFA;
+    private JScrollPane scrollPaneReRg;
+    private JTable tableFA;
+    private JTextArea textAreaReRg;
 	private DefaultListModel<String> regularExpressions;
 	private UIController uiController;
 	
@@ -61,6 +69,8 @@ public class MainWindow extends JFrame {
         btnComplement = new JButton();
         btnMinimize = new JButton();
         panelFAView = new JPanel();
+        scrollPaneFA = new JScrollPane();
+        tableFA = new JTable();
         panelFiniteAutomata = new JPanel();
         jScrollPane2 = new JScrollPane();
         listFiniteAutomata = new JList<String>();
@@ -71,6 +81,8 @@ public class MainWindow extends JFrame {
         btnInsertReRg = new JButton();
         btnRemoveReRg = new JButton();
         panelReRgView = new JPanel();
+        scrollPaneReRg = new JScrollPane();
+        textAreaReRg = new JTextArea();
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("Sistema de Linguagens Formais");
@@ -79,10 +91,13 @@ public class MainWindow extends JFrame {
         panelErGrOperations.setBorder(BorderFactory.createTitledBorder("Operações Sobre Expressões e Gramáticas Regulares"));
 
         btnGenerateFiniteAutomaton.setText("Gerar Autômato Finito");
+        btnGenerateFiniteAutomaton.setToolTipText("");
 
         btnPatternOccurrencesText.setText("Buscar Padrões em Texto");
+        btnPatternOccurrencesText.setToolTipText("");
 
         btnEquals.setText("Equivalentes?");
+        btnEquals.setToolTipText("");
 
         GroupLayout panelErGrOperationsLayout = new GroupLayout(panelErGrOperations);
         panelErGrOperations.setLayout(panelErGrOperationsLayout);
@@ -111,12 +126,16 @@ public class MainWindow extends JFrame {
         panelAutomataOperations.setBorder(BorderFactory.createTitledBorder("Operações Sobre Autômatos Finitos"));
 
         btnIntersection.setText("Interseção");
+        btnIntersection.setToolTipText("");
 
         btnDeterminize.setText("Determinizar");
+        btnDeterminize.setToolTipText("");
 
         btnComplement.setText("Complemento");
+        btnComplement.setToolTipText("");
 
         btnMinimize.setText("Minimizar");
+        btnMinimize.setToolTipText("");
 
         GroupLayout panelAutomataOperationsLayout = new GroupLayout(panelAutomataOperations);
         panelAutomataOperations.setLayout(panelAutomataOperationsLayout);
@@ -126,9 +145,9 @@ public class MainWindow extends JFrame {
                 .addContainerGap()
                 .addGroup(panelAutomataOperationsLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addGroup(panelAutomataOperationsLayout.createSequentialGroup()
-                        .addComponent(btnDeterminize, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnDeterminize, GroupLayout.PREFERRED_SIZE, 170, GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnMinimize, GroupLayout.PREFERRED_SIZE, 129, GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnMinimize, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(btnIntersection, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnComplement, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
@@ -149,15 +168,31 @@ public class MainWindow extends JFrame {
 
         panelFAView.setBorder(BorderFactory.createTitledBorder("Visualização do Autômato Finito"));
 
+        tableFA.setModel(new DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        scrollPaneFA.setViewportView(tableFA);
+
         GroupLayout panelFAViewLayout = new GroupLayout(panelFAView);
         panelFAView.setLayout(panelFAViewLayout);
         panelFAViewLayout.setHorizontalGroup(
             panelFAViewLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(panelFAViewLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(scrollPaneFA, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addContainerGap())
         );
         panelFAViewLayout.setVerticalGroup(
             panelFAViewLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 227, Short.MAX_VALUE)
+            .addGroup(panelFAViewLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(scrollPaneFA, GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         panelFiniteAutomata.setBorder(BorderFactory.createTitledBorder("Autômatos Finitos"));
@@ -209,7 +244,7 @@ public class MainWindow extends JFrame {
             .addGroup(panelRegularExpressionsGrammarsLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelRegularExpressionsGrammarsLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 334, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1)
                     .addGroup(panelRegularExpressionsGrammarsLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnInsertReRg, GroupLayout.PREFERRED_SIZE, 115, GroupLayout.PREFERRED_SIZE)
@@ -231,15 +266,29 @@ public class MainWindow extends JFrame {
 
         panelReRgView.setBorder(BorderFactory.createTitledBorder("Visualização da Expressão/Gramática Regular"));
 
+        scrollPaneReRg.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        textAreaReRg.setEditable(false);
+        textAreaReRg.setColumns(20);
+        textAreaReRg.setLineWrap(true);
+        textAreaReRg.setRows(5);
+        scrollPaneReRg.setViewportView(textAreaReRg);
+
         GroupLayout panelReRgViewLayout = new GroupLayout(panelReRgView);
         panelReRgView.setLayout(panelReRgViewLayout);
         panelReRgViewLayout.setHorizontalGroup(
             panelReRgViewLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(panelReRgViewLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(scrollPaneReRg, GroupLayout.DEFAULT_SIZE, 334, Short.MAX_VALUE)
+                .addContainerGap())
         );
         panelReRgViewLayout.setVerticalGroup(
             panelReRgViewLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(panelReRgViewLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(scrollPaneReRg, GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         GroupLayout layout = new GroupLayout(getContentPane());
@@ -254,9 +303,9 @@ public class MainWindow extends JFrame {
                     .addComponent(panelReRgView, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                    .addComponent(panelAutomataOperations, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(panelFiniteAutomata, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(panelFAView, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(panelAutomataOperations, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(panelFAView, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -272,8 +321,8 @@ public class MainWindow extends JFrame {
                     .addComponent(panelRegularExpressionsGrammars, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                    .addComponent(panelFAView, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(panelReRgView, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(panelReRgView, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(panelFAView, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
