@@ -88,16 +88,13 @@ public class MainWindow extends JFrame {
         setTitle("Sistema de Linguagens Formais");
         setResizable(false);
 
-        panelErGrOperations.setBorder(BorderFactory.createTitledBorder("Operações Sobre Expressões e Gramáticas Regulares"));
+        panelErGrOperations.setBorder(BorderFactory.createTitledBorder("Operações Sobre Expressões e Gramáticas"));
 
         btnGenerateFiniteAutomaton.setText("Gerar Autômato Finito");
-        btnGenerateFiniteAutomaton.setToolTipText("");
 
         btnPatternOccurrencesText.setText("Buscar Padrões em Texto");
-        btnPatternOccurrencesText.setToolTipText("");
 
         btnEquals.setText("Equivalentes?");
-        btnEquals.setToolTipText("");
 
         GroupLayout panelErGrOperationsLayout = new GroupLayout(panelErGrOperations);
         panelErGrOperations.setLayout(panelErGrOperationsLayout);
@@ -126,16 +123,12 @@ public class MainWindow extends JFrame {
         panelAutomataOperations.setBorder(BorderFactory.createTitledBorder("Operações Sobre Autômatos Finitos"));
 
         btnIntersection.setText("Interseção");
-        btnIntersection.setToolTipText("");
 
         btnDeterminize.setText("Determinizar");
-        btnDeterminize.setToolTipText("");
 
         btnComplement.setText("Complemento");
-        btnComplement.setToolTipText("");
 
         btnMinimize.setText("Minimizar");
-        btnMinimize.setToolTipText("");
 
         GroupLayout panelAutomataOperationsLayout = new GroupLayout(panelAutomataOperations);
         panelAutomataOperations.setLayout(panelAutomataOperationsLayout);

@@ -14,9 +14,11 @@ import slr.expression.RegularExpression;
  */
 public class FiniteAutomaton {
 
+	private static int AUTOMATON_ID = 1;
 	private String alphabet;
 	private Set<State> states;
 	private State initialState;
+	private String name;
 	
 	/**
 	 * Construtor.
@@ -28,6 +30,8 @@ public class FiniteAutomaton {
 		this.states = states;
 		this.initialState = initialState;
 		this.buildAlphabet();
+		this.name = "AF" + AUTOMATON_ID;
+		AUTOMATON_ID++;
 	}
 	
 	/**
@@ -100,6 +104,14 @@ public class FiniteAutomaton {
 		builder.append(rest);
 		
 		return builder.toString();
+	}
+	
+	/**
+	 * Obter o nome do autômato.
+	 * @return nome do autômato.
+	 */
+	public String getName() {
+		return this.name;
 	}
 	
 	/**

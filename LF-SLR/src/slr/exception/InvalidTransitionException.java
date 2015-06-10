@@ -6,12 +6,12 @@ package slr.exception;
 public class InvalidTransitionException extends Exception {
 
 	private static final long serialVersionUID = -798526128518478289L;
-	
+
 	/**
 	 * Construtor.
 	 */
-	public String getMessage() {
-		return "Transição inválida!";
+	public InvalidTransitionException() {
+		super("Transição inválida!");
 	}
 
 }

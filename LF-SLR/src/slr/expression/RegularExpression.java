@@ -2,13 +2,14 @@ package slr.expression;
 
 import java.util.Stack;
 
+import slr.RegularDevice;
 import slr.automaton.FiniteAutomaton;
 import slr.exception.InvalidRegularExpressionException;
 
 /**
  * Expressão regular.
  */
-public class RegularExpression {
+public class RegularExpression implements RegularDevice {
 
 	public static final char CONCATENATION = '.';
 	public static final char EPSILON = '&';

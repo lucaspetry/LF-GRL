@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeSet;
 
+import slr.RegularDevice;
 import slr.automaton.FiniteAutomaton;
 import slr.automaton.State;
 import slr.automaton.TransitionMap;
@@ -14,7 +15,7 @@ import slr.expression.RegularExpression;
 /**
  * Gramática regular.
  */
-public class RegularGrammar {
+public class RegularGrammar implements RegularDevice {
 
 	public static final String DERIVATION = "->";
 	public static final String TERMINALS = "abcdefghijklmnopqrstuvwxyz0123456789" + RegularExpression.EPSILON;

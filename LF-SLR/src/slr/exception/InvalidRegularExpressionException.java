@@ -13,4 +13,5 @@ public class InvalidRegularExpressionException extends Exception {
 	public InvalidRegularExpressionException() {
 		super("Expressão regular inválida!");
 	}
+	
 }
