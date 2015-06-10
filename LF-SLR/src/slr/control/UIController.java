@@ -1,5 +1,7 @@
 package slr.control;
 
+import java.util.List;
+
 import javax.swing.JOptionPane;
 
 import slr.gui.FiniteAutomatonWindow;
@@ -115,6 +117,10 @@ public class UIController {
 
 	public void complementFiniteAutomaton(String automatonLabel) {
 		this.mainController.complementFiniteAutomaton(automatonLabel);
+	}
+
+	public void intersectFiniteAutomata(List<String> automataLabels) {
+		this.mainController.intersectFiniteAutomata(automataLabels);
 	}
 	
 }

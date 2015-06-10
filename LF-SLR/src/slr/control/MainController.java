@@ -1,5 +1,7 @@
 package slr.control;
 
+import java.util.List;
+
 import slr.exception.FiniteAutomatonNotFoundException;
 import slr.exception.InvalidProductionException;
 import slr.exception.InvalidRegularExpressionException;
@@ -121,6 +123,10 @@ public class MainController {
 		} catch (Exception e) {
 			this.uiController.showErrorMessage(e.getMessage());
 		}
+	}
+
+	public void intersectFiniteAutomata(List<String> automataLabels) {
+		// TODO
 	}
 	
 	public void removeFiniteAutomaton(String automatonLabel) {

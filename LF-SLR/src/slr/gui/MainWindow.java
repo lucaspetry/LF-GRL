@@ -389,7 +389,7 @@ public class MainWindow extends JFrame {
 		this.btnIntersection.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				List<String> labels = MainWindow.this.listFiniteAutomata.getSelectedValuesList();
-				//MainWindow.this.uiController.removeFiniteAutomaton(label); TODO
+				MainWindow.this.uiController.intersectFiniteAutomata(labels);
 			}
 		});
 		
