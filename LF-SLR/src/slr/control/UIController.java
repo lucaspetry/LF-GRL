@@ -2,6 +2,8 @@ package slr.control;
 
 import javax.swing.JOptionPane;
 
+import slr.automaton.FiniteAutomaton;
+import slr.gui.FiniteAutomatonWindow;
 import slr.gui.MainWindow;
 import slr.gui.RegularDeviceEditionWindow;
 
@@ -43,6 +45,11 @@ public class UIController {
 		}
 	}
 	
+	public void showFiniteAutomatonWindow(String automatonLabel) {
+		new FiniteAutomatonWindow(automatonLabel,
+				this.mainController.getFiniteAutomaton(automatonLabel)).setVisible(true);
+	}
+	
 	public void disposeRegularDeviceEditionWindow() {
 		this.regularDeviceEditionWindow.dispose();
 	}
@@ -77,6 +84,22 @@ public class UIController {
 	
 	public void updateRegularDevice(boolean isRegularExpression, String regularDeviceOldLabel, String regularDeviceDescription) {
 		this.mainController.updateRegularDevice(isRegularExpression, regularDeviceOldLabel, regularDeviceDescription);
+	}
+
+	public void insertFiniteAutomatonToList(String automatonLabel) {
+		this.mainWindow.insertFiniteAutomaton(automatonLabel);
+	}
+
+	public void removeFiniteAutomatonFromList(String automatonLabel) {
+		this.mainWindow.removeFiniteAutomaton(automatonLabel);
+	}
+	
+	public void generateFiniteAutomaton(String regularDeviceLabel) {
+		this.mainController.generateFiniteAutomaton(regularDeviceLabel);
+	}
+
+	public String[][] getFiniteAutomaton(String automatonLabel) {
+		return this.mainController.getFiniteAutomaton(automatonLabel);
 	}
 	
 }

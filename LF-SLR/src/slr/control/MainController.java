@@ -1,5 +1,6 @@
 package slr.control;
 
+import slr.exception.FiniteAutomatonNotFoundException;
 import slr.exception.InvalidProductionException;
 import slr.exception.InvalidRegularExpressionException;
 import slr.exception.RegularDeviceExistingException;
@@ -75,6 +76,24 @@ public class MainController {
 			this.uiController.showErrorMessage(e.getMessage());
 		}
 		return null;
+	}
+
+	public String[][] getFiniteAutomaton(final String automatonLabel) {
+		try {
+			return this.rlController.getFiniteAutomatonTransitionTable(automatonLabel);
+		} catch (FiniteAutomatonNotFoundException e) {
+			this.uiController.showErrorMessage(e.getMessage());
+		}
+		return null;
+	}
+	
+	public void generateFiniteAutomaton(String regularDeviceLabel) {
+		try {
+			String label = this.rlController.generateFiniteAutomaton(regularDeviceLabel);
+			this.uiController.insertFiniteAutomatonToList(label);
+		} catch (RegularDeviceNotFoundException e) {
+			this.uiController.showErrorMessage(e.getMessage());
+		}
 	}
 	
 }

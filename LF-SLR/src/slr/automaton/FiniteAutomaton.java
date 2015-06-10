@@ -1,5 +1,6 @@
 package slr.automaton;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -45,8 +46,10 @@ public class FiniteAutomaton {
 			alphabet.addAll(s.getTransitions().keySet());
 		
 		alphabet.remove(RegularExpression.EPSILON);
+		Character[] alphabetArray = alphabet.toArray(new Character[1]);
+		Arrays.sort(alphabetArray);
 		
-		for(char c : alphabet.toArray(new Character[1]))
+		for(char c : alphabetArray)
 			this.alphabet += "" + c;
 	}
 	
@@ -123,6 +126,7 @@ public class FiniteAutomaton {
 		String[][] matriz = new String[this.states.size() + 1][1 + this.alphabet.length() + epsilonColumn];
 
 		State[] statesArray = this.states.toArray(new State[1]);
+		Arrays.sort(statesArray);
 		char[] alphabetArray = this.alphabet.toCharArray();
 		
 		// Definir o cabeçalho da tabela

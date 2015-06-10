@@ -159,6 +159,7 @@ public class RegularGrammar implements RegularDevice {
 		// Criar o estado final
 		transitionMaps.put("F0", new TransitionMap());
 		State finalState = new State("F0", true, transitionMaps.get("F0"));
+		states.put("F0", finalState);
 		
 		// Definir o estado inicial como final se Epsilon pertence à linguagem
 		try {

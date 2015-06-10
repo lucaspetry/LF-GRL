@@ -55,7 +55,7 @@ public class RegularLanguageController {
 	}
 
 	public String generateFiniteAutomaton(final String regularDeviceLabel) throws RegularDeviceNotFoundException {
-		if(this.regularDevices.containsKey(regularDeviceLabel))
+		if(!this.regularDevices.containsKey(regularDeviceLabel))
 			throw new RegularDeviceNotFoundException();
 		
 		FiniteAutomaton automaton = this.regularDevices.get(regularDeviceLabel).toFiniteAutomaton();
@@ -82,7 +82,7 @@ public class RegularLanguageController {
 	}
 	
 	public String[][] getFiniteAutomatonTransitionTable(final String automatonLabel) throws FiniteAutomatonNotFoundException {
-		if(this.finiteAutomata.containsKey(automatonLabel))
+		if(!this.finiteAutomata.containsKey(automatonLabel))
 			throw new FiniteAutomatonNotFoundException();
 		
 		return this.finiteAutomata.get(automatonLabel).toTransitionsTable();

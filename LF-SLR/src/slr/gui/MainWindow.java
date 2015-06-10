@@ -69,6 +69,10 @@ public class MainWindow extends JFrame {
 		this.btnPatternOccurrencesText.setEnabled(false);
 		this.btnEquals.setEnabled(false);
 		this.btnGenerateFiniteAutomaton.setEnabled(false);
+		MainWindow.this.btnDeterminize.setEnabled(false);
+		MainWindow.this.btnMinimize.setEnabled(false);
+		MainWindow.this.btnComplement.setEnabled(false);
+		MainWindow.this.btnIntersection.setEnabled(false);
 	}
 
 	private void initComponents() {
@@ -381,6 +385,41 @@ public class MainWindow extends JFrame {
 			}
 		});
 		
+		this.listFiniteAutomata
+		.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent arg0) {
+				int items = MainWindow.this.listFiniteAutomata
+						.getSelectedValuesList().size();
+
+				switch (items) {
+					case 0:
+						MainWindow.this.btnDeterminize.setEnabled(false);
+						MainWindow.this.btnMinimize.setEnabled(false);
+						MainWindow.this.btnComplement.setEnabled(false);
+						MainWindow.this.btnIntersection.setEnabled(false);
+						break;
+					case 1:
+						String item = MainWindow.this.listFiniteAutomata.getSelectedValuesList().get(0);
+						String[][] aut = MainWindow.this.uiController.getFiniteAutomaton(item);
+						MainWindow.this.setTransitionsTable(aut);
+						MainWindow.this.btnDeterminize.setEnabled(true);
+						MainWindow.this.btnMinimize.setEnabled(true);
+						MainWindow.this.btnComplement.setEnabled(true);
+						MainWindow.this.btnIntersection.setEnabled(false);
+						break;
+					default:
+						String item2 = MainWindow.this.listFiniteAutomata.getSelectedValuesList().get(0);
+						String[][] aut2 = MainWindow.this.uiController.getFiniteAutomaton(item2);
+						MainWindow.this.setTransitionsTable(aut2);
+						MainWindow.this.btnDeterminize.setEnabled(false);
+						MainWindow.this.btnMinimize.setEnabled(false);
+						MainWindow.this.btnComplement.setEnabled(false);
+						MainWindow.this.btnIntersection.setEnabled(true);
+						break;
+				}
+			}
+		});
+		
 		this.listReRg.addMouseListener(new MouseListener() {
 			public void mouseReleased(MouseEvent arg0) {}
 			public void mousePressed(MouseEvent arg0) {}
@@ -395,6 +434,30 @@ public class MainWindow extends JFrame {
 					if (reRg != null)
 						MainWindow.this.uiController.showRegularDeviceEditionWindow(reRg.contains("[ E ]"), reRg);
 				}
+			}
+		});
+		
+		this.listFiniteAutomata.addMouseListener(new MouseListener() {
+			public void mouseReleased(MouseEvent arg0) {}
+			public void mousePressed(MouseEvent arg0) {}
+			public void mouseExited(MouseEvent arg0) {}
+			public void mouseEntered(MouseEvent arg0) {}
+
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() == 2 && !e.isConsumed()) {
+					e.consume();
+					String fa = MainWindow.this.listFiniteAutomata.getSelectedValue();
+
+					if (fa != null)
+						MainWindow.this.uiController.showFiniteAutomatonWindow(fa);
+				}
+			}
+		});
+		
+		this.btnGenerateFiniteAutomaton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String regularDeviceLabel = MainWindow.this.listReRg.getSelectedValue();
+				MainWindow.this.uiController.generateFiniteAutomaton(regularDeviceLabel);
 			}
 		});
 		
@@ -502,6 +565,21 @@ public class MainWindow extends JFrame {
 //					}
 //				});
 	}
+	
+    private void setTransitionsTable(final String[][] transitionsTable) {    	
+    	String[][] data = new String[transitionsTable.length - 1][transitionsTable[0].length];
+    	
+    	for(int i = 1; i < transitionsTable.length; i++)
+    		data[i - 1] = transitionsTable[i];
+    	
+    	this.tableFA = new JTable(data, transitionsTable[0]);
+    	this.tableFA.setEnabled(false);
+    	this.scrollPaneFA.setViewportView(this.tableFA);
+    	this.tableFA.getColumnModel().getColumn(0).setWidth(20);
+    	
+    	for(int i = 1; i < this.tableFA.getColumnCount(); i++)
+    		this.tableFA.getColumnModel().getColumn(i).setWidth(40); // TODO verificar se tamanho está ok.
+    }
 	
 	public void insertRegularDevice(String regularDeviceLabel) {
 		this.regularDevices.addElement(regularDeviceLabel);

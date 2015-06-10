@@ -24,6 +24,8 @@ public class FiniteAutomatonWindow extends JFrame {
         initComponents();
         initTransitionsTable(transitionsTable);
         this.labelNameValue.setText(automatonName);
+        this.setTitle("Visualização de AF: " + automatonName);
+		this.setLocationRelativeTo(null);
     }
 
     private void initComponents() {
@@ -33,7 +35,6 @@ public class FiniteAutomatonWindow extends JFrame {
         labelNameValue = new JLabel();
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Visualização de Autômato Finito");
         setResizable(false);
 
         tableFA.setModel(new DefaultTableModel(
@@ -88,6 +89,8 @@ public class FiniteAutomatonWindow extends JFrame {
     		data[i - 1] = transitionsTable[i];
     	
     	this.tableFA = new JTable(data, transitionsTable[0]);
+    	this.tableFA.setEnabled(false);
+    	this.scrollPaneFA.setViewportView(this.tableFA);
     	this.tableFA.getColumnModel().getColumn(0).setWidth(30);
     	
     	for(int i = 1; i < this.tableFA.getColumnCount(); i++)
