@@ -16,6 +16,8 @@ import javax.swing.JTextArea;
 import javax.swing.LayoutStyle;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.WindowConstants;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 import slr.control.UIController;
@@ -51,14 +53,20 @@ public class MainWindow extends JFrame {
     private JTable tableFA;
     private JTextArea textAreaReRg;
 	private DefaultListModel<String> regularDevices;
+	private DefaultListModel<String> finiteAutomata;
 	private UIController uiController;
 	
 	public MainWindow(final UIController uiController) {
 		this.uiController = uiController;
 		this.regularDevices = new DefaultListModel<String>();
+		this.finiteAutomata = new DefaultListModel<String>();
 		this.initComponents();
 		this.setActionCommands();
 		this.setLocationRelativeTo(null);
+
+		this.btnPatternOccurrencesText.setEnabled(false);
+		this.btnEquals.setEnabled(false);
+		this.btnGenerateFiniteAutomaton.setEnabled(false);
 	}
 
 	private void initComponents() {
@@ -268,6 +276,7 @@ public class MainWindow extends JFrame {
         textAreaReRg.setColumns(20);
         textAreaReRg.setLineWrap(true);
         textAreaReRg.setRows(5);
+        textAreaReRg.setMargin(new java.awt.Insets(3, 3, 3, 3));
         scrollPaneReRg.setViewportView(textAreaReRg);
 
         GroupLayout panelReRgViewLayout = new GroupLayout(panelReRgView);
@@ -331,6 +340,45 @@ public class MainWindow extends JFrame {
 				MainWindow.this.uiController.showRegularDeviceEditionWindow();
 			}
 		});
+
+		this.btnRemoveReRg.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				for(String label : MainWindow.this.listReRg.getSelectedValuesList())
+					MainWindow.this.uiController.removeRegularDevice(label);
+				MainWindow.this.textAreaReRg.setText("");
+			}
+		});
+		
+		this.listReRg
+		.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent arg0) {
+				int items = MainWindow.this.listReRg
+						.getSelectedValuesList().size();
+
+				switch (items) {
+					case 0:
+						MainWindow.this.btnPatternOccurrencesText.setEnabled(false);
+						MainWindow.this.btnEquals.setEnabled(false);
+						MainWindow.this.btnGenerateFiniteAutomaton.setEnabled(false);
+						break;
+					case 1:
+						String item = MainWindow.this.listReRg.getSelectedValuesList().get(0);
+						MainWindow.this.textAreaReRg.setText(item.substring(5));
+						MainWindow.this.btnPatternOccurrencesText.setEnabled(item.contains("[ E ]"));
+						MainWindow.this.btnEquals.setEnabled(false);
+						MainWindow.this.btnGenerateFiniteAutomaton.setEnabled(true);
+						break;
+					default:
+						String item2 = MainWindow.this.listReRg.getSelectedValuesList().get(0);
+						MainWindow.this.textAreaReRg.setText(item2.substring(5));
+						MainWindow.this.btnPatternOccurrencesText.setEnabled(false);
+						MainWindow.this.btnEquals.setEnabled(true);
+						MainWindow.this.btnGenerateFiniteAutomaton.setEnabled(false);
+						break;
+				}
+			}
+		});
+		
 //		this.btnAddRE.addActionListener(new ActionListener() {
 //			public void actionPerformed(ActionEvent arg0) {
 //				String re = JOptionPane.showInputDialog(null, "",
@@ -441,4 +489,19 @@ public class MainWindow extends JFrame {
 		this.listReRg.setModel(this.regularDevices);
 	}
 
+	public void insertFiniteAutomaton(String automatonLabel) {
+		this.finiteAutomata.addElement(automatonLabel);
+		this.listFiniteAutomata.setModel(this.finiteAutomata);
+	}
+
+	public void removeRegularDevice(String regularDeviceLabel) {
+		this.regularDevices.removeElement(regularDeviceLabel);
+		this.listReRg.setModel(this.regularDevices);
+	}
+
+	public void removeFiniteAutomaton(String automatonLabel) {
+		this.finiteAutomata.removeElement(automatonLabel);
+		this.listFiniteAutomata.setModel(this.finiteAutomata);
+	}
+	
 }

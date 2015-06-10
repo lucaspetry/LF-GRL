@@ -53,9 +53,17 @@ public class UIController {
 	public void insertRegularDeviceToList(String regularDeviceLabel) {
 		this.mainWindow.insertRegularDevice(regularDeviceLabel);
 	}
+
+	public void removeRegularDeviceFromList(String regularDeviceLabel) {
+		this.mainWindow.removeRegularDevice(regularDeviceLabel);
+	}
 	
 	public void insertRegularDevice(boolean isRegularExpression, String description) {
 		this.mainController.insertRegularDevice(isRegularExpression, description);
+	}
+
+	public void removeRegularDevice(String regularDeviceLabel) {
+		this.mainController.removeRegularDevice(regularDeviceLabel);
 	}
 	
 }

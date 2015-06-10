@@ -44,4 +44,9 @@ public class MainController {
 		}
 	}
 
+	public void removeRegularDevice(String regularDeviceLabel) {
+		this.rlController.removeRegularDevice(regularDeviceLabel);
+		this.uiController.removeRegularDeviceFromList(regularDeviceLabel);
+	}
+	
 }
