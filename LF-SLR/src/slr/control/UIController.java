@@ -2,7 +2,6 @@ package slr.control;
 
 import javax.swing.JOptionPane;
 
-import slr.automaton.FiniteAutomaton;
 import slr.gui.FiniteAutomatonWindow;
 import slr.gui.MainWindow;
 import slr.gui.RegularDeviceEditionWindow;
@@ -34,7 +33,7 @@ public class UIController {
 	}
 
 	public void showRegularDeviceEditionWindow(final boolean isRegularExpression, final String regularDeviceLabel) {
-		String description = this.mainController.getRegularDevice(regularDeviceLabel);
+		String description = regularDeviceLabel.substring(6);//this.mainController.getRegularDevice(regularDeviceLabel);
 		
 		if(description != null) {
 			this.regularDeviceEditionWindow.setEditionMode(true);
@@ -93,6 +92,10 @@ public class UIController {
 	public void removeFiniteAutomatonFromList(String automatonLabel) {
 		this.mainWindow.removeFiniteAutomaton(automatonLabel);
 	}
+
+	public void removeFiniteAutomaton(String automatonLabel) {
+		this.mainController.removeFiniteAutomaton(automatonLabel);
+	}
 	
 	public void generateFiniteAutomaton(String regularDeviceLabel) {
 		this.mainController.generateFiniteAutomaton(regularDeviceLabel);
@@ -100,6 +103,18 @@ public class UIController {
 
 	public String[][] getFiniteAutomaton(String automatonLabel) {
 		return this.mainController.getFiniteAutomaton(automatonLabel);
+	}
+	
+	public void determinizeFiniteAutomaton(String automatonLabel) {
+		this.mainController.determinizeFiniteAutomaton(automatonLabel);
+	}
+
+	public void minimizeFiniteAutomaton(String automatonLabel) {
+		this.mainController.minimizeFiniteAutomaton(automatonLabel);
+	}
+
+	public void complementFiniteAutomaton(String automatonLabel) {
+		this.mainController.complementFiniteAutomaton(automatonLabel);
 	}
 	
 }

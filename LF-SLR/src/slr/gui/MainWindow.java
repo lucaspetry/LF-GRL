@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -354,6 +355,43 @@ public class MainWindow extends JFrame {
 				MainWindow.this.textAreaReRg.setText("");
 			}
 		});
+
+		this.btnRemoveFA.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				for(String label : MainWindow.this.listFiniteAutomata.getSelectedValuesList())
+					MainWindow.this.uiController.removeFiniteAutomaton(label);
+				
+				MainWindow.this.scrollPaneFA.setViewportView(new JTable());
+			}
+		});
+
+		this.btnDeterminize.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String label = MainWindow.this.listFiniteAutomata.getSelectedValue();
+				MainWindow.this.uiController.determinizeFiniteAutomaton(label);
+			}
+		});
+
+		this.btnMinimize.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String label = MainWindow.this.listFiniteAutomata.getSelectedValue();
+				MainWindow.this.uiController.minimizeFiniteAutomaton(label);
+			}
+		});
+		
+		this.btnComplement.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String label = MainWindow.this.listFiniteAutomata.getSelectedValue();
+				MainWindow.this.uiController.complementFiniteAutomaton(label);
+			}
+		});
+
+		this.btnIntersection.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				List<String> labels = MainWindow.this.listFiniteAutomata.getSelectedValuesList();
+				//MainWindow.this.uiController.removeFiniteAutomaton(label); TODO
+			}
+		});
 		
 		this.listReRg
 		.addListSelectionListener(new ListSelectionListener() {
@@ -460,110 +498,6 @@ public class MainWindow extends JFrame {
 				MainWindow.this.uiController.generateFiniteAutomaton(regularDeviceLabel);
 			}
 		});
-		
-//		this.btnAddRE.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent arg0) {
-//				String re = JOptionPane.showInputDialog(null, "",
-//						"Inserir uma Expressão Regular",
-//						JOptionPane.QUESTION_MESSAGE);
-//
-//				while (re != null && !re.isEmpty()
-//						&& MainWindow.this.regularExpressions.contains(re)) {
-//					JOptionPane.showMessageDialog(null,
-//							"Expressão regular já existente!", "Atenção",
-//							JOptionPane.WARNING_MESSAGE);
-//					re = JOptionPane.showInputDialog(null, "",
-//							"Inserir uma Expressão Regular",
-//							JOptionPane.QUESTION_MESSAGE);
-//				}
-//
-//				if (re != null && !re.isEmpty())
-//					MainWindow.this.regularExpressions.addElement(re);
-//
-//				MainWindow.this.listRegularExpressions
-//						.setModel(MainWindow.this.regularExpressions);
-//			}
-//		});
-//
-//		this.btnRemoveRE.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent arg0) {
-//				List<String> selected = MainWindow.this.listRegularExpressions
-//						.getSelectedValuesList();
-//
-//				for (String item : selected)
-//					MainWindow.this.regularExpressions.removeElement(item);
-//
-//				MainWindow.this.listRegularExpressions
-//						.setModel(MainWindow.this.regularExpressions);
-//			}
-//		});
-//
-//		this.listRegularExpressions.addMouseListener(new MouseListener() {
-//			public void mouseReleased(MouseEvent arg0) {
-//			}
-//
-//			public void mousePressed(MouseEvent arg0) {
-//			}
-//
-//			public void mouseExited(MouseEvent arg0) {
-//			}
-//
-//			public void mouseEntered(MouseEvent arg0) {
-//			}
-//
-//			public void mouseClicked(MouseEvent e) {
-//				if (e.getClickCount() == 2 && !e.isConsumed()) {
-//					e.consume();
-//					String re = MainWindow.this.listRegularExpressions
-//							.getSelectedValue();
-//					int indexRe = MainWindow.this.regularExpressions
-//							.indexOf(re);
-//
-//					if (re != null) {
-//						String novaRe = (String) JOptionPane.showInputDialog(
-//								null, "", "Editar Expressão Regular",
-//								JOptionPane.QUESTION_MESSAGE, null, null, re);
-//
-//						if (novaRe != null && !novaRe.isEmpty()) {
-//							if (!re.equals(novaRe) && MainWindow.this.regularExpressions
-//									.contains(novaRe)) {
-//								JOptionPane.showMessageDialog(null,
-//										"Expressão regular já existente!",
-//										"Atenção", JOptionPane.WARNING_MESSAGE);
-//							} else {
-//								MainWindow.this.regularExpressions.set(indexRe,
-//										novaRe);
-//								MainWindow.this.listRegularExpressions
-//										.setModel(MainWindow.this.regularExpressions);
-//							}
-//						}
-//					}
-//				}
-//			}
-//		});
-//
-//		this.listRegularExpressions
-//				.addListSelectionListener(new ListSelectionListener() {
-//					public void valueChanged(ListSelectionEvent arg0) {
-//						int items = MainWindow.this.listRegularExpressions
-//								.getSelectedValuesList().size();
-//
-//						switch (items) {
-//							case 0:
-//								MainWindow.this.setUnaryOperation(false);
-//								MainWindow.this.setNaryOperation(false);
-//								break;
-//							case 1:
-//								MainWindow.this.setUnaryOperation(true);
-//								MainWindow.this.setNaryOperation(false);
-//								break;
-//							default:
-//								MainWindow.this.setUnaryOperation(false);
-//								MainWindow.this.setNaryOperation(true);
-//								break;
-//						}
-//					}
-//				});
 	}
 	
     private void setTransitionsTable(final String[][] transitionsTable) {    	

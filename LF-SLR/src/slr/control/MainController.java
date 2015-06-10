@@ -95,5 +95,37 @@ public class MainController {
 			this.uiController.showErrorMessage(e.getMessage());
 		}
 	}
+
+	public void determinizeFiniteAutomaton(String automatonLabel) {
+		try {
+			for(String label : this.rlController.determinizeFiniteAutomaton(this.rlController.getFiniteAutomaton(automatonLabel)))
+				this.uiController.insertFiniteAutomatonToList(label);
+		} catch (Exception e) {
+			this.uiController.showErrorMessage(e.getMessage());
+		}
+	}
+
+	public void minimizeFiniteAutomaton(String automatonLabel) {
+		try {
+			for(String label : this.rlController.minimizeFiniteAutomaton(this.rlController.getFiniteAutomaton(automatonLabel)))
+				this.uiController.insertFiniteAutomatonToList(label);
+		} catch (Exception e) {
+			this.uiController.showErrorMessage(e.getMessage());
+		}
+	}
+
+	public void complementFiniteAutomaton(String automatonLabel) {
+		try {
+			for(String label : this.rlController.complementFiniteAutomaton(this.rlController.getFiniteAutomaton(automatonLabel)))
+				this.uiController.insertFiniteAutomatonToList(label);
+		} catch (Exception e) {
+			this.uiController.showErrorMessage(e.getMessage());
+		}
+	}
+	
+	public void removeFiniteAutomaton(String automatonLabel) {
+		this.rlController.removeFiniteAutomaton(automatonLabel);
+		this.uiController.removeFiniteAutomatonFromList(automatonLabel);
+	}
 	
 }
