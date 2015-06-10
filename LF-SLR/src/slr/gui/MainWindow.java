@@ -1,5 +1,8 @@
 package slr.gui;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
@@ -47,12 +50,12 @@ public class MainWindow extends JFrame {
     private JScrollPane scrollPaneReRg;
     private JTable tableFA;
     private JTextArea textAreaReRg;
-	private DefaultListModel<String> regularExpressions;
+	private DefaultListModel<String> regularDevices;
 	private UIController uiController;
 	
 	public MainWindow(final UIController uiController) {
 		this.uiController = uiController;
-		this.regularExpressions = new DefaultListModel<String>();
+		this.regularDevices = new DefaultListModel<String>();
 		this.initComponents();
 		this.setActionCommands();
 		this.setLocationRelativeTo(null);
@@ -323,6 +326,11 @@ public class MainWindow extends JFrame {
 	}
 
 	private void setActionCommands() {
+		this.btnInsertReRg.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				MainWindow.this.uiController.showRegularDeviceEditionWindow();
+			}
+		});
 //		this.btnAddRE.addActionListener(new ActionListener() {
 //			public void actionPerformed(ActionEvent arg0) {
 //				String re = JOptionPane.showInputDialog(null, "",
@@ -426,6 +434,11 @@ public class MainWindow extends JFrame {
 //						}
 //					}
 //				});
+	}
+	
+	public void insertRegularDevice(String regularDeviceLabel) {
+		this.regularDevices.addElement(regularDeviceLabel);
+		this.listReRg.setModel(this.regularDevices);
 	}
 
 }

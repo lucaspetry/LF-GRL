@@ -47,12 +47,14 @@ public class RegularDeviceEditionWindow extends JFrame {
     private JTextArea textAreaDescription;
     private JTextArea textAreaTip;
 	private UIController uiController;
+	private boolean isEditionMode;
 	
 	/**
      * Creates new form RegularDeviceEditionWindow
      */
     public RegularDeviceEditionWindow(final UIController uiController) {
 		this.uiController = uiController;
+		this.isEditionMode = false;
         initComponents();
 		this.setLocationRelativeTo(null);
     }
@@ -78,7 +80,7 @@ public class RegularDeviceEditionWindow extends JFrame {
         btnOk = new JButton();
         btnCancel = new JButton();
 
-        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Inserção/Edição de Dispositivos Regulares");
 
         panelDeviceType.setBorder(BorderFactory.createTitledBorder("Tipo do Dispositivo"));
@@ -87,7 +89,7 @@ public class RegularDeviceEditionWindow extends JFrame {
         radBtnRegularExpression.setSelected(true);
         radBtnRegularExpression.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				RegularDeviceEditionWindow.this.setDeviceType(
+				RegularDeviceEditionWindow.this.deviceTypeChanged(
 						RegularDeviceEditionWindow.this.radBtnRegularExpression.isSelected());
 				
 			}
@@ -219,8 +221,21 @@ public class RegularDeviceEditionWindow extends JFrame {
 
         pack();
     }
+    
+    public void setDeviceType(boolean isRegularExpression) {
+    	this.radBtnRegularExpression.setSelected(isRegularExpression);
+    	this.radBtnRegularGrammar.setSelected(!isRegularExpression);
+    }
+    
+    public void setDeviceDescription(final String text) {
+    	this.textAreaDescription.setText(text);
+    }
+    
+    public void setEditionMode(boolean isEditionMode) {
+    	this.isEditionMode = isEditionMode;
+    }
 
-    private void setDeviceType(boolean isRegularExpression) {
+    private void deviceTypeChanged(boolean isRegularExpression) {
     	if(isRegularExpression) {
     		this.textAreaTip.setText(REGULAR_EXPRESSION_TIP);
     	} else {
@@ -230,7 +245,12 @@ public class RegularDeviceEditionWindow extends JFrame {
     }
     
     private void insertUpdateRegularDevice() {
-    	System.out.println("Inserir/Atualizar"); // TODO
+    	if(!this.isEditionMode) {
+    		this.uiController.insertRegularDevice(this.radBtnRegularExpression.isSelected(),
+    				this.textAreaDescription.getText());
+    	} else {
+    		System.out.println("Atualizar"); // TODO
+    	}
     }
     
 }

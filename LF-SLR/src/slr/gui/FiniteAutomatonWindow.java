@@ -20,8 +20,10 @@ public class FiniteAutomatonWindow extends JFrame {
     private JLabel labelNameValue;
     private JTable tableFA;
     
-    public FiniteAutomatonWindow() {
+    public FiniteAutomatonWindow(String automatonName, String[][] transitionsTable) {
         initComponents();
+        initTransitionsTable(transitionsTable);
+        this.labelNameValue.setText(automatonName);
     }
 
     private void initComponents() {
@@ -30,7 +32,7 @@ public class FiniteAutomatonWindow extends JFrame {
         labelName = new JLabel();
         labelNameValue = new JLabel();
 
-        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Visualização de Autômato Finito");
         setResizable(false);
 
@@ -79,4 +81,17 @@ public class FiniteAutomatonWindow extends JFrame {
         pack();
     }
 
+    private void initTransitionsTable(final String[][] transitionsTable) {
+    	String[][] data = new String[transitionsTable.length - 1][transitionsTable[0].length];
+    	
+    	for(int i = 1; i < transitionsTable.length; i++)
+    		data[i - 1] = transitionsTable[i];
+    	
+    	this.tableFA = new JTable(data, transitionsTable[0]);
+    	this.tableFA.getColumnModel().getColumn(0).setWidth(30);
+    	
+    	for(int i = 1; i < this.tableFA.getColumnCount(); i++)
+    		this.tableFA.getColumnModel().getColumn(i).setWidth(40); // TODO verificar se tamanho está ok.
+    }
+    
 }
