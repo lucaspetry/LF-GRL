@@ -31,11 +31,16 @@ public class UIController {
 		this.regularDeviceEditionWindow.setVisible(true);
 	}
 
-	public void showRegularDeviceEditionWindow(final boolean isRegularExpression, final String deviceDescription) {
-		this.regularDeviceEditionWindow.setEditionMode(true);
-		this.regularDeviceEditionWindow.setDeviceType(isRegularExpression);
-		this.regularDeviceEditionWindow.setDeviceDescription(deviceDescription);
-		this.regularDeviceEditionWindow.setVisible(true);
+	public void showRegularDeviceEditionWindow(final boolean isRegularExpression, final String regularDeviceLabel) {
+		String description = this.mainController.getRegularDevice(regularDeviceLabel);
+		
+		if(description != null) {
+			this.regularDeviceEditionWindow.setEditionMode(true);
+			this.regularDeviceEditionWindow.setDeviceType(isRegularExpression);
+			this.regularDeviceEditionWindow.setDeviceLabel(regularDeviceLabel);
+			this.regularDeviceEditionWindow.setDeviceDescription(description);
+			this.regularDeviceEditionWindow.setVisible(true);
+		}
 	}
 	
 	public void disposeRegularDeviceEditionWindow() {
@@ -57,6 +62,10 @@ public class UIController {
 	public void removeRegularDeviceFromList(String regularDeviceLabel) {
 		this.mainWindow.removeRegularDevice(regularDeviceLabel);
 	}
+
+	public void updateRegularDeviceFromList(String regularDeviceOldLabel, String regularDeviceNewLabel) {
+		this.mainWindow.updateRegularDevice(regularDeviceOldLabel, regularDeviceNewLabel);
+	}
 	
 	public void insertRegularDevice(boolean isRegularExpression, String description) {
 		this.mainController.insertRegularDevice(isRegularExpression, description);
@@ -64,6 +73,10 @@ public class UIController {
 
 	public void removeRegularDevice(String regularDeviceLabel) {
 		this.mainController.removeRegularDevice(regularDeviceLabel);
+	}
+	
+	public void updateRegularDevice(boolean isRegularExpression, String regularDeviceOldLabel, String regularDeviceDescription) {
+		this.mainController.updateRegularDevice(isRegularExpression, regularDeviceOldLabel, regularDeviceDescription);
 	}
 	
 }

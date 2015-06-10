@@ -2,6 +2,8 @@ package slr.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -363,18 +365,35 @@ public class MainWindow extends JFrame {
 						break;
 					case 1:
 						String item = MainWindow.this.listReRg.getSelectedValuesList().get(0);
-						MainWindow.this.textAreaReRg.setText(item.substring(5));
+						MainWindow.this.textAreaReRg.setText(item.substring(6));
 						MainWindow.this.btnPatternOccurrencesText.setEnabled(item.contains("[ E ]"));
 						MainWindow.this.btnEquals.setEnabled(false);
 						MainWindow.this.btnGenerateFiniteAutomaton.setEnabled(true);
 						break;
 					default:
 						String item2 = MainWindow.this.listReRg.getSelectedValuesList().get(0);
-						MainWindow.this.textAreaReRg.setText(item2.substring(5));
+						MainWindow.this.textAreaReRg.setText(item2.substring(6));
 						MainWindow.this.btnPatternOccurrencesText.setEnabled(false);
 						MainWindow.this.btnEquals.setEnabled(true);
 						MainWindow.this.btnGenerateFiniteAutomaton.setEnabled(false);
 						break;
+				}
+			}
+		});
+		
+		this.listReRg.addMouseListener(new MouseListener() {
+			public void mouseReleased(MouseEvent arg0) {}
+			public void mousePressed(MouseEvent arg0) {}
+			public void mouseExited(MouseEvent arg0) {}
+			public void mouseEntered(MouseEvent arg0) {}
+
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() == 2 && !e.isConsumed()) {
+					e.consume();
+					String reRg = MainWindow.this.listReRg.getSelectedValue();
+
+					if (reRg != null)
+						MainWindow.this.uiController.showRegularDeviceEditionWindow(reRg.contains("[ E ]"), reRg);
 				}
 			}
 		});
@@ -502,6 +521,11 @@ public class MainWindow extends JFrame {
 	public void removeFiniteAutomaton(String automatonLabel) {
 		this.finiteAutomata.removeElement(automatonLabel);
 		this.listFiniteAutomata.setModel(this.finiteAutomata);
+	}
+	
+	public void updateRegularDevice(String regularDeviceOldLabel, String regularDeviceNewLabel) {
+		int index = this.regularDevices.indexOf(regularDeviceOldLabel);
+		this.regularDevices.set(index, regularDeviceNewLabel);
 	}
 	
 }

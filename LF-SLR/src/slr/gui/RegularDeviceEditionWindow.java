@@ -48,6 +48,7 @@ public class RegularDeviceEditionWindow extends JFrame {
     private JTextArea textAreaTip;
 	private UIController uiController;
 	private boolean isEditionMode;
+	private String regularDeviceLabel;
 	
 	/**
      * Creates new form RegularDeviceEditionWindow
@@ -55,6 +56,7 @@ public class RegularDeviceEditionWindow extends JFrame {
     public RegularDeviceEditionWindow(final UIController uiController) {
 		this.uiController = uiController;
 		this.isEditionMode = false;
+		this.regularDeviceLabel = "";
         initComponents();
 		this.setLocationRelativeTo(null);
     }
@@ -230,6 +232,10 @@ public class RegularDeviceEditionWindow extends JFrame {
     public void setDeviceDescription(final String text) {
     	this.textAreaDescription.setText(text);
     }
+
+    public void setDeviceLabel(final String label) {
+    	this.regularDeviceLabel = label;
+    }
     
     public void setEditionMode(boolean isEditionMode) {
     	this.isEditionMode = isEditionMode;
@@ -249,7 +255,12 @@ public class RegularDeviceEditionWindow extends JFrame {
     		this.uiController.insertRegularDevice(this.radBtnRegularExpression.isSelected(),
     				this.textAreaDescription.getText());
     	} else {
-    		System.out.println("Atualizar"); // TODO
+    		if(!this.regularDeviceLabel.substring(6).equals(this.textAreaDescription.getText())) {
+    			this.uiController.updateRegularDevice(this.radBtnRegularExpression.isSelected(),
+    					this.regularDeviceLabel, this.textAreaDescription.getText());
+    		} else {
+    			this.uiController.disposeRegularDeviceEditionWindow();
+    		}
     	}
     }
     
