@@ -51,7 +51,6 @@ public class MainController {
 	}
 	
 	public void updateRegularDevice(boolean isRegularExpression, String regularDeviceOldLabel, String regularDeviceDescription) {
-		
 		try {
 			String label = "";
 			
