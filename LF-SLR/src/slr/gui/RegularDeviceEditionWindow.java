@@ -84,6 +84,7 @@ public class RegularDeviceEditionWindow extends JFrame {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Inserção/Edição de Dispositivos Regulares");
+        setResizable(false);
 
         panelDeviceType.setBorder(BorderFactory.createTitledBorder("Tipo do Dispositivo"));
 
