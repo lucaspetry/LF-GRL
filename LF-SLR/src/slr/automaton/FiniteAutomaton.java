@@ -367,7 +367,7 @@ public class FiniteAutomaton {
 
 		// Criar os novos estados determinísticos
 		Map<HashSet<State>, State> deterministicStates = new HashMap<HashSet<State>, State>();
-		State newInitialState = new State("q0", this.initialState.isFinal(), new TransitionMap());
+		State newInitialState = new State("Q0", this.initialState.isFinal(), new TransitionMap());
 
 		states.remove(initial);
 		deterministicStates.put(initial, newInitialState);
@@ -379,7 +379,7 @@ public class FiniteAutomaton {
 			for(State s : state) {
 				isFinal = isFinal || s.isFinal();
 			}
-			deterministicStates.put(state, new State("q" + stateIndex, isFinal, new TransitionMap()));
+			deterministicStates.put(state, new State("Q" + stateIndex, isFinal, new TransitionMap()));
 			
 			stateIndex++;
 		}
@@ -530,6 +530,7 @@ public class FiniteAutomaton {
 			for(State s : automaton.states) {
 				s.setIsFinal(!s.isFinal());
 			}
+			automaton.name += "-Complemento";
 			
 			return automaton;
 		} catch (CloneNotSupportedException e) {
@@ -579,7 +580,8 @@ public class FiniteAutomaton {
 			// Definir o novo estado inicial e atualizar o alfabeto
 			unionAutomaton.states.add(initialState);
 			unionAutomaton.initialState = initialState;
-			unionAutomaton.buildAlphabet();		
+			unionAutomaton.buildAlphabet();
+			unionAutomaton.name += "-União";
 			
 			return unionAutomaton;
 		} catch (CloneNotSupportedException e) {
@@ -597,8 +599,10 @@ public class FiniteAutomaton {
 			FiniteAutomaton a = (FiniteAutomaton) this.clone();
 			FiniteAutomaton b = (FiniteAutomaton) automaton.clone();
 			FiniteAutomaton union = a.complement().union(b.complement());
+			FiniteAutomaton intersection = union.complement();
+			intersection.name += "-Interseção";
 			
-			return union.complement();
+			return intersection;
 		} catch (CloneNotSupportedException e) {}
 		
 		return null;
