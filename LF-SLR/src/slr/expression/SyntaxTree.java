@@ -40,7 +40,8 @@ public class SyntaxTree extends BinaryTree<Character> {
 	 * Costurar a árvore.
 	 */
 	private void sewTree() {
-		this.getRoot().sewNode(null, new BinaryTreeNode<Character>(RegularExpression.EPSILON));
+		if(this.getRoot() != null)
+			this.getRoot().sewNode(null, new BinaryTreeNode<Character>(RegularExpression.EPSILON));
 	}
 
 	private BinaryTreeNode<Character> atom() {

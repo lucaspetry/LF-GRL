@@ -148,7 +148,7 @@ public class RegularExpression implements RegularDevice {
 		Arrays.sort(symbols);
 		String terminals = "";
 		
-		if(symbols != null) {
+		if(symbols[0] != null) {
 			for(char c : symbols)
 				terminals += "" + c;
 		}

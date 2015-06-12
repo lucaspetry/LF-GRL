@@ -49,8 +49,10 @@ public class FiniteAutomaton {
 		Character[] alphabetArray = alphabet.toArray(new Character[1]);
 		Arrays.sort(alphabetArray);
 		
-		for(char c : alphabetArray)
-			this.alphabet += "" + c;
+		if(alphabetArray[0] != null) {
+			for(char c : alphabetArray)
+				this.alphabet += "" + c;
+		}
 	}
 	
 	@Override
