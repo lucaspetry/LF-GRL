@@ -6,7 +6,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import slr.exception.InvalidRegularExpressionException;
+import slr.expression.BinaryTreeNode;
 import slr.expression.RegularExpression;
+import slr.expression.SyntaxTree;
 
 public class RegularExpressionTest {
 
@@ -42,6 +44,19 @@ public class RegularExpressionTest {
 		RegularExpression regex2 = new RegularExpression("ab*c|aba((ba)+c)");
 		regex2.standardize();
 		assertEquals("a.b*.c|a.b.a.((b.a).(b.a)*.c)", regex2.toString());
+
+		RegularExpression regex3 = new RegularExpression("ab*c | aba\n((ba)+c)");
+		regex3.standardize();
+		assertEquals("a.b*.c|a.b.a.((b.a).(b.a)*.c)", regex3.toString());
 	}
 
+	@Test
+	public void testGetSyntaxTree() throws InvalidRegularExpressionException {
+		RegularExpression regex = new RegularExpression("0*(1(01*0)*1)*0*");
+		SyntaxTree tree = regex.getSyntaxTree();
+		BinaryTreeNode<Character> node = tree.getRoot().getRightNode().getLeftNode().getLeftNode().getRightNode().getRightNode();
+		
+		System.out.println(node.getValue() + " - Cost: " + node.getSeam());
+	}
+	
 }

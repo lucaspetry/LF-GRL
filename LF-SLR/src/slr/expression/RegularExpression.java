@@ -46,7 +46,7 @@ public class RegularExpression implements RegularDevice {
 	private boolean isValid() {
 		String validChars = ALPHABET + CONCATENATION + KLEENE_STAR_CLOSURE 
 				+ KLEENE_POSITIVE_CLOSURE + OR + OPTIONAL
-				+ PARENTHESIS_OPENING + PARENTHESIS_CLOSING;
+				+ PARENTHESIS_OPENING + PARENTHESIS_CLOSING + '\n' + ' ';
 		int openingParenthesis = 0;
 		
 		for(char c : this.regularExpression.toCharArray()) {
@@ -73,6 +73,12 @@ public class RegularExpression implements RegularDevice {
 		String nextChars = ALPHABET + PARENTHESIS_OPENING;
 		StringBuilder regexBuilder = new StringBuilder(this.regularExpression);
 		Stack<Integer> openingParenthesis = new Stack<Integer>();
+		
+		// Remover quebras de linha e espaços
+		for(int i = 0; i < regexBuilder.length(); i++) {
+			if(regexBuilder.charAt(i) == '\n' || regexBuilder.charAt(i) == ' ')
+				regexBuilder.deleteCharAt(i);
+		}
 
 		for(int i = 0; i < regexBuilder.length() - 1; i++) {
 			char currentChar = regexBuilder.charAt(i);
@@ -111,13 +117,17 @@ public class RegularExpression implements RegularDevice {
 		}
 		this.regularExpression = regexBuilder.toString();
 	}
+	
+	public SyntaxTree getSyntaxTree() {
+		return new SyntaxTree(this);
+	}
 
 	/**
 	 * Converter a expressão regular em um autômato finito.
 	 * @return autômato finito equivalente.
 	 */
 	public FiniteAutomaton toFiniteAutomaton() {
-		return null; // TODO
+		return new RegularExpressionAutomatonBuilder(this).buildAutomaton();
 	}
 	
 }

@@ -6,10 +6,12 @@ package slr.expression;
  */
 public class BinaryTreeNode<T> {
 
+	private static int NODE_NUMBER = 1;
 	private T value;
-	private BinaryTreeNode<T> parentNode;
+	private BinaryTreeNode<T> seam;
 	private BinaryTreeNode<T> leftNode;
 	private BinaryTreeNode<T> rightNode;
+	private int number;
 	
 	/**
 	 * Construtor.
@@ -17,9 +19,22 @@ public class BinaryTreeNode<T> {
 	 */
 	public BinaryTreeNode(T value) {
 		this.setValue(value);
-		this.setParentNode(null);
+		this.setSeam(null);
 		this.setLeftNode(null);
 		this.setRightNode(null);
+		this.number = NODE_NUMBER;
+		NODE_NUMBER++;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if(o instanceof BinaryTreeNode<?>) {
+			BinaryTreeNode<?> node = (BinaryTreeNode<?>) o;
+			if(node.number == this.number)
+				return true;
+		}
+		
+		return false;
 	}
 	
 	@Override
@@ -32,7 +47,7 @@ public class BinaryTreeNode<T> {
 	 * @return valor.
 	 */
 	public T getValue() {
-		return value;
+		return this.value;
 	}
 
 	/**
@@ -44,19 +59,19 @@ public class BinaryTreeNode<T> {
 	}
 	
 	/**
-	 * Obter o nodo pai.
-	 * @return nodo pai.
+	 * Obter o nodo da costura.
+	 * @return costura.
 	 */
-	public BinaryTreeNode<T> getParentNode() {
-		return parentNode;
+	public BinaryTreeNode<T> getSeam() {
+		return this.seam;
 	}
 
 	/**
-	 * Definir o nodo pai.
-	 * @param parentNode nodo pai.
+	 * Definir a costura.
+	 * @param seam nodo de costura.
 	 */
-	public void setParentNode(BinaryTreeNode<T> parentNode) {
-		this.parentNode = parentNode;
+	public void setSeam(BinaryTreeNode<T> seam) {
+		this.seam = seam;
 	}
 
 	/**
@@ -97,6 +112,33 @@ public class BinaryTreeNode<T> {
 	 */
 	public boolean isLeaf() {
 		return this.leftNode == null && this.rightNode == null;
+	}
+	
+	public void sewNode(BinaryTreeNode<T> parent, BinaryTreeNode<T> lastLeftChildParent) {
+		if(parent != null) { // Nodo intermediário ou folha
+			if(!this.value.equals(RegularExpression.CONCATENATION)) { // Se for *, ? ou folha, então costura
+				if(this.equals(parent.getLeftNode()))
+					this.setSeam(parent);
+				else
+					this.setSeam(lastLeftChildParent);
+			}
+
+			if(this.getLeftNode() != null) { // Costura filho da esquerda
+				this.getLeftNode().sewNode(this, this);
+			}
+
+			if(this.getRightNode() != null) { // Costura filho da direita
+				this.getRightNode().sewNode(this, lastLeftChildParent);
+			}
+		} else { // Nodo raiz da árvore
+			if(this.getLeftNode() != null) {
+				this.getLeftNode().sewNode(this, this);
+			}
+
+			if(this.getRightNode() != null) {
+				this.getRightNode().sewNode(this, lastLeftChildParent);
+			}
+		}
 	}
 	
 }

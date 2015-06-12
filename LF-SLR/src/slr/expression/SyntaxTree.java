@@ -5,7 +5,7 @@ package slr.expression;
  */
 public class SyntaxTree extends BinaryTree<Character> {
 
-	private StringBuilder builder;
+	private StringBuilder regex;
 	
 	/**
 	 * Construtor.
@@ -13,25 +13,37 @@ public class SyntaxTree extends BinaryTree<Character> {
 	 */
 	public SyntaxTree(RegularExpression regex) {
 		regex.standardize();
-		this.buildTree(regex.toString());
+		this.regex = new StringBuilder(regex.toString());
+		this.buildTree();
+		this.sewTree();
 	}
 	
-	public void buildTree(String regex) {
-		this.builder = new StringBuilder(regex);
+	/**
+	 * Construir a árvore
+	 * @param regex
+	 */
+	public void buildTree() {
 		this.setRoot(expr());
+	}
+	
+	/**
+	 * Costurar a árvore.
+	 */
+	private void sewTree() {
+		this.getRoot().sewNode(null, new BinaryTreeNode<Character>(RegularExpression.EPSILON));
 	}
 
 	private BinaryTreeNode<Character> atom() {
 		BinaryTreeNode<Character> node = null;
 		char c = peek();
-		if (c == RegularExpression.PARENTHESIS_OPENING) {
+		if(c == RegularExpression.PARENTHESIS_OPENING) {
 			c = pop();
 			node = expr();
 			c = pop();
-			if (c != RegularExpression.PARENTHESIS_CLOSING) {
+			if(c != RegularExpression.PARENTHESIS_CLOSING) {
 				assert false;
 			}
-		} else if (RegularExpression.ALPHABET.contains(c + "")) {
+		} else if(RegularExpression.ALPHABET.contains(c + "")) {
 			c = pop();
 			node = new BinaryTreeNode<Character>(c);
 		}
@@ -42,7 +54,7 @@ public class SyntaxTree extends BinaryTree<Character> {
 		BinaryTreeNode<Character> left = atom();
 		Character c = peek();
 		BinaryTreeNode<Character> node = null;
-		if (c.equals(RegularExpression.KLEENE_STAR_CLOSURE) || c.equals(RegularExpression.OPTIONAL)) {
+		if(c.equals(RegularExpression.KLEENE_STAR_CLOSURE) || c.equals(RegularExpression.OPTIONAL)) {
 			c = pop();
 			node = new BinaryTreeNode<Character>(c);
 			node.setLeftNode(left);
@@ -56,7 +68,7 @@ public class SyntaxTree extends BinaryTree<Character> {
 		BinaryTreeNode<Character> left = single();
 		Character c = peek();
 		BinaryTreeNode<Character> node = null;
-		if (c.equals(RegularExpression.CONCATENATION)) {
+		if(c.equals(RegularExpression.CONCATENATION)) {
 			c = pop();
 			node = new BinaryTreeNode<Character>(c);
 			node.setLeftNode(left);
@@ -72,7 +84,7 @@ public class SyntaxTree extends BinaryTree<Character> {
 		BinaryTreeNode<Character> left = concat();
 		BinaryTreeNode<Character> node = null;
 		Character c = peek();
-		if (c.equals(RegularExpression.OR)) {
+		if(c.equals(RegularExpression.OR)) {
 			c = pop();
 			node = new BinaryTreeNode<Character>(c);
 			node.setLeftNode(left);
@@ -84,20 +96,23 @@ public class SyntaxTree extends BinaryTree<Character> {
 		return node;
 	}
 
-	public String prefixPrint() {
-		return recursivePrefixPrint(this.getRoot());
+	private Character peek() {
+		if(this.regex.length() > 0)
+			return this.regex.charAt(0);
+		
+		return '\0';
 	}
 
-	public Character peek() {
-		return builder.length() > 0 ? builder.charAt(0) : '\0';
-	}
-
-	public Character pop() {
-		Character c = builder.charAt(0);
-		builder.deleteCharAt(0);
+	private Character pop() {
+		Character c = this.regex.charAt(0);
+		this.regex.deleteCharAt(0);
 		return c;
 	}
 
+	private String prefixPrint() {
+		return recursivePrefixPrint(this.getRoot());
+	}
+	
 	private String recursivePrefixPrint(BinaryTreeNode<Character> root) {
 		String result = "";
 		if (root != null) {
