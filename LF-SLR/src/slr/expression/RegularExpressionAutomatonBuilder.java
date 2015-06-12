@@ -9,14 +9,25 @@ import slr.automaton.FiniteAutomaton;
 import slr.automaton.State;
 import slr.automaton.TransitionMap;
 
+/**
+ * Construtor de autômato finito para expressões regulares. 
+ */
 public class RegularExpressionAutomatonBuilder {
 
 	private RegularExpression regularExpression;
 	
+	/**
+	 * Construtor.
+	 * @param regularExpression expressão regular.
+	 */
 	public RegularExpressionAutomatonBuilder(RegularExpression regularExpression) {
 		this.regularExpression = regularExpression;
 	}
 	
+	/**
+	 * Construir o autômato.
+	 * @return autômato finito correspondente.
+	 */
 	public FiniteAutomaton buildAutomaton() {
 		SyntaxTree tree = this.regularExpression.getSyntaxTree();
 		String alphabet = this.regularExpression.getTerminals();
@@ -116,7 +127,6 @@ public class RegularExpressionAutomatonBuilder {
 			
 			doneCompositions.add(composition);
 			remainingCompositions.remove(composition);
-			
 		}
 		
 		return new FiniteAutomaton(new HashSet<State>(states.values()), initialState);

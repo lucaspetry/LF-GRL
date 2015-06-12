@@ -49,15 +49,5 @@ public class RegularExpressionTest {
 		regex3.standardize();
 		assertEquals("a.b*.c|a.b.a.((b.a).(b.a)*.c)", regex3.toString());
 	}
-
-	@Test
-	public void testGetSyntaxTree() throws InvalidRegularExpressionException {
-		RegularExpression regex = new RegularExpression("0*(1(01*0)*1)*0*");
-		SyntaxTree tree = regex.getSyntaxTree();
-		BinaryTreeNode<Character> node = tree.getRoot().getRightNode().getLeftNode().getLeftNode().getRightNode().getRightNode();
-		
-		for(BinaryTreeNode<Character> n : node.getReachableNodes())
-			System.out.println(n.getValue() + " - " + n.getNumber());
-	}
 	
 }

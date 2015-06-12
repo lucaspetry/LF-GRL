@@ -44,6 +44,10 @@ public class SyntaxTree extends BinaryTree<Character> {
 			this.getRoot().sewNode(null, new BinaryTreeNode<Character>(RegularExpression.EPSILON));
 	}
 
+	/**
+	 * Método auxiliar: parênteses e caractere.
+	 * @return nodo criado.
+	 */
 	private BinaryTreeNode<Character> atom() {
 		BinaryTreeNode<Character> node = null;
 		char c = peek();
@@ -61,6 +65,10 @@ public class SyntaxTree extends BinaryTree<Character> {
 		return node;
 	}
 
+	/**
+	 * Método auxiliar: fechamento ou opção.
+	 * @return nodo criado.
+	 */
 	private BinaryTreeNode<Character> single() {
 		BinaryTreeNode<Character> left = atom();
 		Character c = peek();
@@ -75,6 +83,10 @@ public class SyntaxTree extends BinaryTree<Character> {
 		return node;
 	}
 
+	/**
+	 * Método auxiliar: concatenação.
+	 * @return nodo criado.
+	 */
 	private BinaryTreeNode<Character> concat() {
 		BinaryTreeNode<Character> left = single();
 		Character c = peek();
@@ -91,6 +103,10 @@ public class SyntaxTree extends BinaryTree<Character> {
 		return node;
 	}
 
+	/**
+	 * Método auxiliar: expressão.
+	 * @return nodo criado.
+	 */
 	private BinaryTreeNode<Character> expr() {
 		BinaryTreeNode<Character> left = concat();
 		BinaryTreeNode<Character> node = null;
@@ -107,6 +123,10 @@ public class SyntaxTree extends BinaryTree<Character> {
 		return node;
 	}
 
+	/**
+	 * Obter o próximo caractere.
+	 * @return próximo caractere.
+	 */
 	private Character peek() {
 		if(this.regex.length() > 0)
 			return this.regex.charAt(0);
@@ -114,6 +134,10 @@ public class SyntaxTree extends BinaryTree<Character> {
 		return '\0';
 	}
 
+	/**
+	 * Remover o próximo caractere.
+	 * @return caractere removido.
+	 */
 	private Character pop() {
 		Character c = this.regex.charAt(0);
 		this.regex.deleteCharAt(0);
