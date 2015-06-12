@@ -1,5 +1,7 @@
 package slr.expression;
 
+import java.util.Set;
+
 /**
  * Árvore sintática.
  */
@@ -19,10 +21,18 @@ public class SyntaxTree extends BinaryTree<Character> {
 	}
 	
 	/**
+	 * Obter os nodos folhas da árvore.
+	 * @return conjunto de folhas.
+	 */
+	public Set<BinaryTreeNode<Character>> getLeaves() {
+		return this.getRoot().getLeaves();
+	}
+	
+	/**
 	 * Construir a árvore
 	 * @param regex
 	 */
-	public void buildTree() {
+	private void buildTree() {
 		this.setRoot(expr());
 	}
 	

@@ -56,7 +56,8 @@ public class RegularExpressionTest {
 		SyntaxTree tree = regex.getSyntaxTree();
 		BinaryTreeNode<Character> node = tree.getRoot().getRightNode().getLeftNode().getLeftNode().getRightNode().getRightNode();
 		
-		System.out.println(node.getValue() + " - Cost: " + node.getSeam());
+		for(BinaryTreeNode<Character> n : node.getReachableNodes())
+			System.out.println(n.getValue() + " - " + n.getNumber());
 	}
 	
 }
