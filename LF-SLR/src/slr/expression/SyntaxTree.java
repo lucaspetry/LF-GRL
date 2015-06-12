@@ -119,19 +119,4 @@ public class SyntaxTree extends BinaryTree<Character> {
 		return c;
 	}
 
-	private String prefixPrint() {
-		return recursivePrefixPrint(this.getRoot());
-	}
-	
-	private String recursivePrefixPrint(BinaryTreeNode<Character> root) {
-		String result = "";
-		if (root != null) {
-			result += root.getValue();
-			result += recursivePrefixPrint(root.getLeftNode());
-			result += recursivePrefixPrint(root.getRightNode());
-			System.err.println(result);
-		}
-		return result;
-	}
-
 }

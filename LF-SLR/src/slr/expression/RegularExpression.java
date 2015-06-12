@@ -1,5 +1,8 @@
 package slr.expression;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Stack;
 
 import slr.RegularDevice;
@@ -118,8 +121,39 @@ public class RegularExpression implements RegularDevice {
 		this.regularExpression = regexBuilder.toString();
 	}
 	
+	/**
+	 * Obter a árvore sintática costurada.
+	 * @return árvore sintática.
+	 */
 	public SyntaxTree getSyntaxTree() {
 		return new SyntaxTree(this);
+	}
+	
+	/**
+	 * Obter os símbolos terminais da expressão.
+	 * @return alfabeto.
+	 */
+	public String getTerminals() {
+		Set<Character> alphabet = new HashSet<Character>();
+		String controlChars = CONCATENATION + "" + KLEENE_STAR_CLOSURE 
+				+ "" + KLEENE_POSITIVE_CLOSURE + "" + OR + "" + OPTIONAL
+				+ "" + PARENTHESIS_OPENING + "" + PARENTHESIS_CLOSING + "\n ";
+		
+		for(char c : this.regularExpression.toCharArray()) {
+			if(!controlChars.contains(c + ""))
+				alphabet.add(c);
+		}
+		
+		Character[] symbols = alphabet.toArray(new Character[1]);
+		Arrays.sort(symbols);
+		String terminals = "";
+		
+		if(symbols != null) {
+			for(char c : symbols)
+				terminals += "" + c;
+		}
+		
+		return terminals;
 	}
 
 	/**

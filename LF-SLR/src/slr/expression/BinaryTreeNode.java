@@ -199,7 +199,6 @@ public class BinaryTreeNode<T> {
 	 * @return conjunto de nodos alcançáveis.
 	 */
 	private Set<BinaryTreeNode<T>> getReachableNodesDown() {
-		
 		if(this.isLeaf()) { // Nodo folha
 			Set<BinaryTreeNode<T>> nodes = new HashSet<BinaryTreeNode<T>>();
 			nodes.add(this);
@@ -227,7 +226,6 @@ public class BinaryTreeNode<T> {
 	 * @return conjunto de nodos alcançáveis.
 	 */
 	private Set<BinaryTreeNode<T>> getReachableNodesUp() {
-		
 		if(this.value.equals(RegularExpression.EPSILON)) { // Epsilon
 			Set<BinaryTreeNode<T>> nodes = new HashSet<BinaryTreeNode<T>>();
 			nodes.add(this);
