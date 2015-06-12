@@ -420,7 +420,18 @@ public class FiniteAutomaton {
 		this.removeUnreachableStates();
 		this.removeDeadStates();
 		this.complete();
-		// TODO Eliminar estados equivalentes
+		
+		if(!this.states.contains(this.initialState)) {
+			this.initialState = new State("Φ", false, new TransitionMap());
+			
+			for(char c : this.alphabet.toCharArray())
+				this.initialState.getTransitionMap().add(c, this.initialState);
+			
+			this.states.clear();
+			this.states.add(this.initialState);
+		} else {
+			// TODO Eliminar estados equivalentes			
+		}
 	}
 
 	/**
@@ -532,7 +543,11 @@ public class FiniteAutomaton {
 			for(State s : automaton.states) {
 				s.setIsFinal(!s.isFinal());
 			}
-			automaton.name += "-Complemento";
+			
+			if(this.name.indexOf('-') > 0)
+				automaton.name += "-ComplementoDe" + this.name.substring(0, this.name.indexOf('-'));
+			else
+				automaton.name += "-ComplementoDe" + this.name;
 			
 			return automaton;
 		} catch (CloneNotSupportedException e) {
@@ -583,7 +598,17 @@ public class FiniteAutomaton {
 			unionAutomaton.states.add(initialState);
 			unionAutomaton.initialState = initialState;
 			unionAutomaton.buildAlphabet();
-			unionAutomaton.name += "-União";
+
+			String name1 = this.name;
+			String name2 = automaton.name;
+			
+			if(name1.indexOf('-') > 0)
+				name1 = name1.substring(0, name1.indexOf('-'));
+
+			if(name2.indexOf('-') > 0)
+				name2 = name2.substring(0, name2.indexOf('-'));
+			
+			unionAutomaton.name += "-UniãoDe" + name1 + "-" + name2;
 			
 			return unionAutomaton;
 		} catch (CloneNotSupportedException e) {
@@ -602,7 +627,17 @@ public class FiniteAutomaton {
 			FiniteAutomaton b = (FiniteAutomaton) automaton.clone();
 			FiniteAutomaton union = a.complement().union(b.complement());
 			FiniteAutomaton intersection = union.complement();
-			intersection.name += "-Interseção";
+
+			String name1 = this.name;
+			String name2 = automaton.name;
+			
+			if(name1.indexOf('-') > 0)
+				name1 = name1.substring(0, name1.indexOf('-'));
+
+			if(name2.indexOf('-') > 0)
+				name2 = name2.substring(0, name2.indexOf('-'));
+			
+			intersection.name += "-InterseçãoDe" + name1 + "-" + name2;
 			
 			return intersection;
 		} catch (CloneNotSupportedException e) {}
