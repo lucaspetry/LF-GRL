@@ -103,7 +103,7 @@ public class MainWindow extends JFrame {
         textAreaReRg = new JTextArea();
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Sistema de Linguagens Formais");
+        setTitle("Sistema de Linguagens Regulares");
         setResizable(false);
 
         panelErGrOperations.setBorder(BorderFactory.createTitledBorder("Operações Sobre Expressões e Gramáticas"));
