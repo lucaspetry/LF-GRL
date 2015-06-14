@@ -123,4 +123,14 @@ public class UIController {
 		this.mainController.intersectFiniteAutomata(automataLabels);
 	}
 	
+	public boolean areDevicesEqual(List<String> regularDeviceLabels) {
+		// TODO
+		return false;
+	}
+
+	public boolean findPatternOccurrences(String regularDeviceLabel, String text) {
+		// TODO
+		return false;
+	}
+	
 }

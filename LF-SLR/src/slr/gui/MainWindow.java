@@ -498,6 +498,24 @@ public class MainWindow extends JFrame {
 				MainWindow.this.uiController.generateFiniteAutomaton(regularDeviceLabel);
 			}
 		});
+
+		this.btnPatternOccurrencesText.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String regularDeviceLabel = MainWindow.this.listReRg.getSelectedValue();
+				//MainWindow.this.uiController.generateFiniteAutomaton(regularDeviceLabel); TODO
+			}
+		});
+
+		this.btnEquals.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				List<String> regularDeviceLabels = MainWindow.this.listReRg.getSelectedValuesList();
+				if(MainWindow.this.uiController.areDevicesEqual(regularDeviceLabels)) {
+					MainWindow.this.uiController.showInformationMessage("Os dispositivos regulares são equivalentes!");
+				} else {
+					MainWindow.this.uiController.showInformationMessage("Os dispositivos regulares não são equivalentes!");					
+				}
+			}
+		});
 	}
 	
     private void setTransitionsTable(final String[][] transitionsTable) {    	
