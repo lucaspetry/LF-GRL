@@ -64,7 +64,7 @@ public class RegularExpressionAutomatonBuilder {
 			boolean stateIsFinal = false;
 			
 			for(BinaryTreeNode<Character> node : initialComposition) {
-				if(node.getValue() == c) {
+				if(node.getValue().equals(c)) {
 					for(BinaryTreeNode<Character> reachable : node.getReachableNodes()) {
 						stateComposition.add(reachable);
 						
@@ -76,14 +76,18 @@ public class RegularExpressionAutomatonBuilder {
 				}
 			}
 
-			if(stateComposition.size() > 0) {
-				if(!stateComposition.equals(initialComposition)) {
-					State state = new State(statePrefix + stateNumber, stateIsFinal, new TransitionMap());
-					initialState.getTransitionMap().add(c, state);
-					states.put(stateComposition, state);
-					remainingCompositions.add(stateComposition);
-					stateNumber++;
-				} else {
+			if(stateComposition.size() > 0) { // Composição não é vazia
+				if(!stateComposition.equals(initialComposition)) { // Composição diferente do inicial
+					if(!remainingCompositions.contains(stateComposition)) { // Composição não existe
+						State state = new State(statePrefix + stateNumber, stateIsFinal, new TransitionMap());
+						initialState.getTransitionMap().add(c, state);
+						states.put(stateComposition, state);
+						remainingCompositions.add(stateComposition);
+						stateNumber++;
+					} else { // Composição já existe e é diferente do inicial
+						initialState.getTransitionMap().add(c, states.get(stateComposition));
+					}
+				} else { // Composição igual ao inicial
 					initialState.getTransitionMap().add(c, initialState);
 				}
 			}

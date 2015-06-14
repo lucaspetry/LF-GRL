@@ -2,12 +2,16 @@ package slr.test;
 
 import static org.junit.Assert.*;
 
+import java.util.Set;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import slr.automaton.FiniteAutomaton;
 import slr.exception.InvalidRegularExpressionException;
+import slr.expression.BinaryTreeNode;
 import slr.expression.RegularExpression;
+import slr.expression.SyntaxTree;
 
 public class RegularExpressionTest {
 
@@ -47,6 +51,21 @@ public class RegularExpressionTest {
 		RegularExpression regex3 = new RegularExpression("ab*c | aba\n((ba)+c)");
 		regex3.standardize();
 		assertEquals("a.b*.c|a.b.a.((b.a).(b.a)*.c)", regex3.toString());
+	}
+	
+	@Test
+	public void testGetSyntaxTree() throws InvalidRegularExpressionException {
+		RegularExpression regex = new RegularExpression("(a|b)+(c|d)*");
+		SyntaxTree tree = regex.getSyntaxTree();
+		Set<BinaryTreeNode<Character>> leaves = tree.getLeaves();
+		BinaryTreeNode<Character> root = tree.getRoot();
+		BinaryTreeNode<Character> node1a = tree.getRoot().getLeftNode().getLeftNode();
+		BinaryTreeNode<Character> node5c = tree.getRoot().getRightNode().getRightNode().getLeftNode().getLeftNode();
+
+		assertEquals(6, leaves.size());
+		assertEquals(root.getValue(), new Character(RegularExpression.CONCATENATION));
+		assertEquals(5, node1a.getReachableNodes().size());
+		assertEquals(3, node5c.getReachableNodes().size());
 	}
 
 	@Test
@@ -109,6 +128,22 @@ public class RegularExpressionTest {
 		assertEquals(true, fa.recognize("bbaaaa"));
 		assertEquals(true, fa.recognize("aabbaa"));
 		assertEquals(true, fa.recognize("aaaaaaaa"));
+	}
+
+	@Test
+	public void testToFiniteAutomaton5() throws InvalidRegularExpressionException {
+		RegularExpression regex = new RegularExpression("(a|b)+(c|d)*");
+		FiniteAutomaton fa = regex.toFiniteAutomaton();
+
+		assertEquals(false, fa.recognize(""));
+		assertEquals(false, fa.recognize("c"));
+		assertEquals(false, fa.recognize("cdc"));
+		assertEquals(false, fa.recognize("abbacda"));
+		assertEquals(true, fa.recognize("a"));
+		assertEquals(true, fa.recognize("babab"));
+		assertEquals(true, fa.recognize("bbacdc"));
+		assertEquals(true, fa.recognize("bbb"));
+		assertEquals(true, fa.recognize("aaacddddc"));
 	}
 	
 }

@@ -509,10 +509,6 @@ public class MainWindow extends JFrame {
     	this.tableFA = new JTable(data, transitionsTable[0]);
     	this.tableFA.setEnabled(false);
     	this.scrollPaneFA.setViewportView(this.tableFA);
-    	this.tableFA.getColumnModel().getColumn(0).setWidth(20);
-    	
-    	for(int i = 1; i < this.tableFA.getColumnCount(); i++)
-    		this.tableFA.getColumnModel().getColumn(i).setWidth(40); // TODO verificar se tamanho está ok.
     }
 	
 	public void insertRegularDevice(String regularDeviceLabel) {

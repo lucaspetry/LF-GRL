@@ -416,7 +416,7 @@ public class FiniteAutomaton {
 	/**
 	 * Minimizar o autômato.
 	 */
-	public void minimize() {
+	public void minimize() {		
 		this.determinize();
 		this.removeUnreachableStates();
 		this.removeDeadStates();
@@ -799,6 +799,19 @@ public class FiniteAutomaton {
 		}
 		
 		this.states = livingStates;
+		
+		// Remover as transições para os estados mortos removidos
+		for(State s : this.states) {
+			for(State reachable : s.getReachableStates()) {
+				if(!this.states.contains(reachable)) {
+					for(char c : this.alphabet.toCharArray()) {
+						try {
+							s.getTransitionMap().remove(c, reachable);
+						} catch (InvalidTransitionException e) {}
+					}
+				}
+			}
+		}
 	}
 
 }
