@@ -132,8 +132,11 @@ public class TextInputWindow extends JFrame {
 	private void setActionCommands() {
 		this.btnOk.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				TextInputWindow.this.uiController.showInformationMessage("O sistema efetuará a busca. Para " +
+						"textos grandes ela pode\nlevar alguns segundos. Pressione Ok para prosseguir.");
 				TextInputWindow.this.uiController.findPatternOccurrences(
 						"[ E ] " + TextInputWindow.this.labelErValue.getText(), TextInputWindow.this.textAreaText.getText());
+				TextInputWindow.this.btnOk.setText("Ok");
 			}
 		});
 		

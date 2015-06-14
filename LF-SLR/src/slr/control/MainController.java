@@ -1,6 +1,7 @@
 package slr.control;
 
 import java.util.List;
+import java.util.Set;
 
 import slr.automaton.FiniteAutomaton;
 import slr.exception.FiniteAutomatonNotFoundException;
@@ -160,14 +161,32 @@ public class MainController {
 		try {
 			String label = this.rlController.generateFiniteAutomaton(regularDeviceLabel);
 			this.uiController.insertFiniteAutomatonToList(label);
-			List<String> patterns = this.rlController.findPatternOccurrences(
+			Set<String> patterns = this.rlController.findPatternOccurrences(
 					this.rlController.getFiniteAutomaton(label), text);
-			
-			String patternsMessage = "";
-			
-			for(String s : patterns)
-				patternsMessage += s + ", ";
-			
+
+
+			if(patterns.size() > 0) {
+				String patternsMessage = "";
+				
+				int i = 0;
+				
+				for(String s : patterns) {
+					i++;
+					patternsMessage += s + ", ";
+					
+					if(i % 5 == 0)
+						patternsMessage += "\n";
+				}
+				
+				if(i % 5 == 0)
+					patternsMessage = patternsMessage.substring(0, patternsMessage.length() - 3);
+				else
+					patternsMessage = patternsMessage.substring(0, patternsMessage.length() - 2);
+					
+				this.uiController.showInformationMessage("Padrões encontrados:\n" + patternsMessage);
+			} else {
+				this.uiController.showInformationMessage("Não foram encontrados padrões no texto!");
+			}		
 		} catch (RegularDeviceNotFoundException | FiniteAutomatonNotFoundException e) {
 			this.uiController.showErrorMessage(e.getMessage());
 		}

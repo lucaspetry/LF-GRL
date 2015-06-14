@@ -2,8 +2,10 @@ package slr.control;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import slr.RegularDevice;
 import slr.automaton.FiniteAutomaton;
@@ -95,8 +97,26 @@ public class RegularLanguageController {
 		return this.regularDevices.get(regularDeviceLabel).toString();
 	}
 	
-	public List<String> findPatternOccurrences(FiniteAutomaton automaton, final String text) {
-		return null; // TODO
+	public Set<String> findPatternOccurrences(FiniteAutomaton automaton, final String text) {
+		Set<String> possibleSentences = new HashSet<String>();
+		String alphabet = automaton.getAlphabet();
+		
+		for(int sentenceLength = 1; sentenceLength <= text.length(); sentenceLength++) {
+			for(int i = sentenceLength; i <= text.length(); i++) {
+				String entry = text.substring(i - sentenceLength, i);
+				if(alphabet.contains(entry.charAt(0) + ""))
+					possibleSentences.add(entry);
+			}
+		}
+		
+		Set<String> sentences = new HashSet<String>();
+		
+		for(String entry : possibleSentences) {
+			if(automaton.recognize(entry))
+				sentences.add(entry);
+		}
+		
+		return sentences;
 	}
 	
 	public boolean finiteAutomataAreEquivalent(FiniteAutomaton fa1, FiniteAutomaton fa2) {
