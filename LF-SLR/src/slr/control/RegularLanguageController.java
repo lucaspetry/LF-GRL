@@ -95,12 +95,12 @@ public class RegularLanguageController {
 		return this.regularDevices.get(regularDeviceLabel).toString();
 	}
 	
-	public List<String> findPatternOccurrences(final String regularExpressionLabel, final String text) {
+	public List<String> findPatternOccurrences(FiniteAutomaton automaton, final String text) {
 		return null; // TODO
 	}
 	
-	public boolean areEquivalent(final String regularDeviceLabel1, final String regularDeviceLabel2) {
-		return false; // TODO
+	public boolean finiteAutomataAreEquivalent(FiniteAutomaton fa1, FiniteAutomaton fa2) {
+		return fa1.isEquivalentTo(fa2);
 	}
 	
 	public List<String> determinizeFiniteAutomaton(final FiniteAutomaton automaton) throws Exception {
@@ -147,11 +147,14 @@ public class RegularLanguageController {
 		return automataLabels;
 	}
 
-	public List<FiniteAutomaton> intersectFiniteAutomaton(final FiniteAutomaton automaton1, final FiniteAutomaton automaton2) {
-		List<FiniteAutomaton> automata = new ArrayList<FiniteAutomaton>();
-		automata.add(automaton1.intersection(automaton2));
+	public List<String> intersectFiniteAutomaton(final FiniteAutomaton automaton1, final FiniteAutomaton automaton2) {
+		List<String> automataLabels = new ArrayList<String>();
+
+		FiniteAutomaton fa = automaton1.intersection(automaton2);
+		this.finiteAutomata.put(fa.getName(), fa);
+		automataLabels.add(fa.getName());
 		
-		return automata;
+		return automataLabels;
 	}
 	
 }

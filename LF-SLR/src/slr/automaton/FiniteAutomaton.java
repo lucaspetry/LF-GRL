@@ -93,11 +93,13 @@ public class FiniteAutomaton {
 				}
 			}
 
-			for(State target : t.get(RegularExpression.EPSILON)) {
-				String sF = s.isFinal() ? "*" : "";
-				String tF = target.isFinal() ? "*" : "";
-				automaton += "δ(" + sF + s.getName() + ", " + RegularExpression.EPSILON + ") = "
-								+ tF + target.getName() + "\n";
+			if(t.containsKey(RegularExpression.EPSILON)) {
+				for(State target : t.get(RegularExpression.EPSILON)) {
+					String sF = s.isFinal() ? "*" : "";
+					String tF = target.isFinal() ? "*" : "";
+					automaton += "δ(" + sF + s.getName() + ", " + RegularExpression.EPSILON + ") = "
+							+ tF + target.getName() + "\n";
+				}
 			}
 		}
 		
@@ -665,27 +667,35 @@ public class FiniteAutomaton {
 			
 			// Renomear os estados do atual
 			for(State s : unionAutomaton.states) {
-				s.setName("q" + stateNumber);
+				s.setName("Q" + stateNumber);
 				stateNumber++;
 			}
 
 			// Renomear os estados do outro autômato e adicionar ao da união
 			for(State s : automaton.states) {
-				s.setName("q" + stateNumber);
+				s.setName("Q" + stateNumber);
 				stateNumber++;
 				unionAutomaton.states.add(s);
 			}
 			
 			// Criar o estado inicial a partir de um dos estados iniciais
-			State initialState = (State) unionAutomaton.initialState.clone();
-			initialState.setName("q0");
-			initialState.setIsFinal(automaton.initialState.isFinal() || initialState.isFinal());
+			State initialState = new State("Q0", false, new TransitionMap());
+			initialState.setIsFinal(automaton.initialState.isFinal() || unionAutomaton.initialState.isFinal());
 			TransitionMap transitions = initialState.getTransitionMap();
 			
 			// Copiar as transições do outro estado inicial
 			for(char symbol : automaton.getAlphabet().toCharArray()) {
 				try {
 					for(State target : automaton.initialState.transit(symbol)) {
+						transitions.add(symbol, target);
+					}
+				} catch (InvalidTransitionException e) {}
+			}
+
+			// Copiar as transições do outro estado inicial
+			for(char symbol : unionAutomaton.getAlphabet().toCharArray()) {
+				try {
+					for(State target : unionAutomaton.initialState.transit(symbol)) {
 						transitions.add(symbol, target);
 					}
 				} catch (InvalidTransitionException e) {}

@@ -389,7 +389,7 @@ public class MainWindow extends JFrame {
 		this.btnIntersection.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				List<String> labels = MainWindow.this.listFiniteAutomata.getSelectedValuesList();
-				MainWindow.this.uiController.intersectFiniteAutomata(labels);
+				MainWindow.this.uiController.intersectFiniteAutomata(labels.get(0), labels.get(1));
 			}
 		});
 		
@@ -412,11 +412,18 @@ public class MainWindow extends JFrame {
 						MainWindow.this.btnEquals.setEnabled(false);
 						MainWindow.this.btnGenerateFiniteAutomaton.setEnabled(true);
 						break;
-					default:
+					case 2:
 						String item2 = MainWindow.this.listReRg.getSelectedValuesList().get(0);
 						MainWindow.this.textAreaReRg.setText(item2.substring(6));
 						MainWindow.this.btnPatternOccurrencesText.setEnabled(false);
 						MainWindow.this.btnEquals.setEnabled(true);
+						MainWindow.this.btnGenerateFiniteAutomaton.setEnabled(false);
+						break;
+					default:
+						String item3 = MainWindow.this.listReRg.getSelectedValuesList().get(0);
+						MainWindow.this.textAreaReRg.setText(item3.substring(6));
+						MainWindow.this.btnPatternOccurrencesText.setEnabled(false);
+						MainWindow.this.btnEquals.setEnabled(false);
 						MainWindow.this.btnGenerateFiniteAutomaton.setEnabled(false);
 						break;
 				}
@@ -445,7 +452,7 @@ public class MainWindow extends JFrame {
 						MainWindow.this.btnComplement.setEnabled(true);
 						MainWindow.this.btnIntersection.setEnabled(false);
 						break;
-					default:
+					case 2:
 						String item2 = MainWindow.this.listFiniteAutomata.getSelectedValuesList().get(0);
 						String[][] aut2 = MainWindow.this.uiController.getFiniteAutomaton(item2);
 						MainWindow.this.setTransitionsTable(aut2);
@@ -453,6 +460,15 @@ public class MainWindow extends JFrame {
 						MainWindow.this.btnMinimize.setEnabled(false);
 						MainWindow.this.btnComplement.setEnabled(false);
 						MainWindow.this.btnIntersection.setEnabled(true);
+						break;
+					default:
+						String item3 = MainWindow.this.listFiniteAutomata.getSelectedValuesList().get(0);
+						String[][] aut3 = MainWindow.this.uiController.getFiniteAutomaton(item3);
+						MainWindow.this.setTransitionsTable(aut3);
+						MainWindow.this.btnDeterminize.setEnabled(false);
+						MainWindow.this.btnMinimize.setEnabled(false);
+						MainWindow.this.btnComplement.setEnabled(false);
+						MainWindow.this.btnIntersection.setEnabled(false);
 						break;
 				}
 			}
@@ -502,14 +518,14 @@ public class MainWindow extends JFrame {
 		this.btnPatternOccurrencesText.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				String regularDeviceLabel = MainWindow.this.listReRg.getSelectedValue();
-				//MainWindow.this.uiController.generateFiniteAutomaton(regularDeviceLabel); TODO
+				MainWindow.this.uiController.showTextInputWindow(regularDeviceLabel);
 			}
 		});
 
 		this.btnEquals.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				List<String> regularDeviceLabels = MainWindow.this.listReRg.getSelectedValuesList();
-				if(MainWindow.this.uiController.areDevicesEqual(regularDeviceLabels)) {
+				if(MainWindow.this.uiController.areDevicesEquals(regularDeviceLabels.get(0), regularDeviceLabels.get(1))) {
 					MainWindow.this.uiController.showInformationMessage("Os dispositivos regulares são equivalentes!");
 				} else {
 					MainWindow.this.uiController.showInformationMessage("Os dispositivos regulares não são equivalentes!");					

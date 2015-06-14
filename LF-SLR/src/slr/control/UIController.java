@@ -7,6 +7,7 @@ import javax.swing.JOptionPane;
 import slr.gui.FiniteAutomatonWindow;
 import slr.gui.MainWindow;
 import slr.gui.RegularDeviceEditionWindow;
+import slr.gui.TextInputWindow;
 
 /**
  * Controlador da interface gráfica.
@@ -16,11 +17,13 @@ public class UIController {
 	private MainController mainController;
 	private MainWindow mainWindow;
 	private RegularDeviceEditionWindow regularDeviceEditionWindow;
+	private TextInputWindow textInputWindow;
 	
 	public UIController(MainController mainController) {
 		this.mainController = mainController;
 		this.mainWindow = new MainWindow(this);
 		this.regularDeviceEditionWindow = new RegularDeviceEditionWindow(this);
+		this.textInputWindow = new TextInputWindow(this);
 	}
 	
 	public void showMainWindow() {
@@ -49,6 +52,11 @@ public class UIController {
 	public void showFiniteAutomatonWindow(String automatonLabel) {
 		new FiniteAutomatonWindow(automatonLabel,
 				this.mainController.getFiniteAutomaton(automatonLabel)).setVisible(true);
+	}
+
+	public void showTextInputWindow(String regularExpressionLabel) {
+		this.textInputWindow.setRegularExpression(regularExpressionLabel.substring(6));
+		this.textInputWindow.setVisible(true);
 	}
 	
 	public void disposeRegularDeviceEditionWindow() {
@@ -119,18 +127,16 @@ public class UIController {
 		this.mainController.complementFiniteAutomaton(automatonLabel);
 	}
 
-	public void intersectFiniteAutomata(List<String> automataLabels) {
-		this.mainController.intersectFiniteAutomata(automataLabels);
+	public void intersectFiniteAutomata(String automatonLabel1, String automatonLabel2) {
+		this.mainController.intersectFiniteAutomata(automatonLabel1, automatonLabel2);
 	}
 	
-	public boolean areDevicesEqual(List<String> regularDeviceLabels) {
-		// TODO
-		return false;
+	public boolean areDevicesEquals(String regularDeviceLabel1, String regularDeviceLabel2) {
+		return this.mainController.areDevicesEquals(regularDeviceLabel1, regularDeviceLabel2);
 	}
 
-	public boolean findPatternOccurrences(String regularDeviceLabel, String text) {
-		// TODO
-		return false;
+	public void findPatternOccurrences(String regularDeviceLabel, String text) {
+		this.mainController.findPatternOccurrences(regularDeviceLabel, text);
 	}
 	
 }

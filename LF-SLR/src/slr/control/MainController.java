@@ -2,6 +2,7 @@ package slr.control;
 
 import java.util.List;
 
+import slr.automaton.FiniteAutomaton;
 import slr.exception.FiniteAutomatonNotFoundException;
 import slr.exception.InvalidProductionException;
 import slr.exception.InvalidRegularExpressionException;
@@ -125,13 +126,51 @@ public class MainController {
 		}
 	}
 
-	public void intersectFiniteAutomata(List<String> automataLabels) {
-		// TODO
+	public void intersectFiniteAutomata(String automatonLabel1, String automatonLabel2) {
+		try {
+			for(String label : this.rlController.intersectFiniteAutomaton(
+					this.rlController.getFiniteAutomaton(automatonLabel1), this.rlController.getFiniteAutomaton(automatonLabel2)))
+				this.uiController.insertFiniteAutomatonToList(label);
+		} catch (FiniteAutomatonNotFoundException e) {
+			this.uiController.showErrorMessage(e.getMessage());
+		}
 	}
 	
 	public void removeFiniteAutomaton(String automatonLabel) {
 		this.rlController.removeFiniteAutomaton(automatonLabel);
 		this.uiController.removeFiniteAutomatonFromList(automatonLabel);
+	}
+
+	public boolean areDevicesEquals(String regularDeviceLabel1, String regularDeviceLabel2) {
+		try {
+			String fa1 = this.rlController.generateFiniteAutomaton(regularDeviceLabel1);
+			String fa2 = this.rlController.generateFiniteAutomaton(regularDeviceLabel2);
+			this.uiController.insertFiniteAutomatonToList(fa1);
+			this.uiController.insertFiniteAutomatonToList(fa2);
+			
+			return this.rlController.finiteAutomataAreEquivalent(
+					this.rlController.getFiniteAutomaton(fa1), this.rlController.getFiniteAutomaton(fa2));
+		} catch (RegularDeviceNotFoundException | FiniteAutomatonNotFoundException e) {
+			this.uiController.showErrorMessage(e.getMessage());
+			return false;
+		}
+	}
+
+	public void findPatternOccurrences(String regularDeviceLabel, String text) {
+		try {
+			String label = this.rlController.generateFiniteAutomaton(regularDeviceLabel);
+			this.uiController.insertFiniteAutomatonToList(label);
+			List<String> patterns = this.rlController.findPatternOccurrences(
+					this.rlController.getFiniteAutomaton(label), text);
+			
+			String patternsMessage = "";
+			
+			for(String s : patterns)
+				patternsMessage += s + ", ";
+			
+		} catch (RegularDeviceNotFoundException | FiniteAutomatonNotFoundException e) {
+			this.uiController.showErrorMessage(e.getMessage());
+		}
 	}
 	
 }
