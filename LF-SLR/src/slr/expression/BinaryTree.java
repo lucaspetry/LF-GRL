@@ -39,5 +39,12 @@ public class BinaryTree<T> {
 	public void setRoot(BinaryTreeNode<T> root) {
 		this.root = root;
 	}
+
+	/**
+	 * Imprimir a árvore.
+	 */
+	public void print() {
+		this.getRoot().print();
+	}
 	
 }

@@ -430,8 +430,103 @@ public class FiniteAutomaton {
 			this.states.clear();
 			this.states.add(this.initialState);
 		} else {
-			// TODO Eliminar estados equivalentes			
+			Set<Set<State>> doneEquivalenceClasses = new HashSet<Set<State>>(); // Classes prontas
+			Set<Set<State>> equivalenceClasses = new HashSet<Set<State>>(); // Classes modificadas
+
+			doneEquivalenceClasses.add(this.getFinalStates());
+			doneEquivalenceClasses.add(this.getNotFinalStates());
+			
+			do {
+				equivalenceClasses.clear();
+				equivalenceClasses.addAll(doneEquivalenceClasses);
+				doneEquivalenceClasses.clear();
+				System.out.println("--");
+				
+				for(Set<State> eqClass : equivalenceClasses) { // Verificar cada classe de equivalência
+					Set<State> remainingStates = new HashSet<State>();
+					remainingStates.addAll(eqClass);
+					System.out.println("---");
+					
+					while(remainingStates.size() > 0) { // Enquanto existirem estados não comparados, compara
+						State[] classStates = remainingStates.toArray(new State[1]);
+						State currentState = classStates[0];
+						Set<State> newClass = new HashSet<State>();
+						newClass.addAll(remainingStates);
+						System.out.println("----");
+						
+						for(int i = 1; i < classStates.length; i++) { // Outro estado da classe sendo comparado
+							State nextState = classStates[i];
+							System.out.println("-----");
+							
+							for(char c : this.alphabet.toCharArray()) { // Verificar se cada transição leva à mesma classe
+								System.out.println("------");
+								try {
+									Set<State> prevClass = this.getStateEquivalenceClass(
+											currentState.transit(c).toArray(new State[1])[0], equivalenceClasses);
+
+									Set<State> nextClass = this.getStateEquivalenceClass(
+											nextState.transit(c).toArray(new State[1])[0], equivalenceClasses);
+
+									if(!prevClass.equals(nextClass)) { // Se os estados não são equivalentes, separa-os
+										newClass.remove(nextState);
+										break;
+									}
+								} catch (InvalidTransitionException e) {}
+							}
+						}
+						doneEquivalenceClasses.add(newClass);
+						remainingStates.removeAll(newClass);
+					}
+				}
+			} while(!doneEquivalenceClasses.equals(equivalenceClasses));
+			
+			Set<State> initialClass = this.getStateEquivalenceClass(this.initialState, doneEquivalenceClasses);
+			State newInitialState = new State("M0", this.initialState.isFinal(), new TransitionMap());
+			
+			Map<Set<State>, State> newStates = new HashMap<Set<State>, State>();
+			newStates.put(initialClass, newInitialState);
+			
+			// Criar os novos estados correspondentes às classes de equivalência
+			doneEquivalenceClasses.remove(initialClass);
+			int stateNumber = 1;
+			
+			for(Set<State> eqClass : doneEquivalenceClasses) {
+				State newState = new State("M" + stateNumber,
+						eqClass.toArray(new State[1])[0].isFinal(), new TransitionMap());
+				newStates.put(eqClass, newState);
+				stateNumber++;
+			}
+			doneEquivalenceClasses.add(initialClass);
+			
+			// Criar as transições
+			for(Set<State> eqClass : doneEquivalenceClasses) {
+				State stateOfClass = newStates.get(eqClass);
+				State aStateFromClass = eqClass.toArray(new State[1])[0];
+				
+				for(char c : this.alphabet.toCharArray()) {
+					try {
+						Set<State> targetClass = this.getStateEquivalenceClass(
+								aStateFromClass.transit(c).toArray(new State[1])[0], doneEquivalenceClasses);
+						State targetState = newStates.get(targetClass);
+						
+						stateOfClass.getTransitionMap().add(c, targetState);
+					} catch (InvalidTransitionException e) {}
+				}
+			}			
+			
+			// Definir os novos estados
+			this.states = new HashSet<State>(newStates.values());
+			this.initialState = newInitialState;			
 		}
+	}
+	
+	public Set<State> getStateEquivalenceClass(State state, Set<Set<State>> equivalenceClasses) {
+		for(Set<State> eqClass : equivalenceClasses) {
+			if(eqClass.contains(state))
+				return eqClass;
+		}
+		
+		return null;
 	}
 
 	/**
@@ -649,18 +744,19 @@ public class FiniteAutomaton {
 	 * Remover estados inalcançáveis.
 	 */
 	private void removeUnreachableStates() {
-		Set<State> reachableStates = new TreeSet<State>();
+		Set<State> reachableStates = new HashSet<State>();
 		reachableStates.add(this.initialState);
 		
 		boolean reachableSetChanged = true;
 
 		while(reachableSetChanged) {
 			int setSize = reachableStates.size();
+			Set<State> newReachableStates = new HashSet<State>();
 			
 			for(State state : reachableStates) {
-				for(State reachable : state.getReachableStates())
-					reachableStates.add(reachable);
+				newReachableStates.addAll(state.getReachableStates());
 			}
+			reachableStates.addAll(newReachableStates);
 			
 			if(setSize == reachableStates.size())
 				reachableSetChanged = false;

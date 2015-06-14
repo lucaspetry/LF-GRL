@@ -11,6 +11,7 @@ public class BinaryTreeNode<T> {
 
 	private static int NODE_NUMBER = 1;
 	private T value;
+	private boolean visited;
 	private BinaryTreeNode<T> seam;
 	private BinaryTreeNode<T> leftNode;
 	private BinaryTreeNode<T> rightNode;
@@ -25,6 +26,7 @@ public class BinaryTreeNode<T> {
 		this.setSeam(null);
 		this.setLeftNode(null);
 		this.setRightNode(null);
+		this.setVisited(false);
 		this.number = NODE_NUMBER;
 		NODE_NUMBER++;
 	}
@@ -116,6 +118,22 @@ public class BinaryTreeNode<T> {
 	public void setRightNode(BinaryTreeNode<T> rightNode) {
 		this.rightNode = rightNode;
 	}
+
+	/**
+	 * Verificar se o nodo foi visitado.
+	 * @return true caso o nodo já foi visitado.
+	 */
+	public boolean isVisited() {
+		return visited;
+	}
+
+	/**
+	 * Definir se o nodo foi visitado.
+	 * @param isVisited true se o nodo foi visitado.
+	 */
+	public void setVisited(boolean isVisited) {
+		this.visited = isVisited;
+	}
 	
 	/**
 	 * Verificar se o nodo é folha.
@@ -123,6 +141,19 @@ public class BinaryTreeNode<T> {
 	 */
 	public boolean isLeaf() {
 		return this.leftNode == null && this.rightNode == null;
+	}
+	
+	/**
+	 * Imprimir a árvore a partir desse nodo.
+	 */
+	public void print() {
+		if(this.leftNode != null)
+			this.leftNode.print();
+		
+		System.out.println(this.getValue());
+		
+		if(this.rightNode != null)
+			this.rightNode.print();
 	}
 	
 	/**
@@ -233,10 +264,15 @@ public class BinaryTreeNode<T> {
 		} else if(this.isLeaf()) { // Nodo folha
 			return this.getSeam().getReachableNodesUp();
 		} else if(this.value.equals(RegularExpression.KLEENE_STAR_CLOSURE)) { // *
-			Set<BinaryTreeNode<T>> left = this.getLeftNode().getReachableNodesDown();
-			left.addAll(this.getSeam().getReachableNodesUp());
-			return left;
+			if(!this.isVisited()) {
+				this.setVisited(true);
+				Set<BinaryTreeNode<T>> left = this.getLeftNode().getReachableNodesDown();
+				left.addAll(this.getSeam().getReachableNodesUp());
+				this.setVisited(false);
+				return left;
+			}
 			
+			return this.getSeam().getReachableNodesUp();			
 		} else if(this.value.equals(RegularExpression.OPTIONAL)) { // ?
 			return this.getSeam().getReachableNodesUp();			
 			
