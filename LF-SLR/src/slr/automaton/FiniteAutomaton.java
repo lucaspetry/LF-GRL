@@ -410,6 +410,7 @@ public class FiniteAutomaton {
 		
 		this.initialState = newInitialState;
 		this.states = new HashSet<State>(deterministicStates.values());
+		this.name += "-Determinístico"; // (AF" + (AUTOMATON_ID - 2) + ")";
 	}
 
 	/**
@@ -440,26 +441,21 @@ public class FiniteAutomaton {
 				equivalenceClasses.clear();
 				equivalenceClasses.addAll(doneEquivalenceClasses);
 				doneEquivalenceClasses.clear();
-				System.out.println("--");
 				
 				for(Set<State> eqClass : equivalenceClasses) { // Verificar cada classe de equivalência
 					Set<State> remainingStates = new HashSet<State>();
 					remainingStates.addAll(eqClass);
-					System.out.println("---");
 					
 					while(remainingStates.size() > 0) { // Enquanto existirem estados não comparados, compara
 						State[] classStates = remainingStates.toArray(new State[1]);
 						State currentState = classStates[0];
 						Set<State> newClass = new HashSet<State>();
 						newClass.addAll(remainingStates);
-						System.out.println("----");
 						
 						for(int i = 1; i < classStates.length; i++) { // Outro estado da classe sendo comparado
 							State nextState = classStates[i];
-							System.out.println("-----");
 							
 							for(char c : this.alphabet.toCharArray()) { // Verificar se cada transição leva à mesma classe
-								System.out.println("------");
 								try {
 									Set<State> prevClass = this.getStateEquivalenceClass(
 											currentState.transit(c).toArray(new State[1])[0], equivalenceClasses);
@@ -518,6 +514,11 @@ public class FiniteAutomaton {
 			this.states = new HashSet<State>(newStates.values());
 			this.initialState = newInitialState;			
 		}
+		
+		if(this.name.indexOf('-') > 0)
+			this.name = this.name.substring(0, this.name.indexOf('-')) + "-Mínimo"; // (AF" + (AUTOMATON_ID - 2) + ")";
+		else
+			this.name += "-Mínimo"; // (AF" + (AUTOMATON_ID - 2) + ")";
 	}
 	
 	public Set<State> getStateEquivalenceClass(State state, Set<Set<State>> equivalenceClasses) {
@@ -585,6 +586,7 @@ public class FiniteAutomaton {
 	public boolean isMinimal() {
 		try {
 			FiniteAutomaton minimal = (FiniteAutomaton) this.clone();
+			AUTOMATON_ID--;
 			minimal.minimize();
 			
 			if(minimal.states.size() == this.states.size())
@@ -640,9 +642,9 @@ public class FiniteAutomaton {
 			}
 			
 			if(this.name.indexOf('-') > 0)
-				automaton.name += "-ComplementoDe" + this.name.substring(0, this.name.indexOf('-'));
+				automaton.name += "-Complemento(" + this.name.substring(0, this.name.indexOf('-')) + ")";
 			else
-				automaton.name += "-ComplementoDe" + this.name;
+				automaton.name += "-Complemento(" + this.name + ")";
 			
 			return automaton;
 		} catch (CloneNotSupportedException e) {
@@ -703,7 +705,7 @@ public class FiniteAutomaton {
 			if(name2.indexOf('-') > 0)
 				name2 = name2.substring(0, name2.indexOf('-'));
 			
-			unionAutomaton.name += "-UniãoDe" + name1 + "-" + name2;
+			unionAutomaton.name += "-União(" + name1 + ", " + name2 + ")";
 			
 			return unionAutomaton;
 		} catch (CloneNotSupportedException e) {
@@ -732,7 +734,7 @@ public class FiniteAutomaton {
 			if(name2.indexOf('-') > 0)
 				name2 = name2.substring(0, name2.indexOf('-'));
 			
-			intersection.name += "-InterseçãoDe" + name1 + "-" + name2;
+			intersection.name += "-Interseção(" + name1 + ", " + name2 + ")";
 			
 			return intersection;
 		} catch (CloneNotSupportedException e) {}
