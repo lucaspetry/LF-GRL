@@ -445,7 +445,7 @@ public class MainWindow extends JFrame {
 						break;
 					case 1:
 						String item = MainWindow.this.listFiniteAutomata.getSelectedValuesList().get(0);
-						String[][] aut = MainWindow.this.uiController.getFiniteAutomaton(item);
+						String[][] aut = MainWindow.this.uiController.getFiniteAutomatonTransitions(item);
 						MainWindow.this.setTransitionsTable(aut);
 						MainWindow.this.btnDeterminize.setEnabled(true);
 						MainWindow.this.btnMinimize.setEnabled(true);
@@ -454,7 +454,7 @@ public class MainWindow extends JFrame {
 						break;
 					case 2:
 						String item2 = MainWindow.this.listFiniteAutomata.getSelectedValuesList().get(0);
-						String[][] aut2 = MainWindow.this.uiController.getFiniteAutomaton(item2);
+						String[][] aut2 = MainWindow.this.uiController.getFiniteAutomatonTransitions(item2);
 						MainWindow.this.setTransitionsTable(aut2);
 						MainWindow.this.btnDeterminize.setEnabled(false);
 						MainWindow.this.btnMinimize.setEnabled(false);
@@ -463,7 +463,7 @@ public class MainWindow extends JFrame {
 						break;
 					default:
 						String item3 = MainWindow.this.listFiniteAutomata.getSelectedValuesList().get(0);
-						String[][] aut3 = MainWindow.this.uiController.getFiniteAutomaton(item3);
+						String[][] aut3 = MainWindow.this.uiController.getFiniteAutomatonTransitions(item3);
 						MainWindow.this.setTransitionsTable(aut3);
 						MainWindow.this.btnDeterminize.setEnabled(false);
 						MainWindow.this.btnMinimize.setEnabled(false);
@@ -525,7 +525,7 @@ public class MainWindow extends JFrame {
 		this.btnEquals.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				List<String> regularDeviceLabels = MainWindow.this.listReRg.getSelectedValuesList();
-				if(MainWindow.this.uiController.areDevicesEquals(regularDeviceLabels.get(0), regularDeviceLabels.get(1))) {
+				if(MainWindow.this.uiController.areEquivalent(regularDeviceLabels.get(0), regularDeviceLabels.get(1))) {
 					MainWindow.this.uiController.showInformationMessage("Os dispositivos regulares são equivalentes!");
 				} else {
 					MainWindow.this.uiController.showInformationMessage("Os dispositivos regulares não são equivalentes!");					

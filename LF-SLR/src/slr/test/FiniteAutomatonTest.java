@@ -407,7 +407,7 @@ public class FiniteAutomatonTest {
 		State a = new State("test", false, transitions);
 		Set<State> states = new TreeSet<State>();
 		states.add(a);
-		this.automatonA.getInitialState().getTransitions().put(RegularExpression.EPSILON, states);
+		this.automatonA.getInitialState().getTransitionMap().getMap().put(RegularExpression.EPSILON, states);
 		assertEquals(false, this.automatonA.isDeterministic());		
 	}
 

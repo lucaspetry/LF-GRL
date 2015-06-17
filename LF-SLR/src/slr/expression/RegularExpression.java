@@ -30,7 +30,7 @@ public class RegularExpression implements RegularDevice {
 	 * @param regularExpression expressão regular na forma textual.
 	 * @throws InvalidRegularExpressionException caso a expressão seja inválida.
 	 */
-	public RegularExpression(final String regularExpression) throws InvalidRegularExpressionException {
+	public RegularExpression(String regularExpression) throws InvalidRegularExpressionException {
 		this.regularExpression = regularExpression;
 		
 		if(!this.isValid())

@@ -31,6 +31,11 @@ public class MainController {
 		this.uiController.showMainWindow();
 	}
 	
+	/**
+	 * Inserir um dispositivo regular.
+	 * @param isRegularExpression true se é uma expressão regular.
+	 * @param description descrição textual do dispositivo.
+	 */
 	public void insertRegularDevice(boolean isRegularExpression, String description) {
 		try {
 			String label = "";
@@ -48,11 +53,21 @@ public class MainController {
 		}
 	}
 
+	/**
+	 * Remover dispositivo regular.
+	 * @param regularDeviceLabel nome do dispositivo.
+	 */
 	public void removeRegularDevice(String regularDeviceLabel) {
 		this.rlController.removeRegularDevice(regularDeviceLabel);
 		this.uiController.removeRegularDeviceFromList(regularDeviceLabel);
 	}
 	
+	/**
+	 * Atualizar dispositivo regular.
+	 * @param isRegularExpression true se é uma expressão regular.
+	 * @param regularDeviceOldLabel nome antigo do dispositivo.
+	 * @param regularDeviceDescription descrição textual do dispositivo.
+	 */
 	public void updateRegularDevice(boolean isRegularExpression, String regularDeviceOldLabel, String regularDeviceDescription) {
 		try {
 			String label = "";
@@ -71,7 +86,12 @@ public class MainController {
 		}
 	}
 	
-	public String getRegularDevice(final String regularDeviceLabel) {
+	/**
+	 * Obter um dispositivo regular.
+	 * @param regularDeviceLabel nome do dispositivo.
+	 * @return nome do dispositivo.
+	 */
+	public String getRegularDeviceLabel(String regularDeviceLabel) {
 		try {
 			return this.rlController.getRegularDeviceTextForm(regularDeviceLabel);
 		} catch (RegularDeviceNotFoundException e) {
@@ -80,7 +100,12 @@ public class MainController {
 		return null;
 	}
 
-	public String[][] getFiniteAutomaton(final String automatonLabel) {
+	/**
+	 * Obter as transições do autômato finito.
+	 * @param automatonLabel nome do autômato.
+	 * @return tabela de transições do autômato.
+	 */
+	public String[][] getFiniteAutomatonTransitions(String automatonLabel) {
 		try {
 			return this.rlController.getFiniteAutomatonTransitionTable(automatonLabel);
 		} catch (FiniteAutomatonNotFoundException e) {
@@ -89,6 +114,10 @@ public class MainController {
 		return null;
 	}
 	
+	/**
+	 * Gerar um autômato finito para um dispositivo regular.
+	 * @param regularDeviceLabel nome do dispositivo.
+	 */
 	public void generateFiniteAutomaton(String regularDeviceLabel) {
 		try {
 			String label = this.rlController.generateFiniteAutomaton(regularDeviceLabel);
@@ -98,6 +127,10 @@ public class MainController {
 		}
 	}
 
+	/**
+	 * Determinizar o autômato finito.
+	 * @param automatonLabel nome do autômato.
+	 */
 	public void determinizeFiniteAutomaton(String automatonLabel) {
 		try {
 			for(String label : this.rlController.determinizeFiniteAutomaton(this.rlController.getFiniteAutomaton(automatonLabel)))
@@ -107,6 +140,10 @@ public class MainController {
 		}
 	}
 
+	/**
+	 * Minimizar o autômato finito.
+	 * @param automatonLabel nome do autômato.
+	 */
 	public void minimizeFiniteAutomaton(String automatonLabel) {
 		try {
 			for(String label : this.rlController.minimizeFiniteAutomaton(this.rlController.getFiniteAutomaton(automatonLabel)))
@@ -116,6 +153,10 @@ public class MainController {
 		}
 	}
 
+	/**
+	 * Complementar o autômato finito.
+	 * @param automatonLabel nome do autômato.
+	 */
 	public void complementFiniteAutomaton(String automatonLabel) {
 		try {
 			for(String label : this.rlController.complementFiniteAutomaton(this.rlController.getFiniteAutomaton(automatonLabel)))
@@ -125,6 +166,11 @@ public class MainController {
 		}
 	}
 
+	/**
+	 * Interceptar dois autômatos finitos.
+	 * @param automatonLabel1 nome do autômato 1.
+	 * @param automatonLabel2 nome do autômato 2.
+	 */
 	public void intersectFiniteAutomata(String automatonLabel1, String automatonLabel2) {
 		try {
 			for(String label : this.rlController.intersectFiniteAutomaton(
@@ -135,12 +181,22 @@ public class MainController {
 		}
 	}
 	
+	/**
+	 * Remover autômato finito.
+	 * @param automatonLabel nome do autômato.
+	 */
 	public void removeFiniteAutomaton(String automatonLabel) {
 		this.rlController.removeFiniteAutomaton(automatonLabel);
 		this.uiController.removeFiniteAutomatonFromList(automatonLabel);
 	}
 
-	public boolean areDevicesEquals(String regularDeviceLabel1, String regularDeviceLabel2) {
+	/**
+	 * Verificar se dois dispositivos regulares são equivalentes.
+	 * @param regularDeviceLabel1 nome do dispositivo 1.
+	 * @param regularDeviceLabel2 nome do dispositivo 2.
+	 * @return true caso a linguagem dos dispositivos seja igual.
+	 */
+	public boolean areEquivalent(String regularDeviceLabel1, String regularDeviceLabel2) {
 		try {
 			String fa1 = this.rlController.generateFiniteAutomaton(regularDeviceLabel1);
 			String fa2 = this.rlController.generateFiniteAutomaton(regularDeviceLabel2);
@@ -155,6 +211,11 @@ public class MainController {
 		}
 	}
 
+	/**
+	 * Buscar ocorrência de padrões em texto.
+	 * @param regularDeviceLabel nome do dispositivo que define a linguagem.
+	 * @param text texto a ser analisado.
+	 */
 	public void findPatternOccurrences(String regularDeviceLabel, String text) {
 		try {
 			String label = this.rlController.generateFiniteAutomaton(regularDeviceLabel);

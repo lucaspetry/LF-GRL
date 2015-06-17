@@ -59,7 +59,7 @@ public class ProductionMap {
 	 * @param leftSide símbolo não terminal.
 	 * @param rightSide símbolo terminal seguido ou não de um símbolo não terminal.
 	 */
-	public void add(final char leftSide, final String rightSide) {
+	public void add(char leftSide, String rightSide) {
 		if(this.productions.containsKey(leftSide)) {
 			Set<String> productions = this.productions.get(leftSide);
 			
@@ -78,7 +78,7 @@ public class ProductionMap {
 	 * @param rightSide símbolo terminal seguido ou não de um símbolo não terminal.
 	 * @throws InvalidProductionException se a produção não existe.
 	 */
-	public void remove(final char leftSide, final String rightSide) throws InvalidProductionException {
+	public void remove(char leftSide, String rightSide) throws InvalidProductionException {
 		if(!this.productions.containsKey(leftSide))
 			throw new InvalidProductionException();
 		
@@ -97,7 +97,7 @@ public class ProductionMap {
 	 * @return conjunto de derivações possíveis.
 	 * @throws InvalidProductionException caso não existam produções a partir do símbolo.
 	 */
-	public Set<String> get(final char leftSide) throws InvalidProductionException {
+	public Set<String> get(char leftSide) throws InvalidProductionException {
 		if(!this.productions.containsKey(leftSide))
 			throw new InvalidProductionException();
 		

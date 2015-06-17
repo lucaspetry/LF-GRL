@@ -22,7 +22,7 @@ public class State implements Comparable<State> {
 	 * @param isFinal true caso o estado seja final.
 	 * @param transitions transições do estado.
 	 */
-	public State(final String name, final boolean isFinal, final TransitionMap transitions) {
+	public State(String name, boolean isFinal, TransitionMap transitions) {
 		this.name = name;
 		this.isFinal = isFinal;
 		this.transitions = transitions;
@@ -55,7 +55,7 @@ public class State implements Comparable<State> {
 	 * Definir se o estado é final.
 	 * @param isFinal true se o estado é final.
 	 */
-	public void setIsFinal(final boolean isFinal) {
+	public void setIsFinal(boolean isFinal) {
 		this.isFinal = isFinal;
 	}
 
@@ -63,7 +63,7 @@ public class State implements Comparable<State> {
 	 * Definir o nome do estado.
 	 * @param name nome do estado.
 	 */
-	public void setName(final String name) {
+	public void setName(String name) {
 		this.name = name;
 	}
 	
@@ -84,18 +84,18 @@ public class State implements Comparable<State> {
 	}
 	
 	/**
-	 * Transitar do estado para outro.
-	 * @param symbol símbolo de entrada de transição.
+	 * Transitar do estado para o(s) próximo(s) pelo símbolo.
+	 * @param symbol símbolo de entrada da transição.
 	 * @return conjunto de estados de destino da transição.
 	 * @throws InvalidTransitionException se não há uma transição pelo símbolo de entrada especificado.
 	 */
-	public Set<State> transit(final char symbol) throws InvalidTransitionException {
+	public Set<State> transit(char symbol) throws InvalidTransitionException {
 		return this.transitions.get(symbol);
 	}
 	
 	/**
 	 * Obter os estados alcançáveis a partir deste.
-	 * @return conjunto de estados.
+	 * @return conjunto de estados alcançáveis.
 	 */
 	public Set<State> getReachableStates() {
 		return this.transitions.getTargetStates();
@@ -114,14 +114,6 @@ public class State implements Comparable<State> {
 		} catch (InvalidTransitionException e) {}
 		
 		return states;
-	}
-
-	/**
-	 * Obter as transições do estado.
-	 * @return mapa de transições.
-	 */
-	public Map<Character, Set<State>> getTransitions() {
-		return this.transitions.getMap();
 	}
 
 	/**

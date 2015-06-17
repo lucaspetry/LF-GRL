@@ -25,12 +25,21 @@ public class RegularLanguageController {
 	private Map<String, FiniteAutomaton> finiteAutomata;
 	private Map<String, RegularDevice> regularDevices;
 	
+	/**
+	 * Construtor.
+	 */
 	public RegularLanguageController() {
 		this.finiteAutomata = new HashMap<String, FiniteAutomaton>();
 		this.regularDevices = new HashMap<String, RegularDevice>();
 	}
-	
-	public String insertRegularGrammar(final String productions) throws RegularDeviceExistingException, InvalidProductionException {
+
+	/**
+	 * Inserir uma gramática regular.
+	 * @param productions produções da gramática.
+	 * @throws RegularDeviceExistingException caso a gramática já exista.
+	 * @throws InvalidProductionException caso o conjunto de produções seja inválido.
+	 */
+	public String insertRegularGrammar(String productions) throws RegularDeviceExistingException, InvalidProductionException {
 		String label = "[ G ] " + productions;
 		
 		RegularGrammar grammar = new RegularGrammar(productions);
@@ -42,8 +51,14 @@ public class RegularLanguageController {
 		
 		return label;
 	}
-	
-	public String insertRegularExpression(final String regularExpression) throws RegularDeviceExistingException, InvalidRegularExpressionException {
+
+	/**
+	 * Inserir uma expressão regular.
+	 * @param regularExpression descrição textual da expressão.
+	 * @throws RegularDeviceExistingException caso a expressão já exista.
+	 * @throws InvalidRegularExpressionException caso a expressão seja inválida.
+	 */
+	public String insertRegularExpression(String regularExpression) throws RegularDeviceExistingException, InvalidRegularExpressionException {
 		String label = "[ E ] " + regularExpression;
 		
 		RegularExpression expression = new RegularExpression(regularExpression);
@@ -56,7 +71,12 @@ public class RegularLanguageController {
 		return label;
 	}
 
-	public String generateFiniteAutomaton(final String regularDeviceLabel) throws RegularDeviceNotFoundException {
+	/**
+	 * Gerar um autômato finito para um dispositivo regular.
+	 * @param regularDeviceLabel nome do dispositivo.
+	 * @throws RegularDeviceNotFoundException caso o dispositivo regular não seja encontrado.
+	 */
+	public String generateFiniteAutomaton(String regularDeviceLabel) throws RegularDeviceNotFoundException {
 		if(!this.regularDevices.containsKey(regularDeviceLabel))
 			throw new RegularDeviceNotFoundException();
 		
@@ -65,39 +85,71 @@ public class RegularLanguageController {
 		
 		return automaton.getName();
 	}
-	
-	public void removeRegularDevice(final String regularDeviceLabel) {
+
+	/**
+	 * Remover um dispositivo regular.
+	 * @param regularDeviceLabel nome do dispositivo regular.
+	 */
+	public void removeRegularDevice(String regularDeviceLabel) {
 		if(this.regularDevices.containsKey(regularDeviceLabel))
 			this.regularDevices.remove(regularDeviceLabel);
 	}
-	
-	public void removeFiniteAutomaton(final String automatonLabel) {
+
+	/**
+	 * Remover um autômato finito.
+	 * @param automatonLabel nome do autômato.
+	 */
+	public void removeFiniteAutomaton(String automatonLabel) {
 		if(this.finiteAutomata.containsKey(automatonLabel))
 			this.finiteAutomata.remove(automatonLabel);
 	}
-	
-	public FiniteAutomaton getFiniteAutomaton(final String automatonLabel) throws FiniteAutomatonNotFoundException {
+
+	/**
+	 * Obter o autômato.
+	 * @param automatonLabel nome do autômato.
+	 * @return autômato finito.
+	 * @throws FiniteAutomatonNotFoundException caso o autômato não seja encontrado.
+	 */
+	public FiniteAutomaton getFiniteAutomaton(String automatonLabel) throws FiniteAutomatonNotFoundException {
 		if(!this.finiteAutomata.containsKey(automatonLabel))
 			throw new FiniteAutomatonNotFoundException();
 		
 		return this.finiteAutomata.get(automatonLabel);
 	}
-	
-	public String[][] getFiniteAutomatonTransitionTable(final String automatonLabel) throws FiniteAutomatonNotFoundException {
+
+	/**
+	 * Obter a tabela de transições do autômato.
+	 * @param automatonLabel nome do autômato.
+	 * @return tabela de transições.
+	 * @throws FiniteAutomatonNotFoundException caso o autômato não seja encontrado.
+	 */
+	public String[][] getFiniteAutomatonTransitionTable(String automatonLabel) throws FiniteAutomatonNotFoundException {
 		if(!this.finiteAutomata.containsKey(automatonLabel))
 			throw new FiniteAutomatonNotFoundException();
 		
 		return this.finiteAutomata.get(automatonLabel).toTransitionsTable();
 	}
 	
-	public String getRegularDeviceTextForm(final String regularDeviceLabel) throws RegularDeviceNotFoundException {
+	/**
+	 * Obter a forma textual de um dispositivo regular.
+	 * @param regularDeviceLabel dispositivo regular.
+	 * @return forma textual do dispositivo.
+	 * @throws RegularDeviceNotFoundException caso o dispositivo não seja encontrado.
+	 */
+	public String getRegularDeviceTextForm(String regularDeviceLabel) throws RegularDeviceNotFoundException {
 		if(!this.regularDevices.containsKey(regularDeviceLabel))
 			throw new RegularDeviceNotFoundException();
 		
 		return this.regularDevices.get(regularDeviceLabel).toString();
 	}
 	
-	public Set<String> findPatternOccurrences(FiniteAutomaton automaton, final String text) {
+	/**
+	 * Buscar ocorrência de padrões em texto.
+	 * @param automaton autômato.
+	 * @param text texto a ser analisado.
+	 * @return conjunto de padrões encontrados.
+	 */
+	public Set<String> findPatternOccurrences(FiniteAutomaton automaton, String text) {
 		Set<String> possibleSentences = new HashSet<String>();
 		String alphabet = automaton.getAlphabet();
 		
@@ -119,11 +171,22 @@ public class RegularLanguageController {
 		return sentences;
 	}
 	
+	/**
+	 * Verificar se a linguagem de dois autômatos é igual.
+	 * @param fa1 autômato 1.
+	 * @param fa2 autômato 2.
+	 * @return true caso a linguagem seja igual.
+	 */
 	public boolean finiteAutomataAreEquivalent(FiniteAutomaton fa1, FiniteAutomaton fa2) {
 		return fa1.isEquivalentTo(fa2);
 	}
-	
-	public List<String> determinizeFiniteAutomaton(final FiniteAutomaton automaton) throws Exception {
+
+	/**
+	 * Determinizar o autômato finito.
+	 * @param automaton autômato.
+	 * @return lista de autômatos correspondentes à determinização.
+	 */
+	public List<String> determinizeFiniteAutomaton(FiniteAutomaton automaton) throws Exception {
 		List<String> automataLabels = new ArrayList<String>();
 
 		try {
@@ -141,6 +204,11 @@ public class RegularLanguageController {
 		return automataLabels;
 	}
 
+	/**
+	 * Minimizar o autômato finito.
+	 * @param automaton autômato.
+	 * @return lista de autômatos correspondentes à minimização.
+	 */
 	public List<String> minimizeFiniteAutomaton(FiniteAutomaton automaton) throws Exception {
 		List<String> automataLabels = new ArrayList<String>();
 		boolean isDeterministic = automaton.isDeterministic();
@@ -155,7 +223,7 @@ public class RegularLanguageController {
 		}
 		
 		try {
-			if(!isDeterministic || !automaton.isMinimal()) {
+			if(!isDeterministic || !automaton.hasMinimalStateSet()) {
 				FiniteAutomaton automatonM = (FiniteAutomaton) automaton.clone();
 				automatonM.minimize();
 				automatonM.setReferencedAutomaton(automaton.getName());
@@ -169,6 +237,11 @@ public class RegularLanguageController {
 		return automataLabels;
 	}
 
+	/**
+	 * Complementar o autômato finito.
+	 * @param automaton autômato.
+	 * @return lista de autômatos correspondentes ao complemento.
+	 */
 	public List<String> complementFiniteAutomaton(FiniteAutomaton automaton) {
 		List<String> automataLabels = new ArrayList<String>();
 		boolean isDeterministic = automaton.isDeterministic();
@@ -193,7 +266,13 @@ public class RegularLanguageController {
 		return automataLabels;
 	}
 
-	public List<String> intersectFiniteAutomaton(final FiniteAutomaton automaton1, final FiniteAutomaton automaton2) {
+	/**
+	 * Interceptar dois autômatos finitos.
+	 * @param automaton1 autômato 1.
+	 * @param automaton2 autômato 2.
+	 * @return lista de autômatos correspondentes à interseção.
+	 */
+	public List<String> intersectFiniteAutomaton(FiniteAutomaton automaton1, FiniteAutomaton automaton2) {
 		List<String> automataLabels = new ArrayList<String>();
 
 		for(FiniteAutomaton fa : automaton1.intersection(automaton2)) {

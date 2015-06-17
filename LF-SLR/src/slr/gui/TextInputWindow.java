@@ -28,9 +28,6 @@ public class TextInputWindow extends JFrame {
     private JTextArea textAreaText;
     private UIController uiController;
     
-	/**
-     * Creates new form TextInputWindow
-     */
     public TextInputWindow(UIController uiController) {
     	this.uiController = uiController;
         initComponents();

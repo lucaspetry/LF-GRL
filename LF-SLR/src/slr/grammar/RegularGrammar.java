@@ -28,7 +28,7 @@ public class RegularGrammar implements RegularDevice {
 	 * @param productions produções na forma textual.
 	 * @throws InvalidProductionException caso as produções sejam inválidas.
 	 */
-	public RegularGrammar(final String productions) throws InvalidProductionException {
+	public RegularGrammar(String productions) throws InvalidProductionException {
 		this.productions = new ProductionMap();
 		this.buildProductions(productions);
 	}
@@ -39,7 +39,7 @@ public class RegularGrammar implements RegularDevice {
 	 * @param initialSymbol símbolo inicial da gramática.
 	 * @throws InvalidProductionException caso as produções sejam inválidas.
 	 */
-	public RegularGrammar(final ProductionMap productions, final char initialSymbol) throws InvalidProductionException {
+	public RegularGrammar(ProductionMap productions, char initialSymbol) throws InvalidProductionException {
 		this.productions = productions;
 		this.initialSymbol = initialSymbol;
 		
@@ -78,7 +78,7 @@ public class RegularGrammar implements RegularDevice {
 	 * @param productions produções na forma textual.
 	 * @throws InvalidProductionException caso as produções sejam inválidas.
 	 */
-	private void buildProductions(final String productions) throws InvalidProductionException {
+	private void buildProductions(String productions) throws InvalidProductionException {
 		this.checkProductions(productions);
 		
 		Scanner scanner = new Scanner(productions);
@@ -110,7 +110,7 @@ public class RegularGrammar implements RegularDevice {
 	 * @param productions produções na forma textual.
 	 * @throws InvalidProductionException caso as produções sejam inválidas.
 	 */
-	private void checkProductions(final String productions) throws InvalidProductionException {
+	private void checkProductions(String productions) throws InvalidProductionException {
 		Scanner scanner = new Scanner(productions);
 
 		try {

@@ -26,10 +26,9 @@ public class FiniteAutomaton {
 	/**
 	 * Construtor.
 	 * @param states conjunto de estados.
-	 * @param  alfabeto do autômato.
 	 * @param initialState estado inicial do conjunto de estados.
 	 */
-	public FiniteAutomaton(final Set<State> states, final State initialState) {
+	public FiniteAutomaton(Set<State> states, State initialState) {
 		this.states = states;
 		this.initialState = initialState;
 		this.buildAlphabet();
@@ -45,7 +44,7 @@ public class FiniteAutomaton {
 		this.alphabet = "";
 		
 		for(State s : this.states)
-			alphabet.addAll(s.getTransitions().keySet());
+			alphabet.addAll(s.getTransitionMap().getMap().keySet());
 		
 		alphabet.remove(RegularExpression.EPSILON);
 		Character[] alphabetArray = alphabet.toArray(new Character[1]);
@@ -84,7 +83,7 @@ public class FiniteAutomaton {
 	public String toString() {
 		String automaton = "";
 		for(State s : this.states) {
-			Map<Character, Set<State>> t = s.getTransitions();
+			Map<Character, Set<State>> t = s.getTransitionMap().getMap();
 			
 			for(char symbol : t.keySet()) {
 				for(State target : t.get(symbol)) {
@@ -197,7 +196,7 @@ public class FiniteAutomaton {
 	}
 	
 	/**
-	 * Definir o autômato referenciado.
+	 * Definir o autômato referenciado por este.
 	 * @param label nome do autômato referenciado.
 	 */
 	public void setReferencedAutomaton(String label) {
@@ -258,17 +257,17 @@ public class FiniteAutomaton {
 	 * @param entry entrada qualquer.
 	 * @return true caso a entrada seja uma sentença da linguagem.
 	 */
-	public boolean recognize(final String entry) {
+	public boolean recognize(String entry) {
 		return this.recognizeEntry(entry, this.initialState);
 	}
 	
 	/**
-	 * Método auxiliar de reconhecimento de uma entrada.
+	 * Reconhecer uma entrada qualquer a partir de um estado.
 	 * @param entry entrada qualquer.
 	 * @param begin estado de início do reconhecimento.
 	 * @return true caso a entrada seja reconhecida a partir do estado especificado.
 	 */
-	private boolean recognizeEntry(final String entry, final State begin) {
+	private boolean recognizeEntry(String entry, State begin) {
 		switch(entry.length()) {
 			case 0:
 				try {
@@ -302,7 +301,7 @@ public class FiniteAutomaton {
 	 * Verificar se as linguagens dos autômatos são iguais.
 	 * @return true caso as linguagens sejam iguais.
 	 */
-	public boolean isEquivalentTo(final FiniteAutomaton automaton) {
+	public boolean isEquivalentTo(FiniteAutomaton automaton) {
 		return this.contains(automaton) && automaton.contains(this);
 	}
 	
@@ -311,13 +310,13 @@ public class FiniteAutomaton {
 	 * @param automaton autômato a ser verificado.
 	 * @return true se T(automaton) está contida na linguagem do autômato.
 	 */
-	public boolean contains(final FiniteAutomaton automaton) {
+	public boolean contains(FiniteAutomaton automaton) {
 		List<FiniteAutomaton> intersection = this.complement().intersection(automaton);
 		return intersection.get(intersection.size() - 1).isEmpty();
 	}
 	
 	/**
-	 * Completar o autômato.
+	 * Completar as transições do autômato.
 	 */
 	public void complete() {
 		// Criar o estado morto
@@ -345,7 +344,7 @@ public class FiniteAutomaton {
 	}
 	
 	/**
-	 * Determinizar o autômato.
+	 * Determinizar o autômato caso ele não seja determinístico.
 	 */
 	public void determinize() {
 		if(this.isDeterministic())
@@ -541,7 +540,13 @@ public class FiniteAutomaton {
 			this.name += "-Mínimo";
 	}
 	
-	public Set<State> getStateEquivalenceClass(State state, Set<Set<State>> equivalenceClasses) {
+	/**
+	 * Obter a classe de equivalência de um estado.
+	 * @param state estado a ser verificado.
+	 * @param equivalenceClasses conjunto de classes de equivalência.
+	 * @return classe de equivalência do estado.
+	 */
+	private Set<State> getStateEquivalenceClass(State state, Set<Set<State>> equivalenceClasses) {
 		for(Set<State> eqClass : equivalenceClasses) {
 			if(eqClass.contains(state))
 				return eqClass;
@@ -600,10 +605,10 @@ public class FiniteAutomaton {
 	}
 
 	/**
-	 * Verificar se o autômato é mínimo.
-	 * @return true se o autômato é mínimo.
+	 * Verificar se o autômato contém o menor número de estados.
+	 * @return true se o autômato possui o menor número de estados possível.
 	 */
-	public boolean isMinimal() {
+	public boolean hasMinimalStateSet() {
 		try {
 			FiniteAutomaton minimal = (FiniteAutomaton) this.clone();
 			AUTOMATON_ID--;
@@ -675,9 +680,9 @@ public class FiniteAutomaton {
 	/**
 	 * Calcular o autômato da união com o autômato especificado.
 	 * @param automaton autômato finito.
-	 * @return o autômato resultante da interseção.
+	 * @return o autômato resultante da união.
 	 */
-	public FiniteAutomaton union(final FiniteAutomaton automaton) {
+	public FiniteAutomaton union(FiniteAutomaton automaton) {
 		int stateNumber = 1;
 		try {
 			// Clonar o autômato atual
@@ -750,7 +755,7 @@ public class FiniteAutomaton {
 	 * @param automaton autômato finito.
 	 * @return lista de autômatos referentes à interseção.
 	 */
-	public List<FiniteAutomaton> intersection(final FiniteAutomaton automaton) {
+	public List<FiniteAutomaton> intersection(FiniteAutomaton automaton) {
 		List<FiniteAutomaton> automata = new ArrayList<FiniteAutomaton>();
 
 		FiniteAutomaton a = this;
