@@ -2,6 +2,7 @@ package slr.test;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -224,11 +225,12 @@ public class FiniteAutomatonTest {
 
 	@Test
 	public void testContains2() {
-		FiniteAutomaton intersection = this.automatonA.intersection(this.automatonB);
-		assertEquals(false, intersection.contains(this.automatonA));
-		assertEquals(false, intersection.contains(this.automatonB));
-		assertEquals(true, this.automatonA.contains(intersection));
-		assertEquals(true, this.automatonB.contains(intersection));
+		List<FiniteAutomaton> intersection = this.automatonA.intersection(this.automatonB);
+		FiniteAutomaton fa = intersection.get(intersection.size() - 1);
+		assertEquals(false, fa.contains(this.automatonA));
+		assertEquals(false, fa.contains(this.automatonB));
+		assertEquals(true, this.automatonA.contains(fa));
+		assertEquals(true, this.automatonB.contains(fa));
 	}
 
 	@Test
@@ -500,16 +502,17 @@ public class FiniteAutomatonTest {
 	
 	@Test
 	public void testIntersection() {
-		FiniteAutomaton intersection = this.automatonA.intersection(this.automatonB);
+		List<FiniteAutomaton> intersection = this.automatonA.intersection(this.automatonB);
+		FiniteAutomaton fa = intersection.get(intersection.size() - 1);
 
-		assertEquals(false, intersection.recognize(""));
-		assertEquals(false, intersection.recognize("bbbb"));
-		assertEquals(false, intersection.recognize("aaa"));
-		assertEquals(false, intersection.recognize("bbaa"));
-		assertEquals(false, intersection.recognize("bbaab"));
-		assertEquals(true, intersection.recognize("abaa"));
-		assertEquals(true, intersection.recognize("aaabbbb"));
-		assertEquals(true, intersection.recognize("bababaabbaa"));
+		assertEquals(false, fa.recognize(""));
+		assertEquals(false, fa.recognize("bbbb"));
+		assertEquals(false, fa.recognize("aaa"));
+		assertEquals(false, fa.recognize("bbaa"));
+		assertEquals(false, fa.recognize("bbaab"));
+		assertEquals(true, fa.recognize("abaa"));
+		assertEquals(true, fa.recognize("aaabbbb"));
+		assertEquals(true, fa.recognize("bababaabbaa"));
 	}
 
 	@Test

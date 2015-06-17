@@ -1,9 +1,7 @@
 package slr.control;
 
-import java.util.List;
 import java.util.Set;
 
-import slr.automaton.FiniteAutomaton;
 import slr.exception.FiniteAutomatonNotFoundException;
 import slr.exception.InvalidProductionException;
 import slr.exception.InvalidRegularExpressionException;

@@ -1,8 +1,10 @@
 package slr.automaton;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -193,6 +195,17 @@ public class FiniteAutomaton {
 		
 		return matriz;
 	}
+	
+	/**
+	 * Definir o autômato referenciado.
+	 * @param label nome do autômato referenciado.
+	 */
+	public void setReferencedAutomaton(String label) {
+		if(label.indexOf('-') > 0)
+			this.name += "(" + label.substring(0, label.indexOf('-')) + ")";
+		else
+			this.name += "(" + label + ")";
+	}
 		
 	/**
 	 * Obter o alfabeto de entrada do autômato.
@@ -299,7 +312,8 @@ public class FiniteAutomaton {
 	 * @return true se T(automaton) está contida na linguagem do autômato.
 	 */
 	public boolean contains(final FiniteAutomaton automaton) {
-		return this.complement().intersection(automaton).isEmpty();
+		List<FiniteAutomaton> intersection = this.complement().intersection(automaton);
+		return intersection.get(intersection.size() - 1).isEmpty();
 	}
 	
 	/**
@@ -412,7 +426,11 @@ public class FiniteAutomaton {
 		
 		this.initialState = newInitialState;
 		this.states = new HashSet<State>(deterministicStates.values());
-		this.name += "-Determinístico"; // (AF" + (AUTOMATON_ID - 2) + ")";
+
+		if(this.name.indexOf('-') > 0)
+			this.name = this.name.substring(0, this.name.indexOf('-')) + "-Determinístico";
+		else
+			this.name += "-Determinístico";
 	}
 
 	/**
@@ -518,9 +536,9 @@ public class FiniteAutomaton {
 		}
 		
 		if(this.name.indexOf('-') > 0)
-			this.name = this.name.substring(0, this.name.indexOf('-')) + "-Mínimo"; // (AF" + (AUTOMATON_ID - 2) + ")";
+			this.name = this.name.substring(0, this.name.indexOf('-')) + "-Mínimo";
 		else
-			this.name += "-Mínimo"; // (AF" + (AUTOMATON_ID - 2) + ")";
+			this.name += "-Mínimo";
 	}
 	
 	public Set<State> getStateEquivalenceClass(State state, Set<Set<State>> equivalenceClasses) {
@@ -643,10 +661,10 @@ public class FiniteAutomaton {
 				s.setIsFinal(!s.isFinal());
 			}
 			
-			if(this.name.indexOf('-') > 0)
-				automaton.name += "-Complemento(" + this.name.substring(0, this.name.indexOf('-')) + ")";
+			if(automaton.name.indexOf('-') > 0)
+				automaton.name = automaton.name.substring(0, automaton.name.indexOf('-')) + "-Complemento";
 			else
-				automaton.name += "-Complemento(" + this.name + ")";
+				automaton.name += "-Complemento";
 			
 			return automaton;
 		} catch (CloneNotSupportedException e) {
@@ -714,8 +732,12 @@ public class FiniteAutomaton {
 
 			if(name2.indexOf('-') > 0)
 				name2 = name2.substring(0, name2.indexOf('-'));
-			
-			unionAutomaton.name += "-União(" + name1 + ", " + name2 + ")";
+
+			int index = unionAutomaton.name.indexOf('-');
+			if(index > 0)
+				unionAutomaton.name = unionAutomaton.name.substring(0, index) + "-União(" + name1 + ", " + name2 + ")";
+			else
+				unionAutomaton.name += "-União(" + name1 + ", " + name2 + ")";	
 			
 			return unionAutomaton;
 		} catch (CloneNotSupportedException e) {
@@ -726,30 +748,42 @@ public class FiniteAutomaton {
 	/**
 	 * Calcular o autômato da interseção com o autômato especificado.
 	 * @param automaton autômato finito.
-	 * @return o autômato resultante da interseção.
+	 * @return lista de autômatos referentes à interseção.
 	 */
-	public FiniteAutomaton intersection(final FiniteAutomaton automaton) {
-		try {
-			FiniteAutomaton a = (FiniteAutomaton) this.clone();
-			FiniteAutomaton b = (FiniteAutomaton) automaton.clone();
-			FiniteAutomaton union = a.complement().union(b.complement());
-			FiniteAutomaton intersection = union.complement();
+	public List<FiniteAutomaton> intersection(final FiniteAutomaton automaton) {
+		List<FiniteAutomaton> automata = new ArrayList<FiniteAutomaton>();
 
-			String name1 = this.name;
-			String name2 = automaton.name;
-			
-			if(name1.indexOf('-') > 0)
-				name1 = name1.substring(0, name1.indexOf('-'));
+		FiniteAutomaton a = this;
+		FiniteAutomaton b = automaton;
+		FiniteAutomaton aComp = a.complement();
+		FiniteAutomaton bComp = b.complement();
+		FiniteAutomaton union = aComp.union(bComp);
+		FiniteAutomaton intersection = union.complement();
 
-			if(name2.indexOf('-') > 0)
-				name2 = name2.substring(0, name2.indexOf('-'));
-			
-			intersection.name += "-Interseção(" + name1 + ", " + name2 + ")";
-			
-			return intersection;
-		} catch (CloneNotSupportedException e) {}
-		
-		return null;
+		aComp.setReferencedAutomaton(a.getName());
+		bComp.setReferencedAutomaton(b.getName());
+
+		String name1 = this.name;
+		String name2 = automaton.name;
+
+		if(name1.indexOf('-') > 0)
+			name1 = name1.substring(0, name1.indexOf('-'));
+
+		if(name2.indexOf('-') > 0)
+			name2 = name2.substring(0, name2.indexOf('-'));
+
+		int index = intersection.name.indexOf('-');
+		if(index > 0)
+			intersection.name = intersection.name.substring(0, index) + "-Interseção(" + name1 + ", " + name2 + ")";
+		else
+			intersection.name += "-Interseção(" + name1 + ", " + name2 + ")";			
+
+		automata.add(aComp);
+		automata.add(bComp);
+		automata.add(union);
+		automata.add(intersection);	
+
+		return automata;
 	}
 	
 	/**

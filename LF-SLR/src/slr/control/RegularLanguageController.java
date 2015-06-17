@@ -130,6 +130,7 @@ public class RegularLanguageController {
 			if(!automaton.isDeterministic()) {
 				FiniteAutomaton automatonD = (FiniteAutomaton) automaton.clone();
 				automatonD.determinize();
+				automatonD.setReferencedAutomaton(automaton.getName());
 				automataLabels.add(automatonD.getName());
 				this.finiteAutomata.put(automatonD.getName(), automatonD);
 			} else {
@@ -140,13 +141,24 @@ public class RegularLanguageController {
 		return automataLabels;
 	}
 
-	public List<String> minimizeFiniteAutomaton(final FiniteAutomaton automaton) throws Exception {
+	public List<String> minimizeFiniteAutomaton(FiniteAutomaton automaton) throws Exception {
 		List<String> automataLabels = new ArrayList<String>();
+		boolean isDeterministic = automaton.isDeterministic();
 
+		if(!isDeterministic) {
+			FiniteAutomaton automatonD = (FiniteAutomaton) automaton.clone();
+			automatonD.determinize();
+			automatonD.setReferencedAutomaton(automaton.getName());
+			automataLabels.add(automatonD.getName());
+			this.finiteAutomata.put(automatonD.getName(), automatonD);
+			automaton = automatonD;
+		}
+		
 		try {
-			if(!automaton.isMinimal()) {
+			if(!isDeterministic || !automaton.isMinimal()) {
 				FiniteAutomaton automatonM = (FiniteAutomaton) automaton.clone();
 				automatonM.minimize();
+				automatonM.setReferencedAutomaton(automaton.getName());
 				automataLabels.add(automatonM.getName());
 				this.finiteAutomata.put(automatonM.getName(), automatonM);
 			} else {
@@ -157,10 +169,24 @@ public class RegularLanguageController {
 		return automataLabels;
 	}
 
-	public List<String> complementFiniteAutomaton(final FiniteAutomaton automaton) {
+	public List<String> complementFiniteAutomaton(FiniteAutomaton automaton) {
 		List<String> automataLabels = new ArrayList<String>();
+		boolean isDeterministic = automaton.isDeterministic();
+
+		if(!isDeterministic) {
+			FiniteAutomaton automatonD;
+			try {
+				automatonD = (FiniteAutomaton) automaton.clone();
+				automatonD.determinize();
+				automatonD.setReferencedAutomaton(automaton.getName());
+				automataLabels.add(automatonD.getName());
+				this.finiteAutomata.put(automatonD.getName(), automatonD);
+				automaton = automatonD;
+			} catch (CloneNotSupportedException e) {}
+		}
 		
 		FiniteAutomaton fa = automaton.complement();
+		fa.setReferencedAutomaton(automaton.getName());
 		this.finiteAutomata.put(fa.getName(), fa);
 		automataLabels.add(fa.getName());
 		
@@ -170,9 +196,10 @@ public class RegularLanguageController {
 	public List<String> intersectFiniteAutomaton(final FiniteAutomaton automaton1, final FiniteAutomaton automaton2) {
 		List<String> automataLabels = new ArrayList<String>();
 
-		FiniteAutomaton fa = automaton1.intersection(automaton2);
-		this.finiteAutomata.put(fa.getName(), fa);
-		automataLabels.add(fa.getName());
+		for(FiniteAutomaton fa : automaton1.intersection(automaton2)) {
+			this.finiteAutomata.put(fa.getName(), fa);
+			automataLabels.add(fa.getName());
+		}
 		
 		return automataLabels;
 	}
