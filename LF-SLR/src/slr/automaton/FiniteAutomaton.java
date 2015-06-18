@@ -715,7 +715,7 @@ public class FiniteAutomaton {
 				} catch (InvalidTransitionException e) {}
 			}
 
-			// Copiar as transições do outro estado inicial
+			// Copiar as transições desse estado inicial
 			for(char symbol : unionAutomaton.getAlphabet().toCharArray()) {
 				try {
 					for(State target : unionAutomaton.initialState.transit(symbol)) {
