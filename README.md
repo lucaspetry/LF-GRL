@@ -1,8 +1,8 @@
-# Sistema de Linguagens Regulares
-Sistema desenvolvido na disciplina de Linguagens Formais e Compiladores (INE5421) do Departamento de Informática e Estatística da UFSC. É possível manipular linguagens regulares em suas diferentes representações formais, bem como a execução de operações entre elas.
+# Regular Languages' Manager
+System developed for the Formal Languages and Compilers course (INE5421) at the Federal University of Santa Catarina (UFSC). The features of the system include regular grammars, finite-state automata and regular expressions.
 
-<b>Frameworks necessários:</b>
-- JUnit (compilação/execução dos testes).
+<b>Required frameworks:</b>
+- JUnit (tests run).
 
-<b>Diagrama de Classes:</b>
+<b>Class Diagram:</b>
 ![Alt Text](https://github.com/lucaspetry/LF-SLR/blob/master/LF-SLR/doc/DiagramaDeClasses.png)
