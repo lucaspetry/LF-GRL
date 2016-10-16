@@ -1,5 +1,5 @@
 # Regular Languages' Manager
-System developed for the Formal Languages and Compilers course (INE5421) at the Federal University of Santa Catarina (UFSC). The features of the system include regular grammars, finite-state automata and regular expressions.
+System developed during the Formal Languages and Compilers course (INE5421) at the Federal University of Santa Catarina (UFSC). The features of the system include regular grammars, finite-state automata and regular expressions.
 
 <b>Required frameworks:</b>
 - JUnit (tests run).
