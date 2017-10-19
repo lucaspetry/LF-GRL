@@ -5,4 +5,9 @@ System developed during the Formal Languages and Compilers course (INE5421) at t
 - JUnit (tests run).
 
 <b>Class Diagram:</b>
-![Alt Text](https://github.com/lucaspetry/LF-SLR/blob/master/LF-SLR/doc/DiagramaDeClasses.png)
+
+![Diagram](https://github.com/lucaspetry/LF-SLR/blob/master/LF-SLR/doc/DiagramaDeClasses.png)
+
+<b>Overview:</b>
+
+![Overview](https://github.com/lucaspetry/LF-SLR/blob/master/slr.png)
